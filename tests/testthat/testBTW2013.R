@@ -13,10 +13,12 @@ test_that("excel files can be read", {
   
   # sort out empty rows and only the needed columns
   individual.polls = individual.polls[!is.na(individual.polls$id), 1:11]
+  
+  # coerce to numeric, get NAs
   individual.polls[,4:11] = apply(individual.polls[,4:11], 2, as.numeric)
   
   library("tidyr")
-  ind.polls = gather(individual.polls, party, percent, one_of("cdu/csu", "spd", "grüne", 
+  ind.polls = gather(individual.polls, party, percent, one_of("cdu/csu", "spd", "grÃ¼ne", 
                                                   "fdp", "linke", "piraten", "afd", "sonstige"))
   
 })
