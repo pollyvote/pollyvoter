@@ -15,7 +15,7 @@ wide_to_long_format <- function(data){
   library("tidyr")
   
   # transform to long format
-  data_long <- gather(data, party, percent, 
+  data_long <- gather(data, "party", "percent", 
                       one_of("cdu/csu", "spd", "grüne", "fdp", 
                              "linke", "piraten", "afd", "sonstige"))  
   data_long

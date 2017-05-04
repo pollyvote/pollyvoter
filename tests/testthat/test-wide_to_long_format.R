@@ -1,4 +1,3 @@
-
 context("test conversion: wide to long format")
 
 test_that("data frame can be convert to long format", {
@@ -6,7 +5,8 @@ test_that("data frame can be convert to long format", {
   library("readxl")
   # warning, this function seems to not work properly,
   # it reads the sheet after the one that was specified, amybe because of the Figure?
-  individual_polls_wide <- read_excel("data/German_PollyVote_2013.xlsx", 
+  individual_polls_wide <- read_excel(system.file("extdata/German_PollyVote_2013.xlsx", 
+                                                  package = "pollyvoter"), 
                                 sheet = "Wahlumfrage",
                                 skip = 1)
   colnames(individual_polls_wide)[1] <- "id"
@@ -20,8 +20,7 @@ test_that("data frame can be convert to long format", {
   individual_polls_wide[, 4:11] <- apply(individual_polls_wide[, 4:11], 2, as.numeric)
   
   # convert to long format
-  library("tidyr")
-  individual_polls_long = gather(individual_polls_wide, party, percent, 
+  individual_polls_long = tidyr::gather(individual_polls_wide, "party", "percent", 
                                  one_of("cdu/csu", "spd", "grüne", 
                                         "fdp", "linke", "piraten", 
                                         "afd", "sonstige"))
