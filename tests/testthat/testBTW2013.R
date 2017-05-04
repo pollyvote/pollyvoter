@@ -8,11 +8,15 @@ test_that("excel files can be read", {
                                 sheet = "Wahlumfrage",
                                 skip = 1)
   colnames(individual.polls)[1] = "id"
+  colnames(individual.polls)[3] = "survey.institute"
+  colnames(individual.polls) = tolower(colnames(individual.polls))
   
   # sort out empty rows and only the needed columns
   individual.polls = individual.polls[!is.na(individual.polls$id), 1:11]
   individual.polls[,4:11] = apply(individual.polls[,4:11], 2, as.numeric)
   
   library("tidyr")
+  ind.polls = gather(individual.polls, party, percent, one_of("cdu/csu", "spd", "grüne", 
+                                                  "fdp", "linke", "piraten", "afd", "sonstige"))
   
 })
