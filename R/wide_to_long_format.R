@@ -16,7 +16,6 @@ wide_to_long_format <- function(data){
                       one_of("cdu/csu", "spd", "grune", "fdp", 
                              "linke", "piraten", "afd", "sonstige"))  
   data_long
-  
 }
 
 
