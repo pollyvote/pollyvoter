@@ -1,4 +1,4 @@
-context("test conversion: wide to long format")
+context("test conversion wide to long format")
 
 test_that("data frame can be convert to long format", {
   
