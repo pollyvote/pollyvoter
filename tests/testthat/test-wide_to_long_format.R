@@ -2,10 +2,9 @@ context("test conversion wide to long format")
 
 test_that("data frame can be convert to long format", {
   
-  library("readxl")
   # warning, this function seems to not work properly,
   # it reads the sheet after the one that was specified, amybe because of the Figure?
-  individual_polls_wide <- read_excel(system.file("extdata/German_PollyVote_2013.xlsx", 
+  individual_polls_wide <- readxl::read_excel(system.file("extdata/German_PollyVote_2013.xlsx", 
                                                   package = "pollyvoter"), 
                                 sheet = "Wahlumfrage",
                                 skip = 1)
