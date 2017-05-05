@@ -2,8 +2,10 @@
 
 S3method(add_data,pollyvote)
 export(add_data)
+export(aggreg_by)
 export(convert_names)
 export(create_pollyvote)
+export(import_exp_data_wide)
 export(setParties)
 export(wide_to_long_format)
 import(checkmate)
