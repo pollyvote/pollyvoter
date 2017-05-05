@@ -1,10 +1,10 @@
 context("test example data")
 
 test_that("excel files can be read", {
-  library("readxl")
+  # library("readxl")
   # warning, this function seems to not work properly,
-  # it reads the sheet after the one that was specified, amybe because of the Figure?
-  individual.polls = read_excel(system.file("extdata/German_PollyVote_2013.xlsx", 
+  # it reads the sheet after the one that was specified, maybe because of the Figure?
+  individual.polls = readxl::read_excel(system.file("extdata/German_PollyVote_2013.xlsx", 
                                             package = "pollyvoter"), 
                                 sheet = "Wahlumfrage",
                                 skip = 1)
@@ -12,15 +12,15 @@ test_that("excel files can be read", {
   
   colnames(individual.polls)[1] = "id"
   colnames(individual.polls)[3] = "survey.institute"
-  colnames(individual.polls) = tolower(colnames(individual.polls))
-  
+  colnames(individual.polls) = convert_names(colnames(individual.polls))
+   
   # sort out empty rows and only the needed columns
   individual.polls = individual.polls[!is.na(individual.polls$id), 1:11]
   
   # coerce to numeric, get NAs
-  individual.polls[,4:11] = apply(individual.polls[,4:11], 2, as.numeric)
+  individual.polls[,4:11] = apply(individual.polls[,4:11], 2, as.numeric) %>% suppressWarnings
   
-  ind.polls = tidyr::gather(individual.polls, party, percent, one_of("cdu/csu", "spd", "grüne", 
+  ind.polls = tidyr::gather(individual.polls, party, percent, one_of("cdu/csu", "spd", "grune", 
                                                   "fdp", "linke", "piraten", "afd", "sonstige"))
   
 })

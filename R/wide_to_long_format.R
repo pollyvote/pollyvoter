@@ -5,18 +5,15 @@
 #'
 #' @param data  [\code{data.frame}]\cr
 #'     data frame in wide fromat containing TODO
-#'     
-#' @importFrom tidyr gather
+#'
 #' @return data.frame in long format 
 #'
 #' @export
 wide_to_long_format <- function(data){
   
-  library("tidyr")
-  
   # transform to long format
-  data_long <- gather(data, "party", "percent", 
-                      one_of("cdu/csu", "spd", "grüne", "fdp", 
+  data_long <- tidyr::gather(data, "party", "percent", 
+                      one_of("cdu/csu", "spd", "grune", "fdp", 
                              "linke", "piraten", "afd", "sonstige"))  
   data_long
   
