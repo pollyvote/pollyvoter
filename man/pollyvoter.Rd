@@ -9,4 +9,3 @@
 The pollyvoter package provides methods for aggregating opinion polls,
 calculating forecasts and determining error margins for elections results
 }
-

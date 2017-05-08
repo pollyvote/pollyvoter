@@ -22,4 +22,3 @@ elect_data_wide <- import_exp_data_wide("Wahlumfrage")
 
 
 }
-

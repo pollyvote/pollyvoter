@@ -25,4 +25,3 @@ parties.
 \examples{
 setParties(parties = c("Democrats", "Republicans"))
 }
-

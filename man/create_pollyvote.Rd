@@ -32,4 +32,3 @@ object of class pollyvote, containing an id, an initially empty data frame
 A pollyvote container is a data frame containing all the information that is 
 needed to predict an election.
 }
-

@@ -19,4 +19,3 @@ the checked data.
 \description{
 internal check function
 }
-

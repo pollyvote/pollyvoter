@@ -32,4 +32,3 @@ elect_data_aggr_max <- aggreg_by(elect_data_long, group_variab = c("date", "part
 
 
 }
-

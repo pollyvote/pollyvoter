@@ -22,4 +22,3 @@ The pollyvote object with added data.
 internal check function if additional arguments to pollyvoter::add_data are 
 permissible for a pollyvote object
 }
-
