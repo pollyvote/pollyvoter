@@ -1,3 +1,27 @@
+#' set data
+#' 
+#' This function completely overwrites the data from a pollyvote container.
+#' Do not use unless you are sure that this is what you want.
+#'
+#' @param pv [\code{pollyvote(1)}]\cr
+#'   the pollyvote object of which to overwrite the data from.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' set_data(pv, newdata = data.frame(country = "D", election = "BTW"))
+#' 
+#' @return pollyvote object containing the new data.  
+#'
+#' @export
+set_data <- function(pv, newdata){
+  assert_class(pv, "pollyvote")
+  # TODO write some sanity checks
+  newdata = check_data(newdata, pv)
+  pv$data = newdata
+  return(pv)
+}
+
 #' set up party names
 #' 
 #' This function set up party names in a pollyvote container.
