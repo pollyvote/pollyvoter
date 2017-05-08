@@ -6,29 +6,57 @@ test_that("pollyvote objects can be created", {
   assert_class(pv, "pollyvote")
 })
 
-test_that("new data can be added to pollyvote objects", {
+test_that("new data can be added to and retrieved from a pollyvote objects", {
   # create empty pollyvote container
   pv = create_pollyvote(perm_countries = "D")
   
   # get data
-  individual.polls = readxl::read_excel(system.file("extdata/German_PollyVote_2013.xlsx", 
-                                                    package = "pollyvoter"), 
-                                        sheet = "Wahlumfrage",
-                                        skip = 1)
-  assert_data_frame(individual.polls, min.cols = 2, min.rows = 2)
-  colnames(individual.polls)[1] = "id"
-  colnames(individual.polls)[3] = "source"
-  colnames(individual.polls) = convert_names(colnames(individual.polls))
-  # sort out empty rows and only the needed columns
-  individual.polls = individual.polls[!is.na(individual.polls$id), 1:11]
-  # coerce to numeric, get NAs
-  individual.polls[,4:11] = apply(individual.polls[,4:11], 2, as.numeric)
-  # coerce to long format
-  ind.polls = wide_to_long_format(individual.polls)
+  data("poll_data_long")
+ 
+  # add data to pollyvote
+  expect_error(add_data(pv, newdata = poll_data_long, country = "USA"))
+  pv = add_data(pv, newdata = poll_data_long, country = "D", election = "BTW")
+  
+  # test get_data()
+  assert_data_frame(get_data(pv), min.cols = 2, min.rows = 2)
+})
+
+
+test_that("the data from a pollyvote object can be aggregated", {
+  # create empty pollyvote container
+  pv = create_pollyvote(perm_countries = "D")
+  
+  # get data
+  data("poll_data_long")
   
   # add data to pollyvote
-  expect_error(add_data(pv, newdata = ind.polls, country = "USA"))
-  pv = add_data(pv, newdata = ind.polls, country = "D", election = "BTW")
+  pv = add_data(pv, newdata = poll_data_long, country = "D", region = "national", 
+                source.type = "poll", election = "BTW")
   
-  head(get_data(pv))
+  # add other data (actually the same) to the pv object
+  pv = add_data(pv, newdata = poll_data_long, country = "D", region = "national", 
+                source.type = "expert", election = "BTW")
+  pv = add_data(pv, newdata = poll_data_long, country = "D", region = "national", 
+                source.type = "eco.model", election = "BTW")
+  
+  # get the daily aggregated prediction
+  dat_aggr = pv %>% 
+    get_data %>% 
+    filter(source.type %in% c("expert", "poll")) %>%
+    group_by(date, source.type, party) %>% 
+    summarize(aggreg_percent = mean(percent, na.rm = TRUE))
+  dat_aggr
+  
+  # maybe create an aggregated pv object?
+  
+  
+  # combine the daily predictions with a weighted mean
+  dat_final = dat_aggr %>%
+    mutate(weight = ifelse(source.type == "expert", 1, 2)) %>%
+    group_by(date, party) %>% 
+    summarize(aggreg_percent = weighted.mean(aggreg_percent, weights = weight))
+  dat_final
+  
+  
 })
+  
