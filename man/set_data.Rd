@@ -9,6 +9,9 @@ set_data(pv, newdata)
 \arguments{
 \item{pv}{[\code{pollyvote(1)}]\cr
 the pollyvote object of which to overwrite the data from.}
+
+\item{newdata}{[\code{data.frame}]\cr
+the data to replace the original data contained in \code{pv}.}
 }
 \value{
 pollyvote object containing the new data.

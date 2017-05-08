@@ -5,6 +5,8 @@
 #'
 #' @param pv [\code{pollyvote(1)}]\cr
 #'   the pollyvote object of which to overwrite the data from.
+#' @param newdata [\code{data.frame}]\cr
+#'   the data to replace the original data contained in \code{pv}.
 #'
 #' @examples
 #' pv = create_pollyvote()
