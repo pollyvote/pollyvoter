@@ -5,24 +5,20 @@
 \title{create a pollyvote data container}
 \usage{
 create_pollyvote(id = "pollyvote", perm_countries = character(0),
-  perm_sources = character(0), perm_elections = character(0),
-  perm_date_earliest = NULL, perm_date_latest = NULL,
-  perm_regions = character(0), perm_parties = character(0),
-  perm_colnames = c("id", "country", "source", "election", "date", "region",
-  "party", "percent"))
+  perm_sources = character(0), perm_source.types = character(0),
+  perm_elections = character(0), perm_date_earliest = NULL,
+  perm_date_latest = NULL, perm_regions = character(0),
+  perm_region.types = character(0), perm_parties = character(0))
 }
 \arguments{
 \item{id}{[\code{character(1)}]\cr
 the name ID of the pollyvote object, defaults to 'pollyvote'.}
 
-\item{perm_countries, perm_sources, perm_elections, perm_regions, perm_parties}{[\code{character(n)}]\cr
+\item{perm_countries, perm_sources, perm_source.types, perm_elections, perm_regions, perm_region.types, perm_parties}{[\code{character(n)}]\cr
 permitted values for the respective column of the data of this pollyvote object}
 
 \item{perm_date_earliest, perm_date_latest}{[\code{POSIXct(1)}]\cr
 earliest and latest permissible date in format \%Y-\%m-\%d.}
-
-\item{perm_colnames}{[\code{character(n)}]\cr
-column names that are permitted in the data of this pollyvote object}
 }
 \value{
 object of class pollyvote, containing an id, an initially empty data frame

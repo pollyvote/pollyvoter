@@ -16,7 +16,7 @@ the pollyvote object to add the data to.}
 \item{...}{additional named arguments to be checked.}
 }
 \value{
-The pollyvote object with added data.
+Nothing. Only throws error message if arguments are not feasible.
 }
 \description{
 internal check function if additional arguments to pollyvoter::add_data are 

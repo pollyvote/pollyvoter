@@ -16,8 +16,6 @@
 #'
 #' @export
 #' 
-#' 
-
 import_exp_data_wide <- function(sheet){
   
   library("readxl")
