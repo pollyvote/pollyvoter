@@ -3,6 +3,7 @@ context("pollyvote")
 test_that("pollyvote objects can be created", {
   # create empty pollyvote container
   pv = create_pollyvote(id = "test_pv")
+  assert_class(pv, "pollyvote")
 })
 
 test_that("new data can be added to pollyvote objects", {
@@ -28,4 +29,6 @@ test_that("new data can be added to pollyvote objects", {
   # add data to pollyvote
   expect_error(add_data(pv, newdata = ind.polls, country = "USA"))
   pv = add_data(pv, newdata = ind.polls, country = "D", election = "BTW")
+  
+  head(get_data(pv))
 })
