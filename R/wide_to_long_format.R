@@ -13,7 +13,7 @@ wide_to_long_format <- function(data){
   
   # transform to long format
   data_long <- tidyr::gather(data, "party", "percent", 
-                      one_of("cdu/csu", "spd", "grune", "fdp", 
+                      dplyr::one_of("cdu/csu", "spd", "grune", "fdp", 
                              "linke", "piraten", "afd", "sonstige"))  
   data_long
 }
