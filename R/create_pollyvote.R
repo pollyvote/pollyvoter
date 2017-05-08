@@ -66,7 +66,7 @@ create_pollyvote = function(id = "pollyvote",
             perm_parties = perm_parties,
             perm_colnames = perm_colnames,
             data = data)
-  class(pv) = "pollyvote"
+  class(pv) = c("pollyvote", "list")
   return(pv)
 }
 
@@ -77,5 +77,5 @@ create_pollyvote = function(id = "pollyvote",
 #' 
 #' @param pv a pollyvote object.
 print.pollyvote = function(pv) {
-  print(pv)
+  print.listof(pv)
 }
