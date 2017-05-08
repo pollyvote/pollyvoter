@@ -43,6 +43,76 @@ test_that("elections can be extracted", {
 })
 
 
+test_that("countries can be extracted", {
+  
+  # create pollyvote container
+  countries_test <- c("D")
+  pv <- create_pollyvote(perm_countries = countries_test)
+  
+  # extract countries
+  countries <- get_countries(pv)
+  
+  expect_that(countries_test, equals(countries))
+  
+})
+
+
+test_that("sources can be extracted", {
+  
+  # create pollyvote container
+  sources_test <- c("experts", "survey")
+  pv <- create_pollyvote(perm_sources = sources_test)
+  
+  # extract sources
+  sources <- get_sources(pv)
+  
+  expect_that(sources_test, equals(sources))
+  
+})
+
+
+test_that("earliest date can be extracted", {
+  
+  # create pollyvote container
+  date_earliest_test <- as.POSIXct("2015-11-23", format = "%Y-%m-%d")
+  pv <- create_pollyvote(perm_date_earliest = date_earliest_test)
+  
+  # extract earliest date
+  date_earliest <- get_date_earliest(pv)
+  
+  expect_that(date_earliest_test, equals(date_earliest))
+  
+})
+
+
+test_that("latest date can be extracted", {
+  
+  # create pollyvote container
+  date_latest_test <- as.POSIXct("2016-01-29", format = "%Y-%m-%d")
+  pv <- create_pollyvote(perm_date_latest = date_latest_test)
+  
+  # extract latest date
+  date_latest <- get_date_latest(pv)
+  
+  expect_that(date_latest_test, equals(date_latest))
+  
+})
+
+
+test_that("colnames can be extracted", {
+  
+  # create pollyvote container
+  colnames_test <- c("id", "country", "source", "election")
+  pv <- create_pollyvote(perm_colnames = colnames_test)
+  
+  # extract latest date
+  colnames <- get_colnames(pv)
+  
+  expect_that(colnames_test, equals(colnames))
+  
+})
+
+
 test_that("parties can be set up", {
   
   # create pollyvote container
