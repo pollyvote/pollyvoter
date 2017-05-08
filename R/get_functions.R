@@ -1,3 +1,24 @@
+#' extract data
+#' 
+#' This function extracts the data from a pollyvote container.
+#'
+#' @param pv [\code{pollyvote(1)}]\cr
+#'   the pollyvote object of which to extract the data from.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_data(pv)
+#' 
+#' @return data frame containing all the data stored in \code{pv}.  
+#'
+#' @export
+get_data <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$data)
+}
+
+
 #' extract party names
 #' 
 #' This function extract party names from a pollyvote container.
@@ -62,5 +83,6 @@ get_elections <- function(id = "pollyvote"){
   id$perm_elections 
   
 }  
+
   
   
