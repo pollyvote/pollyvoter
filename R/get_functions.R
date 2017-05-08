@@ -16,28 +16,28 @@
 get_data <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$data)
-}
+} 
 
 
 #' extract party names
 #' 
 #' This function extract party names from a pollyvote container.
 #'
-#' @param id [\code{character(1)}]\cr
+#' @param pv [\code{character(1)}]\cr
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' get_parties("pollyvote")
-#' 
-#' @return party names  
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_parties(pv)
+#'  
+#' @return character vector containing all party names stored in \code{pv}.   
 #'
 #' @export
 
-get_parties <- function(id = "pollyvote"){
-  
-  # extract parties
-  id$perm_parties 
-  
+get_parties <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_parties) 
 }
 
 
@@ -45,21 +45,21 @@ get_parties <- function(id = "pollyvote"){
 #' 
 #' This function extract regions from a pollyvote container.
 #'
-#' @param id [\code{character(1)}]\cr
+#' @param pv [\code{character(1)}]\cr
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' get_regions("pollyvote")
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_regions(pv)
 #' 
-#' @return regions  
+#' @return character vector containing all regions stored in \code{pv}. 
 #'
 #' @export
 
-get_regions <- function(id = "pollyvote"){
-  
-  # extract parties
-  id$perm_regions 
-  
+get_regions <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_regions) 
 }  
 
 
@@ -67,22 +67,131 @@ get_regions <- function(id = "pollyvote"){
 #' 
 #' This function extract elections from a pollyvote container.
 #'
-#' @param id [\code{character(1)}]\cr
+#' @param pv [\code{character(1)}]\cr
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' get_regions("pollyvote")
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_elections(pv)
 #' 
-#' @return elections  
+#' @return character vector containing all elections stored in \code{pv}.  
 #'
 #' @export
 
-get_elections <- function(id = "pollyvote"){
-  
-  # extract parties
-  id$perm_elections 
-  
+get_elections <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_elections) 
 }  
 
+
+#' extract countries
+#' 
+#' This function extract countries from a pollyvote container.
+#'
+#' @param pv [\code{character(1)}]\cr
+#'   the name ID of the pollyvote object, defaults to 'pollyvote'.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_countries(pv)
+#' 
+#' @return character vector containing all countries stored in \code{pv}.  
+#'
+#' @export
+
+get_countries <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_countries) 
+}  
+
+
+#' extract sources
+#' 
+#' This function extract sources from a pollyvote container.
+#'
+#' @param pv [\code{character(1)}]\cr
+#'   the name ID of the pollyvote object, defaults to 'pollyvote'.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_sources(pv)
+#' 
+#' @return character vector containing all sources stored in \code{pv}.  
+#'
+#' @export
+
+get_sources <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_sources) 
+}  
+
+
+#' extract earliest date
+#' 
+#' This function extract earliest date from a pollyvote container.
+#'
+#' @param pv [\code{character(1)}]\cr
+#'   the name ID of the pollyvote object, defaults to 'pollyvote'.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_date_earliest(pv)
+#' 
+#' @return character containing earliest date stored in \code{pv}.  
+#'
+#' @export
+
+get_date_earliest <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_date_earliest) 
+}  
+
+
+#' extract latest date
+#' 
+#' This function extract latest date from a pollyvote container.
+#'
+#' @param pv [\code{character(1)}]\cr
+#'   the name ID of the pollyvote object, defaults to 'pollyvote'.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_date_latest(pv)
+#' 
+#' @return character containing latest date stored in \code{pv}.  
+#'
+#' @export
+
+get_date_latest <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_date_latest) 
+}  
+
+
+#' extract colnames
+#' 
+#' This function extract colnames from a pollyvote container.
+#'
+#' @param pv [\code{character(1)}]\cr
+#'   the name ID of the pollyvote object, defaults to 'pollyvote'.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_colnames(pv)
+#' 
+#' @return character containing colnames stored in \code{pv}.  
+#'
+#' @export
+
+get_colnames <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_colnames) 
+}  
   
   
