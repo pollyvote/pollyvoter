@@ -57,9 +57,9 @@ add_data.pollyvote = function(pv, newdata = data.frame(),
 #' @inheritParams add_data
 #' @param ... additional named arguments to be checked.
 #' 
-#' @return The pollyvote object with added data.
+#' @return Nothing. Only throws error message if arguments are not feasible.
 #'
-check_additional_args= function(newdata, pv, ...) {
+check_additional_args = function(newdata, pv, ...) {
   args = list(...)
   # check arg names with pv
   for(i in names(args)) {
