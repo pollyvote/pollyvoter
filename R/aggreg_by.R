@@ -27,8 +27,6 @@
 
 aggreg_by <- function(data, group_variab, aggr_func = mean){
   
-  library(dplyr)
-  
   # aggregate by group_variab
   data_aggr <- data %>% 
     group_by_(.dots = group_variab) %>% 
