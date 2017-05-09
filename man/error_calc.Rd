@@ -12,6 +12,8 @@ pollyvote object to predict from.}
 
 \item{name}{[\code{character(1)}] \cr
 name of the error calcluclation function on \code{pr} to use.}
+
+\item{...}{currently unused.}
 }
 \value{
 the prediction

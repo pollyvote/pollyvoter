@@ -6,6 +6,7 @@
 #'   pollyvote object to predict from.
 #' @param name [\code{character(1)}] \cr
 #'   name of the error calcluclation function on \code{pr} to use.
+#' @param ... currently unused.
 #' 
 #' @return the prediction
 #' @family predict
