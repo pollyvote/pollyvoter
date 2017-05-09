@@ -75,6 +75,7 @@ create_pollyvote = function(id = "pollyvote",
             perm_region.types = perm_region.types,
             perm_parties = perm_parties,
             perm_colnames = perm_colnames,
+            predictions = list(),
             data = data)
   class(pv) = c("pollyvote", "list")
   return(pv)
