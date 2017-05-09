@@ -193,5 +193,23 @@ get_colnames <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_colnames) 
 }  
+
+
+
+#' add an election result to a pollyvote object
+#' 
+#' Adds election result to a pollyvote opbject.
+#'
+#' @inheritParams add_election_result
+#' 
+#' @return The pollyvote object with added prediction
+#'
+#' @export
+get_election_result = function(pv, election, ...) {
+  # check feasibility
+  assert_class(pv, "pollyvote")
+  assert_choice(election, names(pv$election_result))
+  return(pv$election_result[[election]])
+}
   
   
