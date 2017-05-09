@@ -12,7 +12,7 @@
 #' @return The pollyvote object with added prediction.
 #'
 #' @export
-add_prediction = function(pv, name, fun = function(x){x}, ...) {
+add_prediction = function(pv, name, fun = function(pv){get_data(pv)}, ...) {
   UseMethod("add_prediction")
 }
 
@@ -26,6 +26,7 @@ add_prediction = function(pv, name, fun = function(x){x}, ...) {
 #'
 #' @export
 add_prediction.pollyvote = function(pv, name = "no_aggregation", fun = function(pv){get_data(pv)}, ...) {
+  # TODO checks on fun
   pv$predictions[[name]] = fun
   return(pv)
 }
