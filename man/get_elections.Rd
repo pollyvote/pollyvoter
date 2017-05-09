@@ -17,7 +17,7 @@ character vector containing all elections stored in \code{pv}.
 This function extract elections from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
+pv = create_pollyvote(perm_elections = "BTW")
 # returns an empty data frame
 get_elections(pv)
 
