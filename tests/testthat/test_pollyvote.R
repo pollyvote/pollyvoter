@@ -46,7 +46,6 @@ test_that("the data from a pollyvote object can be aggregated", {
     group_by(date, source.type, party) %>% 
     summarize(aggreg_percent = mean(percent, na.rm = TRUE))
   dat_aggr
-  
   # maybe create an aggregated pv object?
   
   

@@ -21,3 +21,4 @@ The pollyvote object with added data.
 \description{
 Adds data to a pollyvote opbject.
 }
+

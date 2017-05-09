@@ -4,19 +4,22 @@
 \alias{get_parties}
 \title{extract party names}
 \usage{
-get_parties(id = "pollyvote")
+get_parties(pv)
 }
 \arguments{
-\item{id}{[\code{character(1)}]\cr
+\item{pv}{[\code{character(1)}]\cr
 the name ID of the pollyvote object, defaults to 'pollyvote'.}
 }
 \value{
-party names
+character vector containing all party names stored in \code{pv}.
 }
 \description{
 This function extract party names from a pollyvote container.
 }
 \examples{
-get_parties("pollyvote")
-
+pv = create_pollyvote()
+# returns an empty data frame
+get_parties(pv)
+ 
 }
+

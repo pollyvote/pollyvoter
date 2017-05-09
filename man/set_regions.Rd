@@ -23,3 +23,4 @@ This function set up regions in a pollyvote container.
 set_regions(regions = c("bayern", "bawu"), id = "pollyvote")
 
 }
+

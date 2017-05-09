@@ -23,3 +23,4 @@ the course of a few weeks for the BTW 2013 in Germany.
 \code{\link{poll_data_wide}}
 }
 \keyword{datasets}
+

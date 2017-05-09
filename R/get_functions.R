@@ -71,7 +71,7 @@ get_regions <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
+#' pv = create_pollyvote(perm_elections = "BTW")
 #' # returns an empty data frame
 #' get_elections(pv)
 #' 

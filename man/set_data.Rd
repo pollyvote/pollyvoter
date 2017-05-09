@@ -26,3 +26,4 @@ pv = create_pollyvote()
 set_data(pv, newdata = data.frame(country = "D", election = "BTW"))
 
 }
+

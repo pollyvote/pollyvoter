@@ -4,19 +4,22 @@
 \alias{get_elections}
 \title{extract elections}
 \usage{
-get_elections(id = "pollyvote")
+get_elections(pv)
 }
 \arguments{
-\item{id}{[\code{character(1)}]\cr
+\item{pv}{[\code{character(1)}]\cr
 the name ID of the pollyvote object, defaults to 'pollyvote'.}
 }
 \value{
-elections
+character vector containing all elections stored in \code{pv}.
 }
 \description{
 This function extract elections from a pollyvote container.
 }
 \examples{
-get_regions("pollyvote")
+pv = create_pollyvote()
+# returns an empty data frame
+get_elections(pv)
 
 }
+

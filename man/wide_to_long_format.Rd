@@ -17,3 +17,4 @@ data.frame in long format
 This is a function that converts an election data set from the 
 long  format into the wide format. Currently only German parties are supported.
 }
+

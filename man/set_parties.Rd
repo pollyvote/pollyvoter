@@ -23,3 +23,4 @@ This function set up party names in a pollyvote container.
 set_parties(parties = c("csu", "spd"), id = "pollyvote")
 
 }
+

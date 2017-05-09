@@ -24,7 +24,6 @@
 #' @export
 #' 
 #' 
-
 aggreg_by <- function(data, group_variab, aggr_func = mean){
   
   # aggregate by group_variab
