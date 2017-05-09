@@ -11,6 +11,9 @@
 \item{pv}{[\code{pollyvote}]\cr
 the pollyvote object to add the data to.}
 
+\item{name}{[\code{character(1)}]\cr
+name of the prediction.}
+
 \item{fun}{[\code{function(pv)}]\cr}
 
 \item{...}{additional arguments}

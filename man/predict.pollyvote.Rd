@@ -4,11 +4,14 @@
 \alias{predict.pollyvote}
 \title{predict a pollyvote object}
 \usage{
-\method{predict}{pollyvote}(pv, name, ...)
+\method{predict}{pollyvote}(object, name, ...)
 }
 \arguments{
-\item{pv}{[\code{pollyvote}]\cr
-the pollyvote object to add the data to.}
+\item{object}{[\code{pollyvote(1)}] \cr
+pollyvote object to predict from.}
+
+\item{name}{[\code{character(1)}]\cr
+name of the prediction.}
 
 \item{...}{additional arguments}
 }

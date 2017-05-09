@@ -14,7 +14,7 @@ data frame in wide fromat containing TODO}
 data.frame in long format
 }
 \description{
-This is a function that converts an election data set from the
+This is a function that converts an election data set from the 
 long  format into the wide format. Currently only German parties are supported.
 }
 
