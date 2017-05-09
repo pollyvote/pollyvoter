@@ -21,4 +21,8 @@ the prediction
 \description{
 predict a pollyvote opbject.
 }
+\seealso{
+Other predict: \code{\link{error_calc.pollyvote}},
+  \code{\link{error_calc}}
+}
 
