@@ -4,7 +4,7 @@
 \alias{error_calc.pollyvote}
 \title{calculate the prediction error of a pollyvote prediction.}
 \usage{
-error_calc.pollyvote(pv, name, ...)
+\method{error_calc}{pollyvote}(pv, name, ...)
 }
 \arguments{
 \item{pv}{[\code{pollyvote(1)}] \cr
@@ -13,7 +13,7 @@ pollyvote object to predict from.}
 \item{name}{[\code{character(1)}] \cr
 name of the error calcluclation function on \code{pr} to use.}
 
-\item{...}{currently unused.}
+\item{...}{additional arguments to the error calculation function.}
 }
 \value{
 the prediction
