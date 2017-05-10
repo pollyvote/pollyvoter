@@ -102,13 +102,10 @@ test_that("latest date can be extracted", {
 test_that("colnames can be extracted", {
   
   # create pollyvote container
-  colnames_test <- c("id", "country", "source", "election")
-  pv <- create_pollyvote(perm_colnames = colnames_test)
+  pv <- create_pollyvote()
   
   # extract latest date
-  colnames <- get_colnames(pv)
-  
-  expect_that(colnames_test, equals(colnames))
+ expect_character(get_colnames(pv), any.missing = FALSE)
   
 })
 
