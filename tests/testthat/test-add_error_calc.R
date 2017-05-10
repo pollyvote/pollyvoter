@@ -40,19 +40,14 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
   # confidence interval is just a special case of error calculation
   # add an error calculation function with a ci flag and alpha value
   pv = add_error_calc(pv, "poll_only_ci", function(pv, ci = FALSE, alpha = 0.05) {
-    # extract predicted data
-    pred_data = predict(pv, "poll")
-    # extract election result
-    result = get_election_result(pv, "BTW")
-    joined = left_join(x = pred_data, y = result, by = "party") %>%
-      rename(percent.est = percent.x, percent.true = percent.y)
+   error_dat = error_calc(pv, "poll_only")
     if(!ci) {
-      return(mutate(joined, error = abs(percent.est - percent.true)))
+      return(error_dat)
     } else {
-      ec_mean_error = ec %>% 
+      ec_mean_error = error_dat %>% 
         group_by(party) %>%
         summarize(mean_error = mean(error))
-      ec_ci = left_join(ec, ec_mean_error, by = "party") %>%
+      ec_ci = left_join(error_dat, ec_mean_error, by = "party") %>%
         mutate(ci_lower = percent.est - qnorm(1-alpha/2) * mean_error,
                ci_upper = percent.est + qnorm(1-alpha/2) * mean_error)
       return(ec_ci)
