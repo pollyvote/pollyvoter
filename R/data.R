@@ -102,5 +102,6 @@
 #' \describe{
 #'   \item{party}{Name of the party in all lower case.}
 #'   \item{percent}{Share of the voters that are predicted to vote for this \code{party}}
+#'   \item{gov}{Indicates whether \code{party} is a governing party or not}
 #' }
 "election_result"
