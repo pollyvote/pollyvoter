@@ -14,15 +14,15 @@ the pollyvote object to add the data to.}
 \item{name}{[\code{character(1)}]\cr
 name of the prediction.}
 
-\item{which.source.type}{[\character(n)]\cr
+\item{which.source.type}{[\code{character(n)}]\cr
 character vector of arbitrary length containing the \code{source.type}s 
 over which to aggregate.}
 
-\item{agg_fun}{[\character(1)]\cr
+\item{agg_fun}{[\code{character(1)}]\cr
 string indicating which aggregation function to use. Currently implemented 
 are 'mean' and 'median'.}
 
-\item{na.handle}{[\character(1)]\cr
+\item{na.handle}{[\code{character(1)}]\cr
 string indicating which aggregation function to use. Currently implemented 
 are 'na.rm', indicating that missing observations will be ignored and all
 other functions will be aggregated and TODO.}

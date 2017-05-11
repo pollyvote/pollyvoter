@@ -37,13 +37,13 @@ add_prediction.pollyvote = function(pv, name = "no_aggregation", fun = function(
 #' a special type of a prediction function.
 #'
 #' @inheritParams add_prediction
-#' @param which.source.type [\character(n)]\cr
+#' @param which.source.type [\code{character(n)}]\cr
 #'   character vector of arbitrary length containing the \code{source.type}s 
 #'   over which to aggregate.
-#' @param agg_fun [\character(1)]\cr
+#' @param agg_fun [\code{character(1)}]\cr
 #'   string indicating which aggregation function to use. Currently implemented 
 #'   are 'mean' and 'median'.
-#' @param na.handle [\character(1)]\cr
+#' @param na.handle [\code{character(1)}]\cr
 #'   string indicating which aggregation function to use. Currently implemented 
 #'   are 'na.rm', indicating that missing observations will be ignored and all
 #'   other functions will be aggregated and TODO.
