@@ -17,7 +17,7 @@ name of the prediction to be plotted.}
 name of the error calculation to be plotted. Note that only one of prediction 
 and error_calc can be specified.}
 
-\item{...}{currently unused.}
+\item{...}{additional arguments to the predict or error_calc function}
 }
 \value{
 a ggplot object that can be further modified.

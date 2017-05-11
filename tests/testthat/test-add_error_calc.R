@@ -52,7 +52,6 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
                ci_upper = percent + qnorm(1-alpha/2) * mean_error)
       return(ec_ci)
     }
-    
   })
   assert_data_frame(error_calc(pv, "poll_only_ci", ci = TRUE))
   
