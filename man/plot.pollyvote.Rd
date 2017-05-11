@@ -4,14 +4,18 @@
 \alias{plot.pollyvote}
 \title{plot a pollyvote object}
 \usage{
-\method{plot}{pollyvote}(x, pred_name, ...)
+\method{plot}{pollyvote}(x, prediction = NULL, error_calc = NULL, ...)
 }
 \arguments{
 \item{x}{[\code{pollyvote(1)}] \cr
 pollyvote object to predict from.}
 
-\item{pred_name}{[\code{character(1)}] \cr
+\item{prediction}{[\code{character(1)}] \cr
 name of the prediction to be plotted.}
+
+\item{error_calc}{[\code{character(1)}] \cr
+name of the error calculation to be plotted. Note that only one of prediction 
+and error_calc can be specified.}
 
 \item{...}{currently unused.}
 }

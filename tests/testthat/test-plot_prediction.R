@@ -2,7 +2,7 @@ context("pollyvote_object")
 
 test_that("the the prediction of a pollyvote object can be plotted", {
   # create empty pollyvote container
-  pv = create_pollyvote(perm_countries = "D")
+  pv = create_pollyvote()
   
   # get data
   data("polls_individual")
