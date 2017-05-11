@@ -28,12 +28,12 @@ plot.pollyvote = function(x, prediction = NULL, error_calc = NULL, ...) {
   
   if(!is.null(prediction)){
     pred_data = predict(x, name = prediction, ...)
-    p = ggplot(pred_data) +
-      geom_line(aes(x = date, y = percent, color = party, group = party))
+    p = ggplot(pred_data, aes(x = date, y = percent, color = party, group = party)) +
+      geom_line()
   } else {
     pred_data = error_calc(x, name = error_calc, ...)
-    p = ggplot(pred_data) +
-      geom_line(aes(x = date, y = percent, color = party, group = party))
+    p = ggplot(pred_data, aes(x = date, y = percent, color = party, group = party)) +
+      geom_line()
   }
   return(p)
 }
