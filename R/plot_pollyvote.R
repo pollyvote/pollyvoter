@@ -4,11 +4,15 @@
 #'
 #' @param x [\code{pollyvote(1)}] \cr
 #'   pollyvote object to predict from.
-#' @param pred_name [\code{character(1)}] \cr
+#' @param prediction [\code{character(1)}] \cr
 #'   name of the prediction to be plotted.
+#' @param error_calc [\code{character(1)}] \cr
+#'   name of the error calculation to be plotted. Note that only one of prediction 
+#'   and error_calc can be specified.
 #' @param ... currently unused.
 #' 
 #' @return a ggplot object that can be further modified.
+#' @import ggplot2
 #' @family plot
 #'
 #' @export
@@ -23,7 +27,7 @@ plot.pollyvote = function(x, prediction = NULL, error_calc = NULL, ...) {
     error("Please specify one of 'prediction' or 'error_calc'.")
   
   # TODO implement method for error_calc
-  pred_data = predict(pv, "poll")
+  pred_data = predict(x, prediction)
   p = ggplot(pred_data) +
     geom_line(aes(x = date, y = percent, color = party, group = party))
   return(p)
