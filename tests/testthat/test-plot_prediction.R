@@ -21,6 +21,9 @@ test_that("the the prediction of a pollyvote object can be plotted", {
   })
   assert_class(plot(pv, prediction = "poll"), "ggplot")
   
+  # add an election result
+  data("election_result")
+  pv = add_election_result(pv, "BTW", election_result)
   
   # add an error calculation function
   pv = add_error_calc(pv, "poll_only", function(pv) {
@@ -51,7 +54,11 @@ test_that("the the prediction of a pollyvote object can be plotted", {
     }
   })
   assert_class(plot(pv, error_calc = "poll_only_ci"), "ggplot")
-  
+  # draw a CI
+  p = plot(pv, error_calc = "poll_only_ci", ci = TRUE)
+  p + geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), 
+                  linetype = "dashed",
+                  fill = "grey70", alpha = 0.1)
   
   
 })
