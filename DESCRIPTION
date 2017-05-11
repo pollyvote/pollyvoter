@@ -16,7 +16,7 @@ LazyData: true
 Imports:
     checkmate,
     dplyr,
-    tidyr,
+    ggplot2,
     plyr
 RoxygenNote: 5.0.1
 Suggests:
