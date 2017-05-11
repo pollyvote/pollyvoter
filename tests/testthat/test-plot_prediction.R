@@ -19,7 +19,39 @@ test_that("the the prediction of a pollyvote object can be plotted", {
       group_by(date, source.type, party) %>% 
       summarize(percent = mean(percent, na.rm = TRUE))
   })
+  assert_class(plot(pv, prediction = "poll"), "ggplot")
   
-  assert_class(plot(pv, "poll"), "ggplot")
+  
+  # add an error calculation function
+  pv = add_error_calc(pv, "poll_only", function(pv) {
+    # extract predicted data
+    pred_data = predict(pv, "poll")
+    # extract election result
+    result = get_election_result(pv, "BTW")
+    joined = left_join(x = pred_data, y = result, by = "party") %>%
+      rename(percent = percent.x, percent.true = percent.y)
+    return(mutate(joined, error = abs(percent - percent.true)))
+  })
+  assert_class(plot(pv, error_calc = "poll_only"), "ggplot")
+  
+  # confidence interval is just a special case of error calculation
+  # add an error calculation function with a ci flag and alpha value
+  pv = add_error_calc(pv, "poll_only_ci", function(pv, ci = FALSE, alpha = 0.05) {
+    error_dat = error_calc(pv, "poll_only")
+    if(!ci) {
+      return(error_dat)
+    } else {
+      ec_mean_error = error_dat %>% 
+        group_by(party) %>%
+        summarize(mean_error = mean(error))
+      ec_ci = left_join(error_dat, ec_mean_error, by = "party") %>%
+        mutate(ci_lower = percent - qnorm(1-alpha/2) * mean_error,
+               ci_upper = percent + qnorm(1-alpha/2) * mean_error)
+      return(ec_ci)
+    }
+  })
+  assert_class(plot(pv, error_calc = "poll_only_ci"), "ggplot")
+  
+  
   
 })

@@ -9,7 +9,7 @@
 #' @param error_calc [\code{character(1)}] \cr
 #'   name of the error calculation to be plotted. Note that only one of prediction 
 #'   and error_calc can be specified.
-#' @param ... currently unused.
+#' @param ... additional arguments to the predict or error_calc function
 #' 
 #' @return a ggplot object that can be further modified.
 #' @import ggplot2
@@ -26,9 +26,14 @@ plot.pollyvote = function(x, prediction = NULL, error_calc = NULL, ...) {
   if(is.null(prediction) & is.null(error_calc)) 
     error("Please specify one of 'prediction' or 'error_calc'.")
   
-  # TODO implement method for error_calc
-  pred_data = predict(x, prediction)
-  p = ggplot(pred_data) +
-    geom_line(aes(x = date, y = percent, color = party, group = party))
+  if(!is.null(prediction)){
+    pred_data = predict(x, name = prediction, ...)
+    p = ggplot(pred_data) +
+      geom_line(aes(x = date, y = percent, color = party, group = party))
+  } else {
+    pred_data = error_calc(x, name = error_calc, ...)
+    p = ggplot(pred_data) +
+      geom_line(aes(x = date, y = percent, color = party, group = party))
+  }
   return(p)
 }
