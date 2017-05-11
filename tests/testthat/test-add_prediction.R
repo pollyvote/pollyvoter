@@ -23,6 +23,7 @@ test_that("predictions can be added to pollyvote objects", {
       get_data %>% 
       filter(source.type %in% c("expert")) %>%
       group_by(date, source.type, party) %>% 
+      # TODO NA handling here?
       summarize(percent = mean(percent, na.rm = TRUE))
   })
   
@@ -68,3 +69,21 @@ test_that("predictions can be added to pollyvote objects", {
   
   
 })
+
+
+test_that("aggregations can be added to pollyvote objects", {
+  # create empty pollyvote container
+  pv = create_pollyvote(perm_countries = "D")
+  
+  # get data
+  data("polls_individual")
+  
+  # add data to pollyvote
+  pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+                source.type = "poll", election = "BTW")
+  
+  # add aggregation
+  pv = add_aggr_source.type(pv, name = "aggr_poll", which.source.type = "poll", 
+                            agg_fun = "median", na.handle = "na.rm")
+  assert_data_frame(predict(pv, "aggr_poll"))
+  })
