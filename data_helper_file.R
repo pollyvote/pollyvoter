@@ -113,14 +113,14 @@ markets_wahlfieber_1 <- tidyr::gather(markets_wahlfieber_1, "party", "percent",
 
 election_result <- readxl::read_excel(system.file("extdata/German_PollyVote_2013.xlsx", 
                                                        package = "pollyvoter"), 
-                                      sheet = 24, skip = 0)
+                                      sheet = 24, skip = 1)
 parties <- convert_names(names(election_result)[2:9])
 election_result <- election_result[1, 2:9]
 
 # goverment variable: TRUE/FALSE
 gov = c(TRUE, TRUE, rep(FALSE, 6))
 election_result <- data.frame(party = parties, percent = as.numeric(election_result),
-                              gov = gov)
+                              government = gov)
 election_result$party <- as.character(election_result$party)
 
 ##################### save as package data ##########################
