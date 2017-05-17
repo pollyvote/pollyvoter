@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_functions.R
 \name{get_election_result}
 \alias{get_election_result}
-\title{add an election result to a pollyvote object}
+\title{get an election result from a pollyvote object}
 \usage{
 get_election_result(pv, election, ...)
 }
@@ -16,8 +16,9 @@ name of the election. One of the permitted elections of \code{pv}.}
 \item{...}{currently ignored.}
 }
 \value{
-The pollyvote object with added prediction
+A data frame containing the election result.
 }
 \description{
-Adds election result to a pollyvote opbject.
+gets an election result from a pollyvote object. To add a new election result to a pollyvote object
+use \code{\link{add_election_result}}.
 }

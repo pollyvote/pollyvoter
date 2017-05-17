@@ -4,7 +4,7 @@
 \alias{print.pollyvote}
 \title{print a pollyvote data container}
 \usage{
-\method{print}{pollyvote}(pv)
+\method{print}{pollyvote}(x)
 }
 \arguments{
 \item{pv}{a pollyvote object.}

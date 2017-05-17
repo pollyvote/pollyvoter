@@ -59,6 +59,4 @@ test_that("the prediction of a pollyvote object can be plotted", {
   p + geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), 
                   linetype = "dashed",
                   fill = "grey70", alpha = 0.1)
-  
-  
 })
