@@ -55,14 +55,15 @@ create_pollyvote = function(id = "pollyvote",
                     region = character(), 
                     region.type = character(),
                     party = character(),
-                    percent = numeric())
+                    percent = numeric(),
+                    government = numeric())
   
   # initiate permitted col names for data
   perm_colnames = c("id", "country", 
                     "source", "source.type",
                     "election", "date", 
                     "region", "region.type", 
-                    "party", "percent")
+                    "party", "percent", "government")
   
   # crate pollyvote object
   pv = list(id = id,
