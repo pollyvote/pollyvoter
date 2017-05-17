@@ -91,6 +91,26 @@ create_pollyvote = function(id = "pollyvote",
 #' internal method to print out the most important features of a pollyvote container
 #' 
 #' @param pv a pollyvote object.
-print.pollyvote = function(pv) {
-  print.listof(pv)
+print.pollyvote = function(x) {
+  cat("\n")
+  cat("\t pollyvote object \n")
+  cat("\n")
+  if(length(get_perm_countries(x)) != 0)
+    cat("permitted countries:", get_perm_countries(x), "\n")
+  # if(length(get_perm_source_types(x)) != 0)
+  #   cat("permitted source types:", get_perm_sources(x), "\n")
+  if(!is.null(get_perm_date_earliest(x)) & !is.null(get_perm_date_earliest(x)))
+    cat("Permitted dates: From", get_perm_date_earliest(x), " to ", get_perm_date_latest(x), "\n")
+  if(length(get_perm_regions(x)) != 0)
+    cat("permitted regions:", get_perm_regions(x), "\n")
+  # if(length(get_perm_region_types(x)) != 0)
+  #   cat("permitted region types:", get_perm_region_types(x), "\n")
+  if(length(get_perm_parties(x)) != 0)
+    cat("permitted parties:", get_perm_parties(x), "\n")
+     
+  dims = dim(get_data(x))
+  cat("data:", dims[1], " observations on", length(unique(get_data(x)$date)), "days. \n")
+  if(!is.null(names(x$election_result)))
+    cat("available elections:", names(x$election_result))
+  cat("\n")
 }
