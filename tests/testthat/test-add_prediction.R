@@ -9,20 +9,20 @@ test_that("predictions can be added to pollyvote objects", {
   
   # add data to pollyvote
   pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
-                source.type = "poll", election = "BTW")
+                source_type = "poll", election = "BTW")
   
   # add other data (actually the same) to the pv object
   pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
-                source.type = "expert", election = "BTW")
+                source_type = "expert", election = "BTW")
   pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
-                source.type = "eco.model", election = "BTW")
+                source_type = "eco.model", election = "BTW")
   
   # add prediction functions to the pollyvote object
   pv = add_prediction(pv, "expert", function(pv) {
     pv %>% 
       get_data %>% 
-      filter(source.type %in% c("expert")) %>%
-      group_by(date, source.type, party) %>% 
+      filter(source_type %in% c("expert")) %>%
+      group_by(date, source_type, party) %>% 
       # TODO NA handling here?
       summarize(percent = mean(percent, na.rm = TRUE))
   })
@@ -30,14 +30,14 @@ test_that("predictions can be added to pollyvote objects", {
   pv = add_prediction(pv, "poll", function(pv) {
     pv %>% 
       get_data %>% 
-      filter(source.type %in% c("poll")) %>%
-      group_by(date, source.type, party) %>% 
+      filter(source_type %in% c("poll")) %>%
+      group_by(date, source_type, party) %>% 
       summarize(percent = mean(percent, na.rm = TRUE))
   })
   
   # check the predictions
-  assert_data_frame(predict(pv, name = "expert"))
-  assert_data_frame(predict(pv, name = "poll"))
+  assert_data_frame(predict(pv, method = "expert"))
+  assert_data_frame(predict(pv, method = "poll"))
   
   
   
@@ -47,7 +47,7 @@ test_that("predictions can be added to pollyvote objects", {
     pred_data = plyr::rbind.fill(predict(pv, "expert"), predict(pv, "poll"))
     # aggregate it with a weighted mean (random example)
     dat_final = pred_data %>%
-      mutate(weight = ifelse(source.type == "expert", 1, 2)) %>%
+      mutate(weight = ifelse(source_type == "expert", 1, 2)) %>%
       group_by(date, party) %>% 
       summarize(percent = weighted.mean(percent, weights = weight))
     dat_final
@@ -80,10 +80,10 @@ test_that("aggregations can be added to pollyvote objects", {
   
   # add data to pollyvote
   pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
-                source.type = "poll", election = "BTW")
+                source_type = "poll", election = "BTW")
   
   # add aggregation
-  pv = add_aggr_source.type(pv, name = "aggr_poll", which.source.type = "poll", 
+  pv = add_aggr_source_type(pv, method = "aggr_poll", which_source_type = "poll", 
                             agg_fun = "median", na.handle = "na.rm")
   assert_data_frame(predict(pv, "aggr_poll"))
   })

@@ -5,7 +5,7 @@
 #'
 #' @param id [\code{character(1)}]\cr
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
-#' @param perm_countries,perm_sources,perm_source.types,perm_elections,perm_regions,perm_region.types,perm_parties [\code{character(n)}]\cr
+#' @param perm_countries,perm_sources,perm_source_types,perm_elections,perm_regions,perm_region_types,perm_parties [\code{character(n)}]\cr
 #'   permitted values for the respective column of the data of this pollyvote object
 #' @param perm_date_earliest,perm_date_latest [\code{POSIXct(1)}]\cr
 #'   earliest and latest permissible date in format \%Y-\%m-\%d.
@@ -17,12 +17,12 @@
 create_pollyvote = function(id = "pollyvote",
                             perm_countries = character(0), 
                             perm_sources = character(0),
-                            perm_source.types = character(0),
+                            perm_source_types = character(0),
                             perm_elections = character(0), 
                             perm_date_earliest = NULL, 
                             perm_date_latest = NULL,
                             perm_regions = character(0),
-                            perm_region.types = character(0),
+                            perm_region_types = character(0),
                             perm_parties = character(0)
                             ) {
   # input checking
@@ -39,7 +39,7 @@ create_pollyvote = function(id = "pollyvote",
     date = format(perm_date_latest, format = "%Y-%m-%d", usetz = FALSE)
   }
   assert_character(perm_regions)
-  assert_character(perm_region.types)
+  assert_character(perm_region_types)
   assert_character(perm_countries)
   assert_character(perm_parties)
   
@@ -48,33 +48,33 @@ create_pollyvote = function(id = "pollyvote",
   data = data.frame(id = character(), 
                     country = character(), 
                     source = character(), 
-                    source.type = character(),
+                    source_type = character(),
                     election = character(),
                     date = character(),
                     # date = as.POSIXct(character(0), format = "%Y-%m-%d", usetz = FALSE), # TODO format
                     region = character(), 
-                    region.type = character(),
+                    region_type = character(),
                     party = character(),
                     percent = numeric(),
                     government = numeric())
   
   # initiate permitted col names for data
   perm_colnames = c("id", "country", 
-                    "source", "source.type",
+                    "source", "source_type",
                     "election", "date", 
-                    "region", "region.type", 
+                    "region", "region_type", 
                     "party", "percent", "government")
   
   # crate pollyvote object
   pv = list(id = id,
             perm_countries = perm_countries, 
             perm_sources = perm_sources, 
-            perm_source.types = perm_source.types,
+            perm_source_types = perm_source_types,
             perm_elections = perm_elections, 
             perm_date_earliest = perm_date_earliest, 
             perm_date_latest = perm_date_latest,
             perm_regions = perm_regions, 
-            perm_region.types = perm_region.types,
+            perm_region_types = perm_region_types,
             perm_parties = perm_parties,
             perm_colnames = perm_colnames,
             predictions = list(),

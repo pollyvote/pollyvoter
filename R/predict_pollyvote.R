@@ -6,11 +6,11 @@
 #'   pollyvote object to predict from.
 #' @inheritParams add_prediction
 #' 
-#' @return the prediction
+#' @return a data frame containing the result of the prediction
 #' @family predict
 #'
 #' @export
-predict.pollyvote = function(object, name, ...) {
+predict.pollyvote = function(object, method, ...) {
   assert_class(object, "pollyvote")
-  return(object$predictions[[name]](object))
+  return(object$predictions[[method]](object, ...))
 }

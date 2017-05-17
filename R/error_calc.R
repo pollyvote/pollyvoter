@@ -2,17 +2,17 @@
 #' 
 #' calculate the prediction error of a pollyvote prediction.
 #'
-#' @param pv [\code{pollyvote(1)}] \cr
-#'   pollyvote object to predict from.
-#' @param name [\code{character(1)}] \cr
-#'   name of the error calcluclation function on \code{pr} to use.
+#' @param object [\code{pollyvote(1)}] \cr
+#'   pollyvote object to get the error calculation from.
+#' @param method [\code{character(1)}] \cr
+#'   method name of the error calculation function of \code{object} to use.
 #' @param ... additional arguments to the error calculation function.
 #' 
-#' @return the prediction
+#' @return a data frame containing the result of the error calculation
 #' @family predict
 #'
 #' @export
-error_calc = function(pv, name, ...) {
+error_calc = function(object, method, ...) {
   UseMethod("error_calc")
 }
 
@@ -26,7 +26,7 @@ error_calc = function(pv, name, ...) {
 #' @family predict
 #'
 #' @export
-error_calc.pollyvote = function(pv, name, ...) {
-  assert_class(pv, "pollyvote")
-  return(pv$error_calc[[name]](pv, ...))
+error_calc.pollyvote = function(object, method, ...) {
+  assert_class(object, "pollyvote")
+  return(object$error_calc[[method]](object, ...))
 }

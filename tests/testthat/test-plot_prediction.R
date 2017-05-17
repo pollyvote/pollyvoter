@@ -1,6 +1,6 @@
 context("pollyvote_object")
 
-test_that("the the prediction of a pollyvote object can be plotted", {
+test_that("the prediction of a pollyvote object can be plotted", {
   # create empty pollyvote container
   pv = create_pollyvote()
   
@@ -9,17 +9,17 @@ test_that("the the prediction of a pollyvote object can be plotted", {
   
   # add data to pollyvote
   pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
-                source.type = "poll", election = "BTW")
+                source_type = "poll", election = "BTW")
   
   # add prediction functions to the pollyvote object
   pv = add_prediction(pv, "poll", function(pv) {
     pv %>% 
       get_data %>% 
-      filter(source.type %in% c("poll")) %>%
-      group_by(date, source.type, party) %>% 
+      filter(source_type %in% c("poll")) %>%
+      group_by(date, source_type, party) %>% 
       summarize(percent = mean(percent, na.rm = TRUE))
   })
-  assert_class(plot(pv, prediction = "poll"), "ggplot")
+  assert_class(plot(pv, prediction_method = "poll"), "ggplot")
   
   # add an election result
   data("election_result")
@@ -35,7 +35,7 @@ test_that("the the prediction of a pollyvote object can be plotted", {
       rename(percent = percent.x, percent.true = percent.y)
     return(mutate(joined, error = abs(percent - percent.true)))
   })
-  assert_class(plot(pv, error_calc = "poll_only"), "ggplot")
+  assert_class(plot(pv, error_calc_method = "poll_only"), "ggplot")
   
   # confidence interval is just a special case of error calculation
   # add an error calculation function with a ci flag and alpha value
@@ -53,7 +53,7 @@ test_that("the the prediction of a pollyvote object can be plotted", {
       return(ec_ci)
     }
   })
-  assert_class(plot(pv, error_calc = "poll_only_ci"), "ggplot")
+  assert_class(plot(pv, error_calc_method = "poll_only_ci"), "ggplot")
   # draw a CI
   p = plot(pv, error_calc = "poll_only_ci", ci = TRUE)
   p + geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), 

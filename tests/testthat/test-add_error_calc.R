@@ -9,14 +9,14 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
   
   # add data to pollyvote
   pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
-                source.type = "poll", election = "BTW")
+                source_type = "poll", election = "BTW")
   
   # add prediction functions to the pollyvote object
   pv = add_prediction(pv, "poll", function(pv) {
     pv %>% 
       get_data %>% 
-      filter(source.type %in% c("poll")) %>%
-      group_by(date, source.type, party) %>% 
+      filter(source_type %in% c("poll")) %>%
+      group_by(date, source_type, party) %>% 
       summarize(percent = mean(percent, na.rm = TRUE))
   })
   

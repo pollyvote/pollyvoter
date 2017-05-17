@@ -20,8 +20,8 @@ check_data = function(newdata, pv) {
     sapply(newdata$country, assert_choice, pv$perm_countries)
   if("source" %in% colnames(newdata) & length(pv$perm_sources) > 0)
     sapply(newdata$source, assert_choice, pv$perm_sources)
-  if("source.type" %in% colnames(newdata) & length(pv$perm_source.types) > 0)
-    sapply(newdata$source, assert_choice, pv$perm_source.types)
+  if("source_type" %in% colnames(newdata) & length(pv$perm_source_types) > 0)
+    sapply(newdata$source, assert_choice, pv$perm_source_types)
   if("election" %in% colnames(newdata) & length(pv$perm_elections) > 0) 
     sapply(newdata$election, assert_choice, pv$perm_elections)
   if("date" %in% colnames(newdata)) {
@@ -30,8 +30,8 @@ check_data = function(newdata, pv) {
   }
   if("region" %in% colnames(newdata) & length(pv$perm_regions) > 0) 
     sapply(newdata$region, assert_choice, pv$perm_regions)
-  if("region.type" %in% colnames(newdata) & length(pv$perm_region.types) > 0) 
-    sapply(newdata$region, assert_choice, pv$perm_region.types)
+  if("region_type" %in% colnames(newdata) & length(pv$perm_region_types) > 0) 
+    sapply(newdata$region, assert_choice, pv$perm_region_types)
   if("party" %in% colnames(newdata) & length(pv$perm_parties) > 0) 
     sapply(newdata$party, assert_choice, pv$perm_parties)
   if("percent" %in% colnames(newdata)) 
