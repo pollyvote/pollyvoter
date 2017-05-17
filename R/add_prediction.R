@@ -47,7 +47,7 @@ add_prediction.pollyvote = function(pv, name = "no_aggregation", fun = function(
 #'   string indicating which aggregation function to use. Currently implemented 
 #'   are 'na.rm', indicating that missing observations will be ignored and all
 #'   other functions will be aggregated and TODO.
-#'   
+#' @importFrom stats median
 #' @return The pollyvote object with added prediction
 #' @family add_aggr
 #'
