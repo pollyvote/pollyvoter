@@ -4,15 +4,15 @@
 \alias{add_prediction.pollyvote}
 \title{add data to a pollyvote object}
 \usage{
-\method{add_prediction}{pollyvote}(pv, name = "no_aggregation",
+\method{add_prediction}{pollyvote}(pv, method = "no_aggregation",
   fun = function(pv) {     get_data(pv) }, ...)
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr
 the pollyvote object to add the data to.}
 
-\item{name}{[\code{character(1)}]\cr
-name of the prediction.}
+\item{method}{[\code{character(1)}]\cr
+method of the prediction. This method name will be used to call the prediction in \code{\link{predict.pollyvote}}.}
 
 \item{fun}{[\code{function(pv)}]\cr}
 

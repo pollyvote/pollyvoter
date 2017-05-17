@@ -5,16 +5,16 @@
 \title{create a pollyvote data container}
 \usage{
 create_pollyvote(id = "pollyvote", perm_countries = character(0),
-  perm_sources = character(0), perm_source.types = character(0),
+  perm_sources = character(0), perm_source_types = character(0),
   perm_elections = character(0), perm_date_earliest = NULL,
   perm_date_latest = NULL, perm_regions = character(0),
-  perm_region.types = character(0), perm_parties = character(0))
+  perm_region_types = character(0), perm_parties = character(0))
 }
 \arguments{
 \item{id}{[\code{character(1)}]\cr
 the name ID of the pollyvote object, defaults to 'pollyvote'.}
 
-\item{perm_countries, perm_sources, perm_source.types, perm_elections, perm_regions, perm_region.types, perm_parties}{[\code{character(n)}]\cr
+\item{perm_countries, perm_sources, perm_source_types, perm_elections, perm_regions, perm_region_types, perm_parties}{[\code{character(n)}]\cr
 permitted values for the respective column of the data of this pollyvote object}
 
 \item{perm_date_earliest, perm_date_latest}{[\code{POSIXct(1)}]\cr

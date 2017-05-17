@@ -4,19 +4,19 @@
 \alias{predict.pollyvote}
 \title{predict a pollyvote object}
 \usage{
-\method{predict}{pollyvote}(object, name, ...)
+\method{predict}{pollyvote}(object, method, ...)
 }
 \arguments{
 \item{object}{[\code{pollyvote(1)}] \cr
 pollyvote object to predict from.}
 
-\item{name}{[\code{character(1)}]\cr
-name of the prediction.}
+\item{method}{[\code{character(1)}]\cr
+method of the prediction. This method name will be used to call the prediction in \code{\link{predict.pollyvote}}.}
 
 \item{...}{additional arguments}
 }
 \value{
-the prediction
+a data frame containing the result of the prediction
 }
 \description{
 predict a pollyvote opbject.

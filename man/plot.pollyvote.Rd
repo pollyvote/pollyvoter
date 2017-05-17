@@ -4,20 +4,21 @@
 \alias{plot.pollyvote}
 \title{plot a pollyvote object}
 \usage{
-\method{plot}{pollyvote}(x, prediction = NULL, error_calc = NULL, ...)
+\method{plot}{pollyvote}(x, prediction_method = NULL,
+  error_calc_method = NULL, ...)
 }
 \arguments{
 \item{x}{[\code{pollyvote(1)}] \cr
 pollyvote object to predict from.}
 
-\item{prediction}{[\code{character(1)}] \cr
-name of the prediction to be plotted.}
+\item{prediction_method}{[\code{character(1)}] \cr
+method of the prediction to be plotted.}
 
-\item{error_calc}{[\code{character(1)}] \cr
-name of the error calculation to be plotted. Note that only one of prediction 
-and error_calc can be specified.}
+\item{error_calc_method}{[\code{character(1)}] \cr
+method of the error calculation to be plotted. Note that only one of prediction_method 
+and error_calc_method can be specified.}
 
-\item{...}{additional arguments to the predict or error_calc function}
+\item{...}{additional arguments to the predict or error_calc_method function}
 }
 \value{
 a ggplot object that can be further modified.

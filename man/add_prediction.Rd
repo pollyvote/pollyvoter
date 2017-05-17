@@ -4,14 +4,14 @@
 \alias{add_prediction}
 \title{add a prediciton (to a pollyvote object)}
 \usage{
-add_prediction(pv, name, fun = function(pv) {     get_data(pv) }, ...)
+add_prediction(pv, method, fun = function(pv) {     get_data(pv) }, ...)
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr
 the pollyvote object to add the data to.}
 
-\item{name}{[\code{character(1)}]\cr
-name of the prediction.}
+\item{method}{[\code{character(1)}]\cr
+method of the prediction. This method name will be used to call the prediction in \code{\link{predict.pollyvote}}.}
 
 \item{fun}{[\code{function(pv)}]\cr}
 
