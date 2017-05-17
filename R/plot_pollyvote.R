@@ -27,7 +27,7 @@ plot.pollyvote = function(x, prediction = NULL, error_calc = NULL, ...) {
     error("Please specify one of 'prediction' or 'error_calc'.")
   
   if(!is.null(prediction)){
-    pred_data = predict(x, name = prediction, ...)
+    pred_data = predict.pollyvote(x, name = prediction, ...)
     p = ggplot(pred_data, aes(x = date, y = percent, color = party, group = party)) +
       geom_line()
   } else {
