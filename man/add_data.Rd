@@ -21,4 +21,3 @@ The pollyvote object with added data.
 \description{
 Adds data, so far only implemented for pollyvote objects.
 }
-

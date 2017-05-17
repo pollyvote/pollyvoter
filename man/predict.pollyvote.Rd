@@ -25,4 +25,3 @@ predict a pollyvote opbject.
 Other predict: \code{\link{error_calc.pollyvote}},
   \code{\link{error_calc}}
 }
-

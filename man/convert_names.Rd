@@ -21,4 +21,3 @@ text = c("Grüne", "SPD")
 convert_names(text)
 
 }
-

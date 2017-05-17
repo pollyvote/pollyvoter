@@ -22,4 +22,3 @@ Nothing. Only throws error message if arguments are not feasible.
 internal check function if additional arguments to pollyvoter::add_data are 
 permissible for a pollyvote object
 }
-

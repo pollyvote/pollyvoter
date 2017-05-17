@@ -36,4 +36,3 @@ The pollyvote object with added prediction
 Adds an aggregation function to a pollyvote object. An aggregation function is
 a special type of a prediction function.
 }
-

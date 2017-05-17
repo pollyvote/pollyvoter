@@ -12,4 +12,3 @@
 \description{
 internal method to print out the most important features of a pollyvote container
 }
-

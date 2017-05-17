@@ -22,4 +22,3 @@ pv = create_pollyvote()
 get_colnames(pv)
 
 }
-

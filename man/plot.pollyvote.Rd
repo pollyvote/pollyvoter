@@ -25,4 +25,3 @@ a ggplot object that can be further modified.
 \description{
 plots a prdiction of a pollyvote opbject.
 }
-

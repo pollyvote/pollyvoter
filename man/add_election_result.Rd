@@ -24,4 +24,3 @@ The pollyvote object with added prediction.
 \description{
 Adds an election result, so far only implemented for pollyvote objects.
 }
-

@@ -21,4 +21,3 @@ for the BTW 2013 in Germany.
 \code{\link{markets_prognosys}}, \code{\link{markets_wahlfieber_1}}
 }
 \keyword{datasets}
-

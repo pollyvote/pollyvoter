@@ -21,4 +21,3 @@ for the BTW 2013 in Germany.
 \code{\link{markets_eix}}, \code{\link{markets_prognosys}}
 }
 \keyword{datasets}
-

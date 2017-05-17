@@ -8,7 +8,7 @@
 \describe{
   \item{party}{Name of the party in all lower case.}
   \item{percent}{Share of the voters that are predicted to vote for this \code{party}}
-  \item{gov}{Indicates whether \code{party} is a governing party or not}
+  \item{government}{Indicates whether \code{party} is a governing party (1) or not (0).}
 }}
 \usage{
 election_result
@@ -17,4 +17,3 @@ election_result
 A dataset in the long format containing election result for the BTW 2013 in Germany.
 }
 \keyword{datasets}
-

@@ -23,4 +23,3 @@ for the BTW 2013 in Germany.
 Other example data: \code{\link{polls_individual}}
 }
 \keyword{datasets}
-

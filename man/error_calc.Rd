@@ -25,4 +25,3 @@ calculate the prediction error of a pollyvote prediction.
 Other predict: \code{\link{error_calc.pollyvote}},
   \code{\link{predict.pollyvote}}
 }
-

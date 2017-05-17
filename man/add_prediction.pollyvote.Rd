@@ -24,4 +24,3 @@ The pollyvote object with added prediction
 \description{
 Adds data to a pollyvote opbject.
 }
-

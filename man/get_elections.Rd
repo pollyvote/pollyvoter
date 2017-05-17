@@ -22,4 +22,3 @@ pv = create_pollyvote(perm_elections = "BTW")
 get_elections(pv)
 
 }
-
