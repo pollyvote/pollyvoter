@@ -29,13 +29,12 @@ get_data <- function(pv){
 #' @examples
 #' pv = create_pollyvote()
 #' # returns an empty data frame
-#' get_parties(pv)
+#' get_perm_parties(pv)
 #'  
 #' @return character vector containing all party names stored in \code{pv}.   
 #'
 #' @export
-
-get_parties <- function(pv){
+get_perm_parties <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_parties) 
 }
@@ -51,13 +50,12 @@ get_parties <- function(pv){
 #' @examples
 #' pv = create_pollyvote()
 #' # returns an empty data frame
-#' get_regions(pv)
+#' get_perm_regions(pv)
 #' 
 #' @return character vector containing all regions stored in \code{pv}. 
 #'
 #' @export
-
-get_regions <- function(pv){
+get_perm_regions <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_regions) 
 }  
@@ -73,13 +71,12 @@ get_regions <- function(pv){
 #' @examples
 #' pv = create_pollyvote(perm_elections = "BTW")
 #' # returns an empty data frame
-#' get_elections(pv)
+#' get_perm_elections(pv)
 #' 
 #' @return character vector containing all elections stored in \code{pv}.  
 #'
 #' @export
-
-get_elections <- function(pv){
+get_perm_elections <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_elections) 
 }  
@@ -95,13 +92,12 @@ get_elections <- function(pv){
 #' @examples
 #' pv = create_pollyvote()
 #' # returns an empty data frame
-#' get_countries(pv)
+#' get_perm_countries(pv)
 #' 
 #' @return character vector containing all countries stored in \code{pv}.  
 #'
 #' @export
-
-get_countries <- function(pv){
+get_perm_countries <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_countries) 
 }  
@@ -117,13 +113,12 @@ get_countries <- function(pv){
 #' @examples
 #' pv = create_pollyvote()
 #' # returns an empty data frame
-#' get_sources(pv)
+#' get_perm_sources(pv)
 #' 
 #' @return character vector containing all sources stored in \code{pv}.  
 #'
 #' @export
-
-get_sources <- function(pv){
+get_perm_sources <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_sources) 
 }  
@@ -139,13 +134,12 @@ get_sources <- function(pv){
 #' @examples
 #' pv = create_pollyvote()
 #' # returns an empty data frame
-#' get_date_earliest(pv)
+#' get_perm_date_earliest(pv)
 #' 
 #' @return character containing earliest date stored in \code{pv}.  
 #'
 #' @export
-
-get_date_earliest <- function(pv){
+get_perm_date_earliest <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_date_earliest) 
 }  
@@ -161,13 +155,12 @@ get_date_earliest <- function(pv){
 #' @examples
 #' pv = create_pollyvote()
 #' # returns an empty data frame
-#' get_date_latest(pv)
+#' get_perm_date_latest(pv)
 #' 
 #' @return character containing latest date stored in \code{pv}.  
 #'
 #' @export
-
-get_date_latest <- function(pv){
+get_perm_date_latest <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_date_latest) 
 }  
@@ -183,26 +176,26 @@ get_date_latest <- function(pv){
 #' @examples
 #' pv = create_pollyvote()
 #' # returns an empty data frame
-#' get_colnames(pv)
+#' get_perm_colnames(pv)
 #' 
 #' @return character containing colnames stored in \code{pv}.  
 #'
 #' @export
-
-get_colnames <- function(pv){
+get_perm_colnames <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_colnames) 
 }  
 
 
 
-#' add an election result to a pollyvote object
+#' get an election result from a pollyvote object
 #' 
-#' Adds election result to a pollyvote opbject.
+#' gets an election result from a pollyvote object. To add a new election result to a pollyvote object
+#' use \code{\link{add_election_result}}.
 #'
 #' @inheritParams add_election_result
 #' 
-#' @return The pollyvote object with added prediction
+#' @return A data frame containing the election result.
 #'
 #' @export
 get_election_result = function(pv, election, ...) {
