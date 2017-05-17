@@ -86,11 +86,11 @@ create_pollyvote = function(id = "pollyvote",
 }
 
 
-#' print a pollyvote data container
+#' print a pollyvote object
 #' 
-#' internal method to print out the most important features of a pollyvote container
+#' internal method to print the most important features of a pollyvote container
 #' 
-#' @param pv a pollyvote object.
+#' @param x a pollyvote object.
 print.pollyvote = function(x) {
   cat("\n")
   cat("\t pollyvote object \n")

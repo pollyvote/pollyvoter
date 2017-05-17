@@ -2,13 +2,13 @@
 % Please edit documentation in R/create_pollyvote.R
 \name{print.pollyvote}
 \alias{print.pollyvote}
-\title{print a pollyvote data container}
+\title{print a pollyvote object}
 \usage{
 \method{print}{pollyvote}(x)
 }
 \arguments{
-\item{pv}{a pollyvote object.}
+\item{x}{a pollyvote object.}
 }
 \description{
-internal method to print out the most important features of a pollyvote container
+internal method to print the most important features of a pollyvote container
 }
