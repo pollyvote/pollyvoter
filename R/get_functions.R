@@ -187,7 +187,6 @@ get_perm_colnames <- function(pv){
 }  
 
 
-
 #' get an election result from a pollyvote object
 #' 
 #' gets an election result from a pollyvote object. To add a new election result to a pollyvote object
@@ -204,5 +203,25 @@ get_election_result = function(pv, election, ...) {
   assert_choice(election, names(pv$election_result))
   return(pv$election_result[[election]])
 }
-  
+
+
+#' extract source types
+#' 
+#' This function extract source types from a pollyvote container.
+#'
+#' @param pv [\code{character(1)}]\cr
+#'   the name ID of the pollyvote object, defaults to 'pollyvote'.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_perm_source_types(pv)
+#' 
+#' @return character vector containing all source types stored in \code{pv}.  
+#'
+#' @export
+get_perm_source_types <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_source_types) 
+}  
   

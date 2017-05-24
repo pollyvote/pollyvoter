@@ -21,7 +21,7 @@ test_that("regions can be extracted", {
   regions_test <- c("bayern", "nrw", "bawu")
   pv <- create_pollyvote(perm_regions = regions_test)
   
-  # extract parties
+  # extract regions
   regions <- get_perm_regions(pv)
   
   expect_that(regions_test, equals(regions))
@@ -35,7 +35,7 @@ test_that("elections can be extracted", {
   elections_test <- c("btw")
   pv <- create_pollyvote(perm_elections = elections_test)
   
-  # extract parties
+  # extract elections
   elections <- get_perm_elections(pv)
   
   expect_that(elections_test, equals(elections))
@@ -105,5 +105,19 @@ test_that("colnames can be extracted", {
   pv <- create_pollyvote()
   
   # extract latest date
- expect_character(get_perm_colnames(pv), any.missing = FALSE)
+  expect_character(get_perm_colnames(pv), any.missing = FALSE)
+})
+
+
+test_that("source types can be extracted", {
+  
+  # create pollyvote container
+  source_types_test <- "poll"
+  pv <- create_pollyvote(perm_source_types = source_types_test)
+  
+  # extract source types
+  source_types <- get_perm_source_types(pv)
+  
+  expect_that(source_types_test, equals(source_types))
+  
 })
