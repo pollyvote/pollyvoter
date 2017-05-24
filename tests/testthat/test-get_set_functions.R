@@ -121,3 +121,18 @@ test_that("source types can be extracted", {
   expect_that(source_types_test, equals(source_types))
   
 })
+
+
+test_that("region types can be extracted", {
+  
+  # create pollyvote container
+  region_types_test <- "national"
+  pv <- create_pollyvote(perm_region_types = region_types_test)
+  
+  # extract region types
+  region_types <- get_perm_region_types(pv)
+  
+  expect_that(region_types_test, equals(region_types))
+  
+})
+

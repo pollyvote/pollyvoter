@@ -224,4 +224,25 @@ get_perm_source_types <- function(pv){
   assert_class(pv, "pollyvote")
   return(pv$perm_source_types) 
 }  
+
+
+#' extract region types
+#' 
+#' This function extract region types from a pollyvote container.
+#'
+#' @param pv [\code{character(1)}]\cr
+#'   the name ID of the pollyvote object, defaults to 'pollyvote'.
+#'
+#' @examples
+#' pv = create_pollyvote()
+#' # returns an empty data frame
+#' get_perm_region_types(pv)
+#' 
+#' @return character vector containing all region types stored in \code{pv}.  
+#'
+#' @export
+get_perm_region_types <- function(pv){
+  assert_class(pv, "pollyvote")
+  return(pv$perm_region_types) 
+}  
   
