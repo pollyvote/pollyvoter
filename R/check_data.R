@@ -27,6 +27,8 @@ check_data = function(newdata, pv) {
   if("date" %in% colnames(newdata)) {
     stopifnot(all(newdata$date < pv$perm_date_latest))
     stopifnot(all(newdata$date > pv$perm_date_latest))
+    # reformat to the right data structure
+    newdata$date = as.POSIXct(format(newdata$date, format = "%Y-%m-%d", usetz = FALSE))
   }
   if("region" %in% colnames(newdata) & length(pv$perm_regions) > 0) 
     sapply(newdata$region, assert_choice, pv$perm_regions)

@@ -50,8 +50,8 @@ create_pollyvote = function(id = "pollyvote",
                     source = character(), 
                     source_type = character(),
                     election = character(),
-                    date = character(),
-                    # date = as.POSIXct(character(0), format = "%Y-%m-%d", usetz = FALSE), # TODO format
+                    # date = character(),
+                    date = as.POSIXct(format(character(0), format = "%Y-%m-%d", usetz = FALSE)), # TODO format
                     region = character(), 
                     region_type = character(),
                     party = character(),
