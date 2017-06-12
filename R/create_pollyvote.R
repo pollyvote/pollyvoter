@@ -112,5 +112,7 @@ print.pollyvote = function(x) {
   cat("data:", dims[1], " observations on", length(unique(get_data(x)$date)), "days. \n")
   if(!is.null(names(x$election_result)))
     cat("available elections:", names(x$election_result))
+  if(!is.null(names(x$predictions)))
+    cat("available predictions:", names(x$election_result))
   cat("\n")
 }
