@@ -5,7 +5,3 @@ test_that("pollyvote objects can be created", {
   pv = create_pollyvote(id = "test_pv")
   assert_class(pv, "pollyvote")
 })
-
-
-
-

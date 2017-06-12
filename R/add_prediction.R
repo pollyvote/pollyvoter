@@ -79,4 +79,3 @@ add_aggr_source_type = function(pv, method, which_source_type, agg_fun = "mean",
       summarize(percent = fun(percent, na.rm = na.rm))
   })
 }
-
