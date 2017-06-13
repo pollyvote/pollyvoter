@@ -39,52 +39,14 @@ test_that("predictions can be added to pollyvote objects", {
                                                            ...) {
     na_handle = match.arg(na_handle)
     assert_choice(source_type, unique(get_data(pv)[,"source_type"]))
+    # avoid NSE, ugly but works
+    filter.source_type = source_type
     
-    # na handling
-    if (na_handle == "last") {
-      preprocessed.dat = pv %>% 
-        get_data %>% 
-        filter(source_type %in% c("poll")) %>%
-        complete(date,
-                 nesting(source, source_type, party)) %>%
-        group_by(source, party) %>% 
-        fill(percent, .direction = "down")
-      
-    } else if (na_handle == "omit") {
-      preprocessed.dat = pv %>% 
-        get_data %>% 
-        filter(source_type %in% c("poll"))
-      
-    } else if (na_handle == "mean_within") {
-      preprocessed.dat = pv %>% 
-        get_data %>% 
-        filter(source_type %in% c("poll")) %>%
-        complete(date,
-                 nesting(source, source_type, party)) %>%
-        group_by(date, party) %>%
-        mutate(percent = ifelse(is.na(percent), mean(percent, na.rm = T), percent))
-      
-    } else if (na_handle == "mean_across") {
-      raw.dat = pv %>% 
-        get_data %>% 
-        filter(source_type %in% c("poll")) %>%
-        complete(date,
-                 nesting(source, source_type, party))
-      
-      # create a small fake pollyvote prediction by
-      # calculating the mean per source type and then over all aggregated source types
-      across.dat = pv %>% 
-        get_data %>% 
-        group_by(date, source_type, party) %>%
-        summarize(percent = mean(percent, na.rm = TRUE)) %>%
-        group_by(date, party) %>%
-        summarize(percent = mean(percent, na.rm = TRUE))
-      
-      preprocessed.dat = left_join(raw.dat, across.dat, by = c("date", "party"))
-      preprocessed.dat = preprocessed.dat %>% 
-        mutate(percent = ifelse(is.na(percent.x), percent.y, percent.x))
-    }
+    raw.dat = pv %>% 
+      get_data  %>%
+      filter(source_type %in% filter.source_type)
     
+    preprocessed.dat = fill_na(raw.dat, na_handle = na_handle, pv = pv, ...)
     
     final.dat = preprocessed.dat %>%
       group_by(date, source_type, party) %>% 
@@ -95,6 +57,7 @@ test_that("predictions can be added to pollyvote objects", {
   
   # check the prediction
   assert_data_frame(predict(pv, method = "mean_for_source_type", source_type = "poll"))
+  assert_data_frame(predict(pv, method = "aggr_source_type", which_source_type = "poll"))
   
   
   
