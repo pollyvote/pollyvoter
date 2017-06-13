@@ -43,7 +43,7 @@ add_prediction.pollyvote = function(pv, method = "no_aggregation", fun = functio
 #' @param agg_fun [\code{character(1)}]\cr
 #'   string indicating which aggregation function to use. Currently implemented 
 #'   are 'mean' and 'median'.
-#' @param na.handle [\code{character(1)}]\cr
+#' @param na_handle [\code{character(1)}]\cr
 #'   string indicating which aggregation function to use. Currently implemented 
 #'   are 'na.rm', indicating that missing observations will be ignored and all
 #'   other functions will be aggregated and TODO.
@@ -53,20 +53,20 @@ add_prediction.pollyvote = function(pv, method = "no_aggregation", fun = functio
 #'
 #' @export
 add_aggr_source_type = function(pv, method, which_source_type, agg_fun = "mean", 
-                                na.handle = "last", ...) {
+                                na_handle = "last", ...) {
   # input checking
   assert_class(pv, "pollyvote")
   assert_character(method)
   if(length(get_perm_source_types(pv)) != 0)
     lapply(which_source_type, assert_choice, get_perm_source_types(pv))
   assert_choice(agg_fun, c("mean", "median"))
-  assert_choice(na.handle, c("last", "omit", "mean_within", "mean_across"))
+  assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
   
   # evaluate string input
   fun = switch(agg_fun,
                mean = mean,
                median = median)
-  # na.rm = ifelse(na.handle == "na.rm", TRUE, FALSE)
+  # na.rm = ifelse(na_handle == "na.rm", TRUE, FALSE)
   
   # call add_prediction with the suitable aggregation function
   # add_prediction(pv, method, function(pv) {
@@ -81,7 +81,7 @@ add_aggr_source_type = function(pv, method, which_source_type, agg_fun = "mean",
     pv %>% 
       get_data %>%
       filter(source_type %in% which_source_type) %>%
-      fill_na(na_handle = na.handle, pv = pv, ...) %>%
+      fill_na(na_handle = na_handle, pv = pv, ...) %>%
       group_by(date, source_type, party) %>% 
       summarize(percent = mean(percent, na.rm = TRUE))
   })
