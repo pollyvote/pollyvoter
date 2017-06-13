@@ -61,19 +61,19 @@ test_that("predictions can be added to pollyvote objects", {
   
   
   
-  # add a final prediction function
-  pv = add_prediction(pv, "pollyvote", function(pv) {
-    # extract predicted data
-    pred_data = plyr::rbind.fill(predict(pv, "eco.model"), predict(pv, "poll"))
-    # aggregate it with a weighted mean (random example)
-    dat_final = pred_data %>%
-      mutate(weight = ifelse(source_type == "expert", 1, 2)) %>%
-      group_by(date, party) %>% 
-      summarize(percent = weighted.mean(percent, weights = weight))
-    dat_final
-  })
-  
-  assert_data_frame(predict(pv, "pollyvote"))
+  # # add a final prediction function
+  # pv = add_prediction(pv, "pollyvote", function(pv) {
+  #   # extract predicted data
+  #   pred_data = plyr::rbind.fill(predict(pv, "eco.model"), predict(pv, "poll"))
+  #   # aggregate it with a weighted mean (random example)
+  #   dat_final = pred_data %>%
+  #     mutate(weight = ifelse(source_type == "expert", 1, 2)) %>%
+  #     group_by(date, party) %>% 
+  #     summarize(percent = weighted.mean(percent, weights = weight))
+  #   dat_final
+  # })
+  # 
+  # assert_data_frame(predict(pv, "pollyvote"))
   
   # pv = add_prediction(pv, "mega_pollyvote", function(pv) {
   #   # extract predicted data
