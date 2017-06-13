@@ -5,7 +5,7 @@
 \title{add an aggregation function to a pollyvote object}
 \usage{
 add_aggr_source_type(pv, method, which_source_type, agg_fun = "mean",
-  na.handle = "na.rm", ...)
+  na_handle = "last", ...)
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr
@@ -22,7 +22,7 @@ over which to aggregate.}
 string indicating which aggregation function to use. Currently implemented 
 are 'mean' and 'median'.}
 
-\item{na.handle}{[\code{character(1)}]\cr
+\item{na_handle}{[\code{character(1)}]\cr
 string indicating which aggregation function to use. Currently implemented 
 are 'na.rm', indicating that missing observations will be ignored and all
 other functions will be aggregated and TODO.}
