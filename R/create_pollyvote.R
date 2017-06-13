@@ -82,6 +82,51 @@ create_pollyvote = function(id = "pollyvote",
             error_calc = list(),
             data = data)
   class(pv) = c("pollyvote", "list")
+  
+  # initialize some useful prediction, aggregation and error calculation functions
+  pv = add_prediction(pv, "pollyvote", function(pv, agg_fun = "mean", na_handle = "last", ...) {
+    # input checking
+    assert_class(pv, "pollyvote")
+    # evaluate string input
+    fun = switch(agg_fun,
+                 mean = mean,
+                 median = median)
+    assert_choice(agg_fun, c("mean", "median"))
+    assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
+    if(length(get_perm_source_types(pv)) != 0)
+      lapply(which_source_type, assert_choice, get_perm_source_types(pv))
+    
+    pv %>%
+      get_data %>% 
+      fill_na(na_handle = na_handle, pv = pv, ...)
+      group_by(date, source_type, party) %>%
+      summarize(percent = mean(percent, na.rm = TRUE)) %>%
+      group_by(date, party) %>%
+      summarize(percent = mean(percent, na.rm = TRUE))
+  })
+  
+  pv = add_prediction(pv, "aggr_source_type", function(pv, which_source_type, 
+                                                       agg_fun = "mean", 
+                                                       na_handle = "last", ...) {
+    # input checking
+    assert_class(pv, "pollyvote")
+    # evaluate string input
+    fun = switch(agg_fun,
+                 mean = mean,
+                 median = median)
+    assert_choice(agg_fun, c("mean", "median"))
+    assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
+    if(length(get_perm_source_types(pv)) != 0)
+      lapply(which_source_type, assert_choice, get_perm_source_types(pv))
+    
+    pv %>% 
+      get_data  %>%
+      filter(source_type %in% which_source_type) %>%
+      fill_na(na_handle = na_handle, pv = pv, ...) %>%
+      group_by(date, source_type, party) %>% 
+      summarize(percent = mean(percent, na.rm = TRUE))
+  })
+  
   return(pv)
 }
 
@@ -113,6 +158,6 @@ print.pollyvote = function(x) {
   if(!is.null(names(x$election_result)))
     cat("available elections:", names(x$election_result))
   if(!is.null(names(x$predictions)))
-    cat("available predictions:", names(x$election_result))
+    cat("available predictions:", names(x$predictions))
   cat("\n")
 }
