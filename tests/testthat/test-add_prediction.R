@@ -1,5 +1,22 @@
 context("pollyvote_object")
 
+test_that("predefined predictions of a pollyvote object work", {
+  # create empty pollyvote container
+  pv = create_pollyvote(perm_countries = "D")
+  
+  # get data
+  data("polls_individual")
+  
+  # add data to pollyvote
+  pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+                source_type = "poll", election = "BTW")
+  
+  # test predefined prediction functions
+  assert_data_frame(predict(pv, "pollyvote"))
+  assert_data_frame(predict(pv, "aggr_source_type", which_source_type = "poll"))
+})
+
+
 test_that("predictions can be added to pollyvote objects", {
   # create empty pollyvote container
   pv = create_pollyvote(perm_countries = "D")
