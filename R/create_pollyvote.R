@@ -98,7 +98,7 @@ create_pollyvote = function(id = "pollyvote",
     
     pv %>%
       get_data %>% 
-      fill_na(na_handle = na_handle, pv = pv, ...)
+      fill_na(na_handle = na_handle, pv = pv) %>%
       group_by(date, source_type, party) %>%
       summarize(percent = mean(percent, na.rm = TRUE)) %>%
       group_by(date, party) %>%
@@ -122,7 +122,7 @@ create_pollyvote = function(id = "pollyvote",
     pv %>% 
       get_data  %>%
       filter(source_type %in% which_source_type) %>%
-      fill_na(na_handle = na_handle, pv = pv, ...) %>%
+      fill_na(na_handle = na_handle, pv = pv) %>%
       group_by(date, source_type, party) %>% 
       summarize(percent = mean(percent, na.rm = TRUE))
   })
