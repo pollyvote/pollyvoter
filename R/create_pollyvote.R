@@ -12,7 +12,20 @@
 #'
 #' @return object of class pollyvote, containing an id, an initially empty data frame
 #'   and potentially permissible values for the entries of the data frame.
-#'   
+#'
+#' @section initial functions:
+#'   some useful prediction, aggregation and error calculation functions are already
+#'   initialized when calling \code{create_pollyvote()}. 
+#'   These are:
+#'   \itemize{
+#'     \item prediction functions
+#'       \itemize{
+#'       \item 'pollyvote': 
+#'       \item 'aggr_source_type':
+#'     }
+#'     \item error calculations: TODO
+#'     }
+#' 
 #' @export
 create_pollyvote = function(id = "pollyvote",
                             perm_countries = character(0), 
@@ -84,6 +97,7 @@ create_pollyvote = function(id = "pollyvote",
   class(pv) = c("pollyvote", "list")
   
   # initialize some useful prediction, aggregation and error calculation functions
+  # TODO describe all of them in 
   pv = add_prediction(pv, "pollyvote", function(pv, agg_fun = "mean", na_handle = "last", ...) {
     # input checking
     assert_class(pv, "pollyvote")
@@ -127,6 +141,37 @@ create_pollyvote = function(id = "pollyvote",
       summarize(percent = mean(percent, na.rm = TRUE))
   })
   
+  # error claculation based on name of prediction and election
+  pv = add_error_calc(pv, "prediction_election", 
+                      function(pv, prediction = "pollyvote", election, 
+                               ci = FALSE, alpha = 0.05, ... ) {
+                        # extract predicted data
+                        pred_data = predict(pv, prediction)
+                        # extract election result
+                        if (length(pv$election_result) == 0)
+                          stop("pv does not contain any election results. Use add_election_result() to add the results of an election.")
+                        if (missing(election)) 
+                          election = names(pv$election_result)[1]
+                        result = get_election_result(pv, election)
+                        
+                        joined = left_join(x = pred_data, y = result, by = "party") %>%
+                          rename(percent = percent.x, percent.true = percent.y)
+                        error_dat = mutate(joined, error = abs(percent - percent.true))
+                        
+                        if(!ci) {
+                          return(error_dat)
+                        } else {
+                          ec_mean_error = error_dat %>% 
+                            group_by(party) %>%
+                            summarize(mean_error = mean(error))
+                          ec_ci = left_join(error_dat, ec_mean_error, by = "party") %>%
+                            mutate(ci_lower = percent - qnorm(1 - alpha / 2) * mean_error,
+                                   ci_upper = percent + qnorm(1 - alpha / 2) * mean_error)
+                          return(ec_ci)
+                        }
+                        
+                      })
+  
   return(pv)
 }
 
@@ -155,9 +200,11 @@ print.pollyvote = function(x) {
      
   dims = dim(get_data(x))
   cat("data:", dims[1], " observations on", length(unique(get_data(x)$date)), "days. \n")
-  if(!is.null(names(x$election_result)))
-    cat("available elections:", names(x$election_result))
   if(!is.null(names(x$predictions)))
-    cat("available predictions:", names(x$predictions))
+    cat("available predictions:", names(x$predictions), "\n")
+  if(!is.null(names(x$election_result)))
+    cat("available elections:", names(x$election_result), "\n")
+  if(!is.null(names(x$error_calc)))
+    cat("available error calculations:", names(x$error_calc), "\n")
   cat("\n")
 }
