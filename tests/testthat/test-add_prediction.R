@@ -104,6 +104,6 @@ test_that("aggregations can be added to pollyvote objects", {
   
   # add aggregation
   pv = add_aggr_source_type(pv, method = "aggr_poll", which_source_type = "poll", 
-                            agg_fun = "median", na_handle = "na.rm")
+                            agg_fun = "median", na_handle = "mean_within")
   assert_data_frame(predict(pv, "aggr_poll"))
 })
