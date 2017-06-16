@@ -11,6 +11,18 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
   pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
                 source_type = "poll", election = "BTW")
   
+  # add an election result
+  data("election_result")
+  pv = add_election_result(pv, "BTW", election_result)
+  
+  # check if predefined error calculation works
+  assert_data_frame(error_calc(pv, "prediction_election", 
+                               prediction = "pollyvote", election = "BTW"))
+  assert_data_frame(error_calc(pv, "prediction_election", 
+                               prediction = "pollyvote", election = "BTW",
+                               ci = TRUE, alpha = 0.1))
+  
+  
   # add prediction functions to the pollyvote object
   pv = add_prediction(pv, "poll", function(pv) {
     pv %>% 
@@ -19,10 +31,6 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
       group_by(date, source_type, party) %>% 
       summarize(percent = mean(percent, na.rm = TRUE))
   })
-  
-  # add an election result
-  data("election_result")
-  pv = add_election_result(pv, "BTW", election_result)
   
   # add an error calculation function
   pv = add_error_calc(pv, "poll_only", function(pv) {
@@ -48,8 +56,8 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
         group_by(party) %>%
         summarize(mean_error = mean(error))
       ec_ci = left_join(error_dat, ec_mean_error, by = "party") %>%
-        mutate(ci_lower = percent - qnorm(1-alpha/2) * mean_error,
-               ci_upper = percent + qnorm(1-alpha/2) * mean_error)
+        mutate(ci_lower = percent - qnorm(1 - alpha / 2) * mean_error,
+               ci_upper = percent + qnorm(1 - alpha / 2) * mean_error)
       return(ec_ci)
     }
   })
