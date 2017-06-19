@@ -13,7 +13,16 @@ data frame of a pollyvote object.}
 
 \item{na_handle}{[\code{character(1)}]\cr
 character describing which method is used to fill missing values.
-Currently supported is (TODO: give options and their meaning).}
+Currently supported is 
+\itemize{
+\item \code{'last'}: Use the last available value. Fill all days between the earliest and latest day in the data.
+\item \code{'omit'}: For every day, agregate available data.
+\item \code{'mean_within'} Use the available data of this subcomponent to fill missing values.
+\item \code{'mean_across'} Create a mini-pollyvote prediction by aggregating 
+all \code{source_type}s using \code{na_handle = 'last'} and then
+aggregating the result using \code{na_handle = 'last'}, which will then be used 
+to predict missing values in the lowest aggregation level.
+}}
 
 \item{pv}{[\code{pollyvote}]\cr
 only required for \code{na_handle = 'mean_across'}, the pollyvote object containing the data frame.}
