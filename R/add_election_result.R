@@ -49,4 +49,3 @@ add_election_result.pollyvote = function(pv, election, data, ...) {
   pv$election_result[[election]] = data
   return(pv)
 }
-
