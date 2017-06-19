@@ -25,14 +25,14 @@
 #'
 #' @export
 limit_days = function(data, 
-                      no_days, earliest_date,
+                      no_days,
                       election_data, 
                       pv, election, 
                       election_date, 
                       ...) {
   assert_class(data, "data.frame")
   # check if anything has to be done
-  if (all(missing(no_days), missing(earliest_date),
+  if (all(missing(no_days),
           missing(election_data), 
           missing(pv), missing(election), 
           missing(election_date))) {
@@ -40,8 +40,6 @@ limit_days = function(data,
   }
   
   assert_numeric(no_days)
-  if(!missing(earliest_date))
-    earliest_date = as.POSIXct(earliest_date, format = "%Y-%m-%d")
   if(!missing(election_data))
     assert_class(election_data, "data.frame")
   if(!missing(pv))
