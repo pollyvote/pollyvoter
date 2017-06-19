@@ -126,7 +126,7 @@ create_pollyvote = function(id = "pollyvote",
   # error claculation based on name of prediction and election
   pv = add_error_calc(pv, "prediction_election", 
                       function(pv, prediction = "pollyvote", election, 
-                               ci = FALSE, alpha = 0.05, ... ) {
+                               ci = FALSE, alpha = 0.05, no_days = Inf, ... ) {
                         
                         # extract election result
                         if (length(pv$election_result) == 0)
