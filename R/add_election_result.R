@@ -28,8 +28,19 @@ add_election_result = function(pv, election, data, ...) {
 #'
 #' @export
 add_election_result.pollyvote = function(pv, election, data, ...) {
+  # input checking
+  assert_class(pv, "pollyvote")
+  assert_data_frame(data)
+  
+  # run check on additional arguments
+  check_additional_args(data, pv, ...)
+  # add additional arguments to newdata
+  args = list(...)
+  data[,names(args)] = args
+  
   # check feasibility
-  if(!length(pv$perm_elections) == 0) assert_choice(election, pv$perm_elections)
+  if(!length(pv$perm_elections) == 0) 
+    assert_choice(election, pv$perm_elections)
   data = check_data(data, pv)
   
   # possibly overwrite election name
@@ -38,3 +49,4 @@ add_election_result.pollyvote = function(pv, election, data, ...) {
   pv$election_result[[election]] = data
   return(pv)
 }
+
