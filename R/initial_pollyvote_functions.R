@@ -15,22 +15,25 @@
 #' @inheritParams fill_na
 #' @export
 initial_prediction_pollyvote = function(pv, agg_fun = "mean", na_handle = "last", ...) {
-   # input checking
-   assert_class(pv, "pollyvote")
-   # evaluate string input
-   fun = switch(agg_fun,
-                mean = mean,
-                median = median)
-   assert_choice(agg_fun, c("mean", "median"))
-   assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
-   if(length(get_perm_source_types(pv)) != 0)
-     lapply(which_source_type, assert_choice, get_perm_source_types(pv))
-   
-   pv %>%
-     get_data %>% 
-     fill_na(na_handle = na_handle, pv = pv) %>%
-     group_by(date, source_type, party) %>%
-     summarize(percent = mean(percent, na.rm = TRUE)) %>%
-     group_by(date, party) %>%
-     summarize(percent = mean(percent, na.rm = TRUE))
- }
+  # TODO create limit_days argument either usign number of days to election or fixed date
+  #  create a function that works like fill_na just for limit_days
+  
+  # input checking
+  assert_class(pv, "pollyvote")
+  # evaluate string input
+  fun = switch(agg_fun,
+               mean = mean,
+               median = median)
+  assert_choice(agg_fun, c("mean", "median"))
+  assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
+  if(length(get_perm_source_types(pv)) != 0)
+    lapply(which_source_type, assert_choice, get_perm_source_types(pv))
+  
+  pv %>%
+    get_data %>% 
+    fill_na(na_handle = na_handle, pv = pv) %>%
+    group_by(date, source_type, party) %>%
+    summarize(percent = mean(percent, na.rm = TRUE)) %>%
+    group_by(date, party) %>%
+    summarize(percent = mean(percent, na.rm = TRUE)) 
+}
