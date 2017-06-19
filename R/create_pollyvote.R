@@ -20,8 +20,8 @@
 #'   \itemize{
 #'     \item prediction functions
 #'       \itemize{
-#'       \item pollyvote
-#'       \item aggr_source_type
+#'       \item 'pollyvote': \code{\link{initial_prediction_pollyvote}}
+#'       \item 'aggr_source_type'
 #'     }
 #'     \item error calculations: TODO
 #'     }
