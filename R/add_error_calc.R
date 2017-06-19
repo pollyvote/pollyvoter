@@ -4,7 +4,7 @@
 #'
 #' @param pv [\code{pollyvote}]\cr
 #'   the pollyvote object to add the data to.
-#' @param name [\code{character(1)}]\cr
+#' @param method [\code{character(1)}]\cr
 #'   name of the error calculation.
 #' @param fun [\code{function(pv)}]\cr
 #' @param ... additional arguments
@@ -12,7 +12,7 @@
 #' @return The pollyvote object with added prediction.
 #'
 #' @export
-add_error_calc = function(pv, name, fun, ...) {
+add_error_calc = function(pv, method, fun, ...) {
   UseMethod("add_error_calc")
 }
 
@@ -25,8 +25,8 @@ add_error_calc = function(pv, name, fun, ...) {
 #' @return The pollyvote object with added prediction
 #'
 #' @export
-add_error_calc.pollyvote = function(pv, name = "TODO", fun = function(pv){stop("TODO")}, ...) {
+add_error_calc.pollyvote = function(pv, method = "TODO", fun = function(pv){stop("TODO")}, ...) {
   # TODO checks on fun
-  pv$error_calc[[name]] = fun
+  pv$error_calc[[method]] = fun
   return(pv)
 }
