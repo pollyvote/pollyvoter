@@ -37,7 +37,7 @@ create_pollyvote = function(id = "pollyvote",
                             perm_regions = character(0),
                             perm_region_types = character(0),
                             perm_parties = character(0)
-                            ) {
+) {
   # input checking
   assert_character(id)
   assert_character(perm_countries)
@@ -127,14 +127,19 @@ create_pollyvote = function(id = "pollyvote",
   pv = add_error_calc(pv, "prediction_election", 
                       function(pv, prediction = "pollyvote", election, 
                                ci = FALSE, alpha = 0.05, ... ) {
-                        # extract predicted data
-                        pred_data = predict(pv, prediction)
+                        
                         # extract election result
                         if (length(pv$election_result) == 0)
                           stop("pv does not contain any election results. Use add_election_result() to add the results of an election.")
                         if (missing(election)) 
                           election = names(pv$election_result)[1]
                         result = get_election_result(pv, election)
+                        
+                        # extract predicted data
+                        pred_data = predict(pv, method = prediction, ...) %>%
+                          limit_days(no_days = no_days,
+                                     election_data = result, ...)
+                        
                         
                         joined = left_join(x = pred_data, y = result, by = "party") %>%
                           rename(percent = percent.x, percent.true = percent.y)
@@ -169,17 +174,17 @@ print.pollyvote = function(x) {
   cat("\n")
   if(length(get_perm_countries(x)) != 0)
     cat("permitted countries:", get_perm_countries(x), "\n")
-   if(length(get_perm_source_types(x)) != 0)
-     cat("permitted source types:", get_perm_sources(x), "\n")
+  if(length(get_perm_source_types(x)) != 0)
+    cat("permitted source types:", get_perm_sources(x), "\n")
   if(!is.null(get_perm_date_earliest(x)) & !is.null(get_perm_date_earliest(x)))
     cat("Permitted dates: From", get_perm_date_earliest(x), " to ", get_perm_date_latest(x), "\n")
   if(length(get_perm_regions(x)) != 0)
     cat("permitted regions:", get_perm_regions(x), "\n")
-   if(length(get_perm_region_types(x)) != 0)
-     cat("permitted region types:", get_perm_region_types(x), "\n")
+  if(length(get_perm_region_types(x)) != 0)
+    cat("permitted region types:", get_perm_region_types(x), "\n")
   if(length(get_perm_parties(x)) != 0)
     cat("permitted parties:", get_perm_parties(x), "\n")
-     
+  
   dims = dim(get_data(x))
   cat("data:", dims[1], " observations on", length(unique(get_data(x)$date)), "days. \n")
   if(!is.null(names(x$predictions)))
