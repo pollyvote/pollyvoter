@@ -13,7 +13,7 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
   
   # add an election result
   data("election_result")
-  pv = add_election_result(pv, "BTW", election_result)
+  pv = add_election_result(pv, "BTW", election_result, date = "2013-09-22")
   
   # check if predefined error calculation works
   assert_data_frame(error_calc(pv, "prediction_election", 
