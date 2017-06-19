@@ -4,14 +4,14 @@
 \alias{add_error_calc.pollyvote}
 \title{add data to a pollyvote object}
 \usage{
-\method{add_error_calc}{pollyvote}(pv, name = "TODO", fun = function(pv) {  
-    stop("TODO") }, ...)
+\method{add_error_calc}{pollyvote}(pv, method = "TODO", fun = function(pv) {
+      stop("TODO") }, ...)
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr
 the pollyvote object to add the data to.}
 
-\item{name}{[\code{character(1)}]\cr
+\item{method}{[\code{character(1)}]\cr
 name of the error calculation.}
 
 \item{fun}{[\code{function(pv)}]\cr}
