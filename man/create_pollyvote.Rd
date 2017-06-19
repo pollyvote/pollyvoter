@@ -36,8 +36,8 @@ needed to predict an election.
   \itemize{
     \item prediction functions
       \itemize{
-      \item 'pollyvote': 
-      \item 'aggr_source_type':
+      \item pollyvote
+      \item aggr_source_type
     }
     \item error calculations: TODO
     }
