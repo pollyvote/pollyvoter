@@ -2,40 +2,31 @@
 #' 
 #' internal function that handles missing values in the data frame of a pollyvote 
 #' object. Different error handling arguments can be handed over.
-#' @param dat [\code{data.frame()}]\cr
+#' 
+#' @param data [\code{data.frame()}]\cr
 #'   data frame of a pollyvote object.
-#' @param na_handle [\code{character(1)}]\cr
-#'   character describing which method is used to fill missing values.
-#'   Currently supported is 
-#'   \itemize{
-#'   \item \code{'last'}: Use the last available value. Fill all days between the earliest and latest day in the data.
-#'   \item \code{'omit'}: For every day, agregate available data.
-#'   \item \code{'mean_within'} Use the available data of this subcomponent to fill missing values.
-#'   \item \code{'mean_across'} Create a mini-pollyvote prediction by aggregating 
-#'   all \code{source_type}s using \code{na_handle = 'last'} and then
-#'   aggregating the result using \code{na_handle = 'last'}, which will then be used 
-#'   to predict missing values in the lowest aggregation level.
-#'   }
-#' @param pv [\code{pollyvote}]\cr
-#'   only required for \code{na_handle = 'mean_across'}, the pollyvote object containing the data frame.
+#' @param no_days [\code{integer(1)}]\cr
+#'   number of days before the election to return results for.
+#' @param election_data [\code{data.frame()}]\cr
+#'   data frame containing the election results. The election date can be included in the \code{date} coulmn.
+#' @param pv [\code{pollyvot(1)}]\cr
+#'   pollyvote container to extract the \code{election} from.
+#' @param election [\code{character(1)}]\cr
+#'   name of the election from \code{pv} to use.
+#' @param election_date [\code{character(1)}]\cr
+#'   date of the election in the format '\%Y-\%m-\%d'. If not supplied, the date of the election has to be supplied in the election data.
 #' @param ... [\code{list()}]\cr
 #'   additional arguments, currently ignored.
 #' 
-#' @return the data set with filled mssing values.
+#' @return the data set limited to the number of days before the election.
 #'
 #' @export
-limit_days = function(data, 
-                      no_days,
-                      election_data, 
-                      pv, election, 
-                      election_date, 
-                      ...) {
+limit_days = function(data, no_days, election_data, pv, election, 
+                      election_date, ...) {
   assert_class(data, "data.frame")
   # check if anything has to be done
-  if (all(missing(no_days),
-          missing(election_data), 
-          missing(pv), missing(election), 
-          missing(election_date))) {
+  if (all(missing(no_days), missing(election_data), missing(pv), 
+          missing(election), missing(election_date))) {
     return(data)
   }
   
@@ -46,6 +37,8 @@ limit_days = function(data,
     assert_class(pv, "pollyvote")
   if(!missing(election))
     assert_choice(election, names(pv$election_result))
+  if(!missing(election_date))
+    as.POSIXct(election_date, format = "%Y-%m-%d")
   
   # get election_data
   if (missing(election_data)){
@@ -64,7 +57,7 @@ limit_days = function(data,
   }
   
   # subset the data accordingly
-  earliest_date = election_date - as.difftime(no_days, unit = "days")
+  earliest_date = election_date - as.difftime(no_days, units = "days")
   data = filter(data, date > earliest_date)
   return(data)
 }
