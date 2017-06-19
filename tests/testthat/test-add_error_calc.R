@@ -1,5 +1,34 @@
 context("pollyvote_object")
 
+test_that("the initial error_calc functions of pollyvote object work", {
+  # create empty pollyvote container
+  pv = create_pollyvote(perm_countries = "D")
+  
+  # get data
+  data("polls_individual")
+  
+  # add data to pollyvote
+  pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+                source_type = "poll", election = "BTW")
+  
+  # add an election result
+  data("election_result")
+  pv = add_election_result(pv, "BTW", election_result, date = "2013-09-22")
+  
+  # check that predefined error calculation works
+  assert_data_frame(error_calc(pv, "prediction_election", 
+                               prediction = "pollyvote", election = "BTW"))
+  # check that arguments to limit_days work
+  assert_data_frame(error_calc(pv, "prediction_election", 
+                               prediction = "pollyvote", election = "BTW",
+                               no_days = 10))
+  # check that CI works
+  assert_data_frame(error_calc(pv, "prediction_election", 
+                               prediction = "pollyvote", election = "BTW",
+                               ci = TRUE, alpha = 0.1))
+  
+})
+
 test_that("the error of pollyvote object can be calculated (with CI)", {
   # create empty pollyvote container
   pv = create_pollyvote(perm_countries = "D")
@@ -15,9 +44,14 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
   data("election_result")
   pv = add_election_result(pv, "BTW", election_result, date = "2013-09-22")
   
-  # check if predefined error calculation works
+  # check that predefined error calculation works
   assert_data_frame(error_calc(pv, "prediction_election", 
                                prediction = "pollyvote", election = "BTW"))
+  # check that arguments to limit_days work
+  assert_data_frame(error_calc(pv, "prediction_election", 
+                               prediction = "pollyvote", election = "BTW",
+                               no_days = 10))
+  # check that CI works
   assert_data_frame(error_calc(pv, "prediction_election", 
                                prediction = "pollyvote", election = "BTW",
                                ci = TRUE, alpha = 0.1))
@@ -62,6 +96,4 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
     }
   })
   assert_data_frame(error_calc(pv, "poll_only_ci", ci = TRUE))
-  
-  
 })
