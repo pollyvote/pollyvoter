@@ -158,7 +158,6 @@ create_pollyvote = function(id = "pollyvote",
                         }
                         
                       })
-  
   return(pv)
 }
 
