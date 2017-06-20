@@ -106,11 +106,11 @@ create_pollyvote = function(id = "pollyvote",
                                                        na_handle = "last", ...) {
     # input checking
     assert_class(pv, "pollyvote")
+    assert_choice(agg_fun, c("mean", "median"))
     # evaluate string input
     fun = switch(agg_fun,
                  mean = mean,
                  median = median)
-    assert_choice(agg_fun, c("mean", "median"))
     assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
     if(length(get_perm_source_types(pv)) != 0)
       lapply(which_source_type, assert_choice, get_perm_source_types(pv))
@@ -120,7 +120,7 @@ create_pollyvote = function(id = "pollyvote",
       filter(source_type %in% which_source_type) %>%
       fill_na(na_handle = na_handle, pv = pv) %>%
       group_by(date, source_type, party) %>% 
-      summarize(percent = mean(percent, na.rm = TRUE))
+      summarize(percent = fun(percent, na.rm = TRUE))
   })
   
   # error calculation based on name of prediction and election
