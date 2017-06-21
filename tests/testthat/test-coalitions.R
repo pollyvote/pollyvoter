@@ -38,14 +38,14 @@ test_that("the initial coalition function of a pollyvote object work", {
       if(!ci) {
         raw_error_calcs[[i]] = raw_error_calc %>%
           filter(party %in% coalitions[[i]]) %>%
-          group_by(date.x) %>% # TODO replace with date, see issue #6
+          group_by(date) %>% 
           summarize(percent = sum(percent), percent.true = sum(percent.true), 
                     error = abs(sum(percent) - sum(percent.true))) %>%
           mutate(party = paste(coalitions[[i]], collapse = "-"))
       } else {
         raw_error_calcs[[i]] = raw_error_calc %>%
           filter(party %in% coalitions[[i]]) %>%
-          group_by(date.x) %>% # TODO replace with date, see issue #6
+          group_by(date) %>% 
           summarize(percent = sum(percent), percent.true = sum(percent.true), 
                     error = abs(sum(percent) - sum(percent.true)),
                     ci_lower = sum(ci_lower),

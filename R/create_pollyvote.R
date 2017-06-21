@@ -121,7 +121,10 @@ create_pollyvote = function(id = "pollyvote",
     
     # bring the prediction and the result together
     joined = left_join(x = pred_data, y = result, by = "party") %>%
-      rename(percent = percent.x, percent.true = percent.y)
+      #rename(percent = percent.x, percent.true = percent.y)
+      ungroup %>%
+      rename(percent = percent.x, percent.true = percent.y,
+             date = date.x, election_date = date.y)
     error_dat = mutate(joined, error = abs(percent - percent.true))
     
     if(!ci) {

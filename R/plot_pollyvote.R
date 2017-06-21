@@ -1,6 +1,6 @@
 #' plot a pollyvote object
 #' 
-#' plots a prdiction of a pollyvote opbject.
+#' plots a prediction of a pollyvote object.
 #'
 #' @param x [\code{pollyvote(1)}] \cr
 #'   pollyvote object to predict from.
