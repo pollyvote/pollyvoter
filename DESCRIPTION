@@ -1,13 +1,26 @@
 Package: pollyvoter
-Title: Aggregate Components, Calculate Forecasts and Determine Errors for Election Results
+Title: Aggregate Components, Calculate Forecasts and Determine Errors for
+    Election Results
 Version: 0.0.0.9000
-Authors@R: person("Andreas", "Hueck", email = "andi.hueck@gmail.com", role = c("aut", "cre"))
-Description: The pollyvoter package  provides methods for aggregating opinion polls, 
-    calculating forecasts and determining error margins for elections results.
-Depends: R (>= 3.3.3)
+Authors@R: c(
+  person("Thomas", "Maierhofer", email = "thomasmaierhofer@hotmail.de", role = c("aut", "cre")),
+  person("Andreas", "Hueck", email = "andi.hueck@gmail.com", role = c("ctb")),
+  person("Maxim", "Bort", email = "maxim_bort@web.de", role = c("aut")))
+Description: The pollyvoter package provides methods for aggregating opinion
+    polls, calculating forecasts and determining error margins for elections
+    results.
+Depends:
+    R (>= 3.1.2)
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-Imports: dplyr
+Imports:
+    checkmate,
+    dplyr,
+    ggplot2,
+    plyr,
+    tidyr
 RoxygenNote: 6.0.1
-Suggests: testthat
+Suggests:
+    testthat,
+    readxl
