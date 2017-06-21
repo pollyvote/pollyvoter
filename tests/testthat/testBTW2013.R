@@ -17,6 +17,8 @@ test_that("excel files can be read", {
   # coerce to numeric, get NAs
   individual.polls[,4:11] = apply(individual.polls[,4:11], 2, as.numeric)
   
+  
+  
   library("tidyr")
   ind.polls = gather(individual.polls, party, percent, one_of("cdu/csu", "spd", "grüne", 
                                                   "fdp", "linke", "piraten", "afd", "sonstige"))
