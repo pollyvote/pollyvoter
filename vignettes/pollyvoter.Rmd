@@ -96,7 +96,7 @@ head(pred, 20)
 
 ### plot predictions
 
-Apply `plot` function to create a graphical representation of prediction. Since prediction results weren't stored, a prediction method specification is required. 
+Apply `plot` function to create a graphical representation of prediction. Since prediction results were not stored, a prediction method specification is required. 
 
 ```{r}
 
