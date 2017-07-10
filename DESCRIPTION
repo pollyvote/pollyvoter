@@ -23,4 +23,7 @@ Imports:
 RoxygenNote: 6.0.1
 Suggests:
     testthat,
-    readxl
+    readxl,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
