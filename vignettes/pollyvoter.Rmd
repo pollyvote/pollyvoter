@@ -9,50 +9,144 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+## 1. concept
 
-## Vignette Info
+The idea is to create a general object (list) which contains all necessary information. This created object will get the object class "pollyvote".   
+Another special feature is to save only the most important characteristics of the object (e.g. poll data, election results, aggregation functions, ...). Other 
+calculated results like predictions or error calculations will not be saved in pollyvote the object. 
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
 
-## Styles
+## 2. functionalities
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+The `pollyvote-package` contains the following functionalities:
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+- save election predictions from different sources and source types    
+- save election results      
+- predict election results with aggregated election prediction from different sources    
+- results in graphical form       
+- error calculation    
+- define own aggregation and error calculation functions
 
-## Figures
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+## 3. examples for application
 
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+
+This section shows the most important functionalities of `pollyvote`-package using
+examples. 
+
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+library(devtools)
+load_all()
+
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+### create empty pollyvote container
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+With function `create_pollyvote` you can create an empty pollyvote object. It is also possible to define permitted values for the respective column of the data of this pollyvote object.
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+```{r}
 
-## More Examples
+pv = create_pollyvote(perm_countries = "D")
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
 ```
 
-Also a quote using `>`:
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+### add data to pollyvote
+
+Use `add_data` to include election data. Additional arguments allow to specify
+information about data e.g. country, region, source type. 
+
+```{r}
+
+  data("polls_individual")
+  pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+                source_type = "poll", election = "BTW")
+  head(pv$data)
+  
+```
+
+
+
+### add election results
+
+Use `add_election_result` to add election results. Election results are necessary for error calculation.
+
+```{r}
+
+data("election_result")
+pv = add_election_result(pv, "BTW", election_result, date = "2013-09-22")
+head(pv$election_result)
+
+```
+
+
+### predictions
+
+
+```{r}
+
+pred <- predict(pv, "pollyvote")
+head(pred, 20)
+
+```
+
+
+### plot predictions
+
+Apply `plot` function to create a graphical representation of prediction. Since prediction results weren't stored, a prediction method specification is required. 
+
+```{r}
+
+plot(pv, prediction_method = "pollyvote")
+
+```
+
+
+### error calculation
+
+The calculated error is the absolute difference between election results and predicted values. 
+
+```{r}
+
+error_calc_pred <- error_calc(pv, "prediction_election", 
+                              prediction = "pollyvote", election = "BTW")
+error_calc_pred[1:10, c("party", "percent", "percent.true", "government",
+                        "error")]
+
+```
+
+
+
+### error calculation with confidence interval
+
+Confidence interval is just a special case of error calculation. Use an error calculation function with a `ci = TRUE` and `alpha value`.
+
+```{r}
+
+error_pred_conf_int <- error_calc(pv, "prediction_election", 
+                                  prediction = "pollyvote", election = "BTW",
+                                  ci = TRUE, alpha = 0.3)
+error_pred_conf_int[1:10, c("party", "percent", "percent.true","error",
+                            "mean_error", "ci_lower", "ci_upper")]
+
+```
+
+
+### save as .csv file
+
+To save predictions or error calculations use function `write.pollyvote`. It is important to specify either the prediction (argument `prediction`) or the error calculation method (argument `error_calculation`). 
+
+```{r}
+
+write.pollyvote(pv, file = "pred.csv", method = "write.table", 
+                prediction = "pollyvote")
+  
+write.pollyvote(pv, file = "error_calc.csv", method = "write.table",
+                error_calculation = "prediction_election")
+
+```
+
+
