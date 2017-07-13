@@ -23,7 +23,7 @@
 #'       \item 'pollyvote': \code{\link{initial_prediction_pollyvote}}
 #'       \item 'aggr_source_type'
 #'     }
-#'     \item error calculations: TODO
+#'     \item error calculations: 'prediction_election'
 #'     }
 #' @importFrom stats qnorm
 #' @export
@@ -149,7 +149,9 @@ create_pollyvote = function(id = "pollyvote",
 #' internal method to print the most important features of a pollyvote container
 #' 
 #' @param x a pollyvote object.
-print.pollyvote = function(x) {
+#' @param ... currently ignored.
+#' @export
+print.pollyvote = function(x, ...) {
   cat("\n")
   cat("\t pollyvote object \n")
   cat("\n")
