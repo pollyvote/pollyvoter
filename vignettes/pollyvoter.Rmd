@@ -1,6 +1,6 @@
 ---
 title: "Pollyvoter"
-author: "Vignette Author"
+author: "Maxim Bort"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -10,36 +10,35 @@ vignette: >
 ---
 
 
-## 1. concept
+## 1. Concept
 
-The idea is to create a general object (list) which contains all necessary information. This created object will get the object class "pollyvote".   
-Another special feature is to save only the most important characteristics of the object (e.g. poll data, election results, aggregation functions, ...). Other 
-calculated results like predictions or error calculations will not be saved in pollyvote the object. 
+The idea is to create one general pollyvote object (list) per election which contains all data in one data set and information on how to create predictions and calculate prediction errors as functions. This created object will get the object class "pollyvote".   
+Another special feature is to save only the raw data (e.g. poll data, election result, ...) and functions on how to create aggregated predictions from it (prediction functions, aggregation functions, error calculation functions, ...). Calculated results like predictions or error calculations will not be saved in pollyvote the object. This allows constant updating of the data underlying the predictions.
 
 
-## 2. functionalities
+## 2. Functionalities
 
 The `pollyvote-package` contains the following functionalities:
 
-- save election predictions from different sources and source types    
-- save election results      
-- predict election results with aggregated election prediction from different sources    
-- results in graphical form       
-- error calculation    
+- save election predictions from different sources (eg. Forsa, Emnid, ...) and source types (eg. polls, economic models, ...)   
+- save election results (eg. percentages per party for Bundestagswahl 2017)
+- predict election results with predefined prediction functions (eg. aggregate within and over different source types)
 - define own aggregation and error calculation functions
+- display predictions graphically over time     
+- error calculation after the election  
 
 
-## 3. examples for application
+
+## 3. Examples for Application
 
 
-This section shows the most important functionalities of `pollyvote`-package using
-examples. 
+This section shows the most important functionalities of `pollyvote`-package using examples. 
 
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 
-library(devtools)
-load_all()
+# library(devtools)
+# load_all()
 
 ```
 
@@ -48,23 +47,29 @@ load_all()
 With function `create_pollyvote` you can create an empty pollyvote object. It is also possible to define permitted values for the respective column of the data of this pollyvote object.
 
 ```{r}
+# load the pollyvoter package
+library("pollyvoter")
 
+# create an empty pollvote object that only allows 'D' as a country
 pv = create_pollyvote(perm_countries = "D")
 
 ```
 
 
-### add data to pollyvote
+### add data to pollyvote container
 
 Use `add_data` to include election data. Additional arguments allow to specify
 information about data e.g. country, region, source type. 
 
 ```{r}
-
+  # load example data from the package
   data("polls_individual")
+
+  # add data to the pollyvote object
+  # note how additional columns in the data set can be specified as additional arguments to add_data()
   pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
                 source_type = "poll", election = "BTW")
-  head(pv$data)
+  head(get_data(pv))
   
 ```
 
@@ -72,23 +77,38 @@ information about data e.g. country, region, source type.
 
 ### add election results
 
-Use `add_election_result` to add election results. Election results are necessary for error calculation.
+Use `add_election_result` to add election results to the pollyvote container. Election results are necessary for error calculation.
 
 ```{r}
-
+# load the election results of Bundestagswahl 2013
 data("election_result")
-pv = add_election_result(pv, "BTW", election_result, date = "2013-09-22")
-head(pv$election_result)
+
+# add the election result to the pollyvote container
+pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+head(get_election_result(pv, election = "BTW 2013"))
 
 ```
 
 
 ### predictions
-
+Predictions are saved as functions in the pollyvote container. They can be called using `predict.pollyvote()`. There is a set of predefined prediction functions when a pollyvote object is created. Aggregation functions are handled as prediction.
 
 ```{r}
+# see which predictions are available
+names(pv$predictions)
+# # or use the print function
+# pv
+# pollyvoter:::print.pollyvote(pv)
 
-pred <- predict(pv, "pollyvote")
+
+# see what the 'pollyvote' function does exactly
+pv$predictions$pollyvote
+
+# # there is also a help page for initial functions
+# ?initial_prediction_pollyvote
+
+# call this function on your pollyvote container
+pred <- predict(pv, method = "pollyvote")
 head(pred, 20)
 
 ```
@@ -98,9 +118,12 @@ head(pred, 20)
 
 Apply `plot` function to create a graphical representation of prediction. Since prediction results were not stored, a prediction method specification is required. 
 
-```{r}
-
-plot(pv, prediction_method = "pollyvote")
+```{r, fig.width=7, fig.height=4}
+# returns a ggplot2 object that can be further modified
+p <- plot(pv, .prediction_method = "pollyvote")
+library("ggplot2")
+p + scale_colour_brewer(type = "qual") +
+  theme_bw(15)
 
 ```
 
@@ -112,7 +135,7 @@ The calculated error is the absolute difference between election results and pre
 ```{r}
 
 error_calc_pred <- error_calc(pv, "prediction_election", 
-                              prediction = "pollyvote", election = "BTW")
+                              prediction = "pollyvote", election = "BTW 2013")
 error_calc_pred[1:10, c("party", "percent", "percent.true", "government",
                         "error")]
 
@@ -127,7 +150,7 @@ Confidence interval is just a special case of error calculation. Use an error ca
 ```{r}
 
 error_pred_conf_int <- error_calc(pv, "prediction_election", 
-                                  prediction = "pollyvote", election = "BTW",
+                                  prediction = "pollyvote", election = "BTW 2013",
                                   ci = TRUE, alpha = 0.3)
 error_pred_conf_int[1:10, c("party", "percent", "percent.true","error",
                             "mean_error", "ci_lower", "ci_upper")]
@@ -137,7 +160,7 @@ error_pred_conf_int[1:10, c("party", "percent", "percent.true","error",
 
 ### save as .csv file
 
-To save predictions or error calculations use function `write.pollyvote`. It is important to specify either the prediction (argument `prediction`) or the error calculation method (argument `error_calculation`). 
+To save the result of predictions or error calculations use the function `write.pollyvote()`. It is important to specify either the prediction method (argument `prediction`) or the error calculation method (argument `error_calculation`). 
 
 ```{r}
 
