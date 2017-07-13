@@ -19,7 +19,7 @@ test_that("the prediction of a pollyvote object can be plotted", {
       group_by(date, source_type, party) %>% 
       summarize(percent = mean(percent, na.rm = TRUE))
   })
-  assert_class(plot(pv, prediction_method = "poll"), "ggplot")
+  assert_class(plot(pv, .prediction_method = "poll"), "ggplot")
   
   # add an election result
   data("election_result")
@@ -35,7 +35,7 @@ test_that("the prediction of a pollyvote object can be plotted", {
       rename(percent = percent.x, percent.true = percent.y)
     return(mutate(joined, error = abs(percent - percent.true)))
   })
-  assert_class(plot(pv, error_calc_method = "poll_only"), "ggplot")
+  assert_class(plot(pv, .error_calc_method = "poll_only"), "ggplot")
   
   # confidence interval is just a special case of error calculation
   # add an error calculation function with a ci flag and alpha value
@@ -53,9 +53,9 @@ test_that("the prediction of a pollyvote object can be plotted", {
       return(ec_ci)
     }
   })
-  assert_class(plot(pv, error_calc_method = "poll_only_ci"), "ggplot")
+  assert_class(plot(pv, .error_calc_method = "poll_only_ci"), "ggplot")
   # draw a CI
-  p = plot(pv, error_calc = "poll_only_ci", ci = TRUE)
+  p = plot(pv, .error_calc_method = "poll_only_ci", ci = TRUE)
   p + geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), 
                   linetype = "dashed",
                   fill = "grey70", alpha = 0.1)
