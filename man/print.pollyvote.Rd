@@ -4,10 +4,12 @@
 \alias{print.pollyvote}
 \title{print a pollyvote object}
 \usage{
-\method{print}{pollyvote}(x)
+\method{print}{pollyvote}(x, ...)
 }
 \arguments{
 \item{x}{a pollyvote object.}
+
+\item{...}{currently ignored.}
 }
 \description{
 internal method to print the most important features of a pollyvote container

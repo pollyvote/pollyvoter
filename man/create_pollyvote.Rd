@@ -39,7 +39,7 @@ needed to predict an election.
       \item 'pollyvote': \code{\link{initial_prediction_pollyvote}}
       \item 'aggr_source_type'
     }
-    \item error calculations: TODO
+    \item error calculations: 'prediction_election'
     }
 }
 
