@@ -8,6 +8,11 @@
 #'   the data to add to the pollyvote object.
 #' @param ... additional arguments giving information about \code{newdata}.
 #' 
+#' @examples
+#' data("polls_individual")
+#' pv = add_data(pv, newdata = polls_individual, country = "D", 
+#'               region = "national", source_type = "poll", election = "BTW")
+#' 
 #' @return The pollyvote object with added data.
 #'
 #' @export
@@ -21,6 +26,11 @@ add_data = function(pv, newdata = data.frame(), ...) {
 #'
 #' @inheritParams add_data
 #' @importFrom plyr rbind.fill
+#' 
+#' @examples
+#' data("polls_individual")
+#' pv = add_data(pv, newdata = polls_individual, country = "D", 
+#'               region = "national", source_type = "poll", election = "BTW")
 #' 
 #' @return The pollyvote object with added data.
 #'
@@ -56,6 +66,11 @@ add_data.pollyvote = function(pv, newdata = data.frame(),
 #'
 #' @inheritParams add_data
 #' @param ... additional named arguments to be checked.
+#' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' data("polls_individual")
+#' check_additional_args(polls_individual, pv)
 #' 
 #' @return Nothing. Only throws error message if arguments are not feasible.
 #'
