@@ -11,6 +11,13 @@
 #'   and error_calc_method can be specified.
 #' @param ... additional arguments to the predict or error_calc_method function
 #' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' data("polls_individual")
+#' pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+#'               source_type = "poll", election = "BTW")
+#' p <- plot(pv, .prediction_method = "pollyvote")
+#' 
 #' @return a ggplot object that can be further modified.
 #' @import ggplot2
 #' @family plot
