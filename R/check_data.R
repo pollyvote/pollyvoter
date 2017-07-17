@@ -4,6 +4,11 @@
 #'
 #' @inheritParams add_data
 #' 
+#' @examples 
+#' pv = create_pollyvote(perm_countries = "D")
+#' data("election_result")
+#' election_result = check_data(election_result, pv)
+#' 
 #' @return the checked data.
 check_data = function(newdata, pv) {
   # check col names
