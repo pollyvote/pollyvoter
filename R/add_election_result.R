@@ -10,6 +10,12 @@
 #'   data frame containing the election results in the long format.
 #' @param ... currently ignored.
 #' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D") 
+#' data("election_result")
+#' pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+#' 
+#' 
 #' @return The pollyvote object with added prediction.
 #'
 #' @export
@@ -23,6 +29,11 @@ add_election_result = function(pv, election, data, ...) {
 #' Adds election result to a pollyvote opbject.
 #'
 #' @inheritParams add_election_result
+#' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D") 
+#' data("election_result")
+#' pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
 #' 
 #' @return The pollyvote object with added prediction
 #'
