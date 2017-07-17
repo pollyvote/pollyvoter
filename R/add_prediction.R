@@ -9,6 +9,16 @@
 #' @param fun [\code{function(pv)}]\cr
 #' @param ... additional arguments
 #' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' pv = add_prediction(pv, "poll", function(pv) {
+#'   pv %>% 
+#'     get_data %>% 
+#'     filter(source_type %in% c("poll")) %>%
+#'     group_by(date, source_type, party) %>% 
+#'     summarize(percent = mean(percent, na.rm = TRUE))
+#' })
+#' 
 #' @return The pollyvote object with added prediction.
 #'
 #' @export
@@ -23,6 +33,16 @@ add_prediction = function(pv, method, fun = function(pv){get_data(pv)}, ...) {
 #' @inheritParams add_prediction
 #' 
 #' @return The pollyvote object with added prediction
+#' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' pv = add_prediction(pv, "poll", function(pv) {
+#'   pv %>% 
+#'     get_data %>% 
+#'     filter(source_type %in% c("poll")) %>%
+#'     group_by(date, source_type, party) %>% 
+#'     summarize(percent = mean(percent, na.rm = TRUE))
+#' })
 #'
 #' @export
 add_prediction.pollyvote = function(pv, method = "no_aggregation", fun = function(pv){get_data(pv)}, ...) {
