@@ -37,8 +37,8 @@ This section shows the most important functionalities of `pollyvote`-package usi
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 
-# library(devtools)
-# load_all()
+ library(devtools)
+ load_all()
 
 ```
 
