@@ -10,6 +10,16 @@
 #' @param ... additional arguments
 #' 
 #' @return The pollyvote object with added prediction.
+#' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' pv = add_error_calc(pv, "poll_only", function(pv) {
+#'   pred_data = predict(pv, "poll")
+#'   result = get_election_result(pv, "BTW")
+#'   joined = left_join(x = pred_data, y = result, by = "party") %>%
+#'     rename(percent = percent.x, percent.true = percent.y)
+#'   return(mutate(joined, error = abs(percent - percent.true)))
+#' })
 #'
 #' @export
 add_error_calc = function(pv, method, fun, ...) {
@@ -23,6 +33,16 @@ add_error_calc = function(pv, method, fun, ...) {
 #' @inheritParams add_error_calc
 #' 
 #' @return The pollyvote object with added prediction
+#'
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' pv = add_error_calc(pv, "poll_only", function(pv) {
+#'   pred_data = predict(pv, "poll")
+#'   result = get_election_result(pv, "BTW")
+#'   joined = left_join(x = pred_data, y = result, by = "party") %>%
+#'     rename(percent = percent.x, percent.true = percent.y)
+#'   return(mutate(joined, error = abs(percent - percent.true)))
+#' })
 #'
 #' @export
 add_error_calc.pollyvote = function(pv, method = "TODO", fun = function(pv){stop("TODO")}, ...) {
