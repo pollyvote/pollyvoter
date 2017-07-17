@@ -17,6 +17,14 @@
 #'   list of arguments to the write function specified in \code{method}.
 #' @param ... additional arguments to the prediction or error calculation function.
 #'
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' data("polls_individual")
+#' pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+#'               source_type = "poll", election = "BTW")
+#' write.pollyvote(pv, file = "pred.csv", method = "write.table", 
+#'                 prediction = "pollyvote")
+#'
 #' @return Nothing. A file is created.
 #'
 #' @family write
