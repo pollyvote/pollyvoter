@@ -6,8 +6,10 @@
 #'   the pollyvote object of which to extract the data from.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_countries = "D")
+#' data("polls_individual")
+#' pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+#'               source_type = "poll", election = "BTW")
 #' get_data(pv)
 #' 
 #' @return data frame containing all the data stored in \code{pv}.  
@@ -27,8 +29,7 @@ get_data <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_countries = "D", perm_parties = c("CSU", "SPD"))
 #' get_perm_parties(pv)
 #'  
 #' @return character vector containing all party names stored in \code{pv}.   
@@ -48,8 +49,7 @@ get_perm_parties <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_regions = "national")
 #' get_perm_regions(pv)
 #' 
 #' @return character vector containing all regions stored in \code{pv}. 
@@ -69,8 +69,7 @@ get_perm_regions <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote(perm_elections = "BTW")
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_countries = "D", perm_elections = "BTW")
 #' get_perm_elections(pv)
 #' 
 #' @return character vector containing all elections stored in \code{pv}.  
@@ -90,8 +89,7 @@ get_perm_elections <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_countries = "D")
 #' get_perm_countries(pv)
 #' 
 #' @return character vector containing all countries stored in \code{pv}.  
@@ -111,8 +109,7 @@ get_perm_countries <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_sources = "poll")
 #' get_perm_sources(pv)
 #' 
 #' @return character vector containing all sources stored in \code{pv}.  
@@ -132,8 +129,7 @@ get_perm_sources <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_date_earliest = as.POSIXct( "2013-09-22"))
 #' get_perm_date_earliest(pv)
 #' 
 #' @return character containing earliest date stored in \code{pv}.  
@@ -153,8 +149,7 @@ get_perm_date_earliest <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_date_earliest = as.POSIXct( "2013-09-22"))
 #' get_perm_date_latest(pv)
 #' 
 #' @return character containing latest date stored in \code{pv}.  
@@ -174,8 +169,10 @@ get_perm_date_latest <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_countries = "D")
+#' data("polls_individual")
+#' pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+#'               source_type = "poll", election = "BTW")
 #' get_perm_colnames(pv)
 #' 
 #' @return character containing colnames stored in \code{pv}.  
@@ -193,6 +190,12 @@ get_perm_colnames <- function(pv){
 #' use \code{\link{add_election_result}}.
 #'
 #' @inheritParams add_election_result
+#' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' data("election_result")
+#' pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+#' get_election_result(pv, election = "BTW 2013")
 #' 
 #' @return A data frame containing the election result.
 #'
@@ -213,8 +216,7 @@ get_election_result = function(pv, election, ...) {
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_source_types = "poll")
 #' get_perm_source_types(pv)
 #' 
 #' @return character vector containing all source types stored in \code{pv}.  
@@ -234,8 +236,7 @@ get_perm_source_types <- function(pv){
 #'   the name ID of the pollyvote object, defaults to 'pollyvote'.
 #'
 #' @examples
-#' pv = create_pollyvote()
-#' # returns an empty data frame
+#' pv = create_pollyvote(perm_region_types = "national")
 #' get_perm_region_types(pv)
 #' 
 #' @return character vector containing all region types stored in \code{pv}.  
