@@ -10,6 +10,9 @@
 #' @param perm_date_earliest,perm_date_latest [\code{POSIXct(1)}]\cr
 #'   earliest and latest permissible date in format \%Y-\%m-\%d.
 #'
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#'
 #' @return object of class pollyvote, containing an id, an initially empty data frame
 #'   and potentially permissible values for the entries of the data frame.
 #'
@@ -150,7 +153,13 @@ create_pollyvote = function(id = "pollyvote",
 #' 
 #' @param x a pollyvote object.
 #' @param ... currently ignored.
+#' 
+#' @examples
+#' pv = create_pollyvote(perm_countries = "D")
+#' print(pv)
+#' 
 #' @export
+#' 
 print.pollyvote = function(x, ...) {
   cat("\n")
   cat("\t pollyvote object \n")
