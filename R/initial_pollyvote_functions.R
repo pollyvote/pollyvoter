@@ -100,7 +100,7 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 #' 
 #' @inheritParams fill_na
 #' @export
-initial_prediction_prediction_election = function(pv, prediction = "pollyvote", election, 
+initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", election, 
                                                   ci = FALSE, alpha = 0.05, no_days = Inf, ... ) {
   # extract election result
   if (length(pv$election_result) == 0)

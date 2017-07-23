@@ -108,7 +108,7 @@ create_pollyvote = function(id = "pollyvote",
   
   # error calculation based on name of prediction and election
   pv = add_error_calc(pv, "prediction_election", 
-                      initial_prediction_prediction_election)
+                      initial_error_calc_prediction_election)
            
   return(pv)
 }
