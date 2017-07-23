@@ -107,42 +107,9 @@ create_pollyvote = function(id = "pollyvote",
   pv = add_prediction(pv, "aggr_source_type", initial_prediction_aggr_source_type)
   
   # error calculation based on name of prediction and election
-  pv = add_error_calc(pv, "prediction_election", function(pv, prediction = "pollyvote", election, 
-                                                          ci = FALSE, alpha = 0.05, no_days = Inf, ... ) {
-    
-    # extract election result
-    if (length(pv$election_result) == 0)
-      stop("pv does not contain any election results. Use add_election_result() to add the results of an election.")
-    if (missing(election)) 
-      election = names(pv$election_result)[1]
-    result = get_election_result(pv, election)
-    
-    # extract predicted data
-    pred_data = predict(pv, method = prediction, ...) %>%
-      limit_days(no_days = no_days,
-                 election_data = result, ...)
-    
-    # bring the prediction and the result together
-    joined = left_join(x = pred_data, y = result, by = "party") %>%
-      #rename(percent = percent.x, percent.true = percent.y)
-      ungroup %>%
-      rename(percent = percent.x, percent.true = percent.y,
-             date = date.x, election_date = date.y)
-    error_dat = mutate(joined, error = abs(percent - percent.true))
-    
-    if(!ci) {
-      return(error_dat)
-    } else {
-      ec_mean_error = error_dat %>% 
-        group_by(party) %>%
-        summarize(mean_error = mean(error))
-      ec_ci = left_join(error_dat, ec_mean_error, by = "party") %>%
-        mutate(ci_lower = percent - qnorm(1 - alpha / 2) * mean_error,
-               ci_upper = percent + qnorm(1 - alpha / 2) * mean_error)
-      return(ec_ci)
-    }
-    
-  })
+  pv = add_error_calc(pv, "prediction_election", 
+                      initial_prediction_prediction_election)
+           
   return(pv)
 }
 
