@@ -1,9 +1,9 @@
-# this file collect all the initial heler functions of a pollyovte object
+# this file collect all the initial helper functions of a pollyovte object
 # naming convention is initial _ function type _ method name
 
 #' initial pollyvote prediction
 #' 
-#' TODO
+#' internal function which initial prediction function of method pollyvote.
 #' 
 #' @param pv [\code{pollyvote}]\cr
 #'   the pollyvote object of which to get the prediction from.
@@ -15,8 +15,6 @@
 #' @inheritParams fill_na
 #' @export
 initial_prediction_pollyvote = function(pv, agg_fun = "mean", na_handle = "last", ...) {
-  # TODO create limit_days argument either usign number of days to election or fixed date
-  #  create a function that works like fill_na just for limit_days
   
   # input checking
   assert_class(pv, "pollyvote")
@@ -42,7 +40,8 @@ initial_prediction_pollyvote = function(pv, agg_fun = "mean", na_handle = "last"
 
 #' initial aggregated source type prediction
 #' 
-#' TODO
+#' internal function which initial prediction function of method aggregated 
+#' source type.
 #' 
 #' @param pv [\code{pollyvote}]\cr
 #'   the pollyvote object of which to get the prediction from.
@@ -81,7 +80,7 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 
 #' initial pollyvote error calculation
 #' 
-#' TODO
+#' internal function which intial function for error calculation.
 #' 
 #' @param pv [\code{pollyvote}]\cr
 #'   the pollyvote object of which to get the prediction from.
