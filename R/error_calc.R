@@ -8,7 +8,7 @@
 #'   method name of the error calculation function of \code{object} to use.
 #' @param ... additional arguments to the error calculation function.
 #' 
-#' @examples
+#' @examples 
 #' pv = create_pollyvote(perm_countries = "D")
 #' data("polls_individual")
 #' pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 

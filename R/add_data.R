@@ -6,6 +6,7 @@
 #'   the pollyvote object to add the data to.
 #' @param newdata [\code{data.frame}]\cr
 #'   the data to add to the pollyvote object.
+#'   should contain this columns: id, date, source, party, percent
 #' @param ... additional arguments giving information about \code{newdata}.
 #' 
 #' @examples
