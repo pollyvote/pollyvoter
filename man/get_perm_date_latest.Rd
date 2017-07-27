@@ -17,8 +17,7 @@ character containing latest date stored in \code{pv}.
 This function extract latest date from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
-# returns an empty data frame
+pv = create_pollyvote(perm_date_earliest = as.POSIXct( "2013-09-22"))
 get_perm_date_latest(pv)
 
 }

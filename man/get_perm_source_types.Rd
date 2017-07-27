@@ -17,8 +17,7 @@ character vector containing all source types stored in \code{pv}.
 This function extract source types from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
-# returns an empty data frame
+pv = create_pollyvote(perm_source_types = "poll")
 get_perm_source_types(pv)
 
 }

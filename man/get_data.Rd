@@ -17,8 +17,10 @@ data frame containing all the data stored in \code{pv}.
 This function extracts the data from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
-# returns an empty data frame
+pv = create_pollyvote(perm_countries = "D")
+data("polls_individual")
+pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+              source_type = "poll", election = "BTW")
 get_data(pv)
 
 }

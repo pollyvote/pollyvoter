@@ -24,3 +24,10 @@ The pollyvote object with added prediction.
 \description{
 Adds an election result, so far only implemented for pollyvote objects.
 }
+\examples{
+pv = create_pollyvote(perm_countries = "D") 
+data("election_result")
+pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+
+
+}

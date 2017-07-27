@@ -17,8 +17,7 @@ character vector containing all countries stored in \code{pv}.
 This function extract countries from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
-# returns an empty data frame
+pv = create_pollyvote(perm_countries = "D")
 get_perm_countries(pv)
 
 }

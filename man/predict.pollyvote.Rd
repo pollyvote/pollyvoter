@@ -21,6 +21,15 @@ a data frame containing the result of the prediction
 \description{
 predict a pollyvote opbject.
 }
+\examples{
+pv = create_pollyvote(perm_countries = "D") 
+data("polls_individual")
+pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+              source_type = "poll", election = "BTW")
+pred <- predict(pv, method = "pollyvote")               
+              
+
+}
 \seealso{
 Other predict: \code{\link{error_calc.pollyvote}},
   \code{\link{error_calc}}

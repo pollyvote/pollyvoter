@@ -17,8 +17,7 @@ character vector containing all party names stored in \code{pv}.
 This function extract party names from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
-# returns an empty data frame
+pv = create_pollyvote(perm_countries = "D", perm_parties = c("CSU", "SPD"))
 get_perm_parties(pv)
  
 }

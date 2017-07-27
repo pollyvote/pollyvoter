@@ -35,3 +35,12 @@ Nothing. A file is created.
 \description{
 writes the result of a prediction of a pollyvote object to a .csv file.
 }
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+data("polls_individual")
+pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+              source_type = "poll", election = "BTW")
+write.pollyvote(pv, file = "pred.csv", method = "write.table", 
+                prediction = "pollyvote")
+
+}

@@ -8,7 +8,8 @@ check_data(newdata, pv)
 }
 \arguments{
 \item{newdata}{[\code{data.frame}]\cr
-the data to add to the pollyvote object.}
+the data to add to the pollyvote object.
+should contain this columns: id, date, source, party, percent}
 
 \item{pv}{[\code{pollyvote}]\cr
 the pollyvote object to add the data to.}
@@ -18,4 +19,10 @@ the checked data.
 }
 \description{
 internal check function
+}
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+data("election_result")
+election_result = check_data(election_result, pv)
+
 }

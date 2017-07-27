@@ -8,7 +8,8 @@ check_additional_args(newdata, pv, ...)
 }
 \arguments{
 \item{newdata}{[\code{data.frame}]\cr
-the data to add to the pollyvote object.}
+the data to add to the pollyvote object.
+should contain this columns: id, date, source, party, percent}
 
 \item{pv}{[\code{pollyvote}]\cr
 the pollyvote object to add the data to.}
@@ -21,4 +22,10 @@ Nothing. Only throws error message if arguments are not feasible.
 \description{
 internal check function if additional arguments to pollyvoter::add_data are 
 permissible for a pollyvote object
+}
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+data("polls_individual")
+check_additional_args(polls_individual, pv)
+
 }

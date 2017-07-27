@@ -14,3 +14,8 @@
 \description{
 internal method to print the most important features of a pollyvote container
 }
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+print(pv)
+
+}

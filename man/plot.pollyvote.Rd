@@ -26,3 +26,11 @@ a ggplot object that can be further modified.
 \description{
 plots a prediction of a pollyvote object.
 }
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+data("polls_individual")
+pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+              source_type = "poll", election = "BTW")
+p <- plot(pv, .prediction_method = "pollyvote")
+
+}

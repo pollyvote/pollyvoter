@@ -17,8 +17,7 @@ character vector containing all sources stored in \code{pv}.
 This function extract sources from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
-# returns an empty data frame
+pv = create_pollyvote(perm_sources = "poll")
 get_perm_sources(pv)
 
 }

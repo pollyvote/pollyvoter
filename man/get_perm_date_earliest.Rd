@@ -17,8 +17,7 @@ character containing earliest date stored in \code{pv}.
 This function extract earliest date from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
-# returns an empty data frame
+pv = create_pollyvote(perm_date_earliest = as.POSIXct( "2013-09-22"))
 get_perm_date_earliest(pv)
 
 }

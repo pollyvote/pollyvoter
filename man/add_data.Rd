@@ -11,7 +11,8 @@ add_data(pv, newdata = data.frame(), ...)
 the pollyvote object to add the data to.}
 
 \item{newdata}{[\code{data.frame}]\cr
-the data to add to the pollyvote object.}
+the data to add to the pollyvote object.
+should contain this columns: id, date, source, party, percent}
 
 \item{...}{additional arguments giving information about \code{newdata}.}
 }
@@ -20,4 +21,10 @@ The pollyvote object with added data.
 }
 \description{
 Adds data, so far only implemented for pollyvote objects.
+}
+\examples{
+data("polls_individual")
+pv = add_data(pv, newdata = polls_individual, country = "D", 
+              region = "national", source_type = "poll", election = "BTW")
+
 }

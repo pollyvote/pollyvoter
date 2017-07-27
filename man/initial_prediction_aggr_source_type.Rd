@@ -37,5 +37,6 @@ additional arguments, currently ignored.}
 data frame containing the results
 }
 \description{
-TODO
+internal function which initial prediction function of method aggregated 
+source type.
 }

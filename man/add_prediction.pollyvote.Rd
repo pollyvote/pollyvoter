@@ -24,3 +24,14 @@ The pollyvote object with added prediction
 \description{
 Adds data to a pollyvote opbject.
 }
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+pv = add_prediction(pv, "poll", function(pv) {
+  pv \%>\% 
+    get_data \%>\% 
+    filter(source_type \%in\% c("poll")) \%>\%
+    group_by(date, source_type, party) \%>\% 
+    summarize(percent = mean(percent, na.rm = TRUE))
+})
+
+}

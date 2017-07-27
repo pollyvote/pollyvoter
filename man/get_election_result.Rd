@@ -22,3 +22,10 @@ A data frame containing the election result.
 gets an election result from a pollyvote object. To add a new election result to a pollyvote object
 use \code{\link{add_election_result}}.
 }
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+data("election_result")
+pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+get_election_result(pv, election = "BTW 2013")
+
+}

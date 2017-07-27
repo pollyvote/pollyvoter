@@ -43,3 +43,7 @@ needed to predict an election.
     }
 }
 
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+
+}

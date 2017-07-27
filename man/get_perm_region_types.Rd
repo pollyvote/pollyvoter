@@ -17,8 +17,7 @@ character vector containing all region types stored in \code{pv}.
 This function extract region types from a pollyvote container.
 }
 \examples{
-pv = create_pollyvote()
-# returns an empty data frame
+pv = create_pollyvote(perm_region_types = "national")
 get_perm_region_types(pv)
 
 }

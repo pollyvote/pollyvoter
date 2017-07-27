@@ -21,6 +21,17 @@ a data frame containing the result of the error calculation
 \description{
 calculate the prediction error of a pollyvote prediction.
 }
+\examples{
+pv = create_pollyvote(perm_countries = "D")
+data("polls_individual")
+pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
+              source_type = "poll", election = "BTW")
+data("election_result")
+pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+error_calc_pred <- error_calc(pv, "prediction_election", 
+                              prediction = "pollyvote", election = "BTW 2013")             
+
+}
 \seealso{
 Other predict: \code{\link{error_calc.pollyvote}},
   \code{\link{predict.pollyvote}}
