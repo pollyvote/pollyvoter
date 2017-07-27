@@ -1,7 +1,7 @@
 Package: pollyvoter
-Title: Aggregate Components, Calculate Forecasts and Determine Errors for
-    Election Results
+Title: Aggregate Components, Calculate Forecasts and Determine Errors for Election Results.
 Version: 0.0.0.9000
+Date: 2017-07-27
 Authors@R: c(
   person("Thomas", "Maierhofer", email = "thomasmaierhofer@hotmail.de", role = c("aut", "cre")),
   person("Andreas", "Hueck", email = "andi.hueck@gmail.com", role = c("ctb")),
