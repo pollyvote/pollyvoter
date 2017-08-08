@@ -32,5 +32,8 @@ additional arguments, currently ignored.}
 data frame containing the results
 }
 \description{
-internal function which intial function for error calculation.
+internal function which intializes a function for error calculation of method
+\code{'prediction_election'}. This means, that one election result of the pollyvote
+container is compared with the result of a prediction function of the same
+pollyvote container.
 }

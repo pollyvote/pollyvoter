@@ -3,7 +3,11 @@
 
 #' initial pollyvote prediction
 #' 
-#' internal function which initial prediction function of method pollyvote.
+#' internal function which initializes the prediction function of method pollyvote.
+#' This function aggregates the daat in two steps: 
+#' In the first step all predictions of the same \code{source_types} are aggregated
+#' daily. In the second step the aggregated \code{source_types} are aggregated,
+#' resulting in one prediction per day and party. 
 #' 
 #' @param pv [\code{pollyvote}]\cr
 #'   the pollyvote object of which to get the prediction from.
@@ -40,8 +44,9 @@ initial_prediction_pollyvote = function(pv, agg_fun = "mean", na_handle = "last"
 
 #' initial aggregated source type prediction
 #' 
-#' internal function which initial prediction function of method aggregated 
-#' source type.
+#' internal function which initializes a prediction function of method
+#' \code{'aggr_source_type'}. This functions selects one source type and aggregates
+#' the different sources daily per party.
 #' 
 #' @param pv [\code{pollyvote}]\cr
 #'   the pollyvote object of which to get the prediction from.
@@ -80,7 +85,10 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 
 #' initial pollyvote error calculation
 #' 
-#' internal function which intial function for error calculation.
+#' internal function which intializes a function for error calculation of method
+#' \code{'prediction_election'}. This means, that one election result of the pollyvote
+#' container is compared with the result of a prediction function of the same
+#' pollyvote container.
 #' 
 #' @param pv [\code{pollyvote}]\cr
 #'   the pollyvote object of which to get the prediction from.

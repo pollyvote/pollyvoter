@@ -29,12 +29,21 @@ A pollyvote container is a list containing all the information that is
 needed to predict an election. This is the central construct of this package 
 around which all other functions are centered. 
 A pollyvote container stores all relevant data and aggregation functions.
+New data can be added using \code{\link{add_data}}, election results can be 
+added using \code{\link{add_election_result}}.
 A pollyvote container can be 
 predicted (\code{\link{predict.pollyvote}}) and its prediction error can be 
-calculated (\code{\link{error_calc.pollyvote}}). The predictions and error 
-calculations can also be plotted using \code{\link{plot.pollyvote}}.
+calculated (\code{\link{error_calc.pollyvote}}). 
+An overview over the out-of-the-box predictions and error calculation functions
+is given in the section \code{Initial Functions}. These initial functions are
+not meant to be used directly, but only through 
+\code{predict(pv, method = "initial_prediction_...")}.
+New prediction methods and error calculcation methods can be added to a pollyvote
+object using \code{\link{add_prediction.pollyvote}} and \code{\link{add_error_calc.pollyvote}}.
+The predictions and error calculations can also be plotted using 
+\code{\link{plot.pollyvote}}.
 }
-\section{initial functions}{
+\section{Initial Functions}{
 
   some useful prediction, aggregation and error calculation functions are already
   initialized when calling \code{create_pollyvote()}. 
@@ -43,13 +52,17 @@ calculations can also be plotted using \code{\link{plot.pollyvote}}.
     \item prediction functions
       \itemize{
       \item 'pollyvote': \code{\link{initial_prediction_pollyvote}}
-      \item 'aggr_source_type'
+      \item 'aggr_source_type': \code{\link{initial_prediction_aggr_source_type}}
     }
-    \item error calculations: 'prediction_election'
+    \item error calculations: 
+      \itemize{
+      \item 'prediction_election': \code{\link{initial_error_calc_prediction_election}}
+      }
     }
 }
 
 \examples{
 pv = create_pollyvote(perm_countries = "D")
+pv
 
 }

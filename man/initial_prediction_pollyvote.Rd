@@ -33,5 +33,9 @@ additional arguments, currently ignored.}
 data frame containing the results
 }
 \description{
-internal function which initial prediction function of method pollyvote.
+internal function which initializes the prediction function of method pollyvote.
+This function aggregates the daat in two steps: 
+In the first step all predictions of the same \code{source_types} are aggregated
+daily. In the second step the aggregated \code{source_types} are aggregated,
+resulting in one prediction per day and party.
 }

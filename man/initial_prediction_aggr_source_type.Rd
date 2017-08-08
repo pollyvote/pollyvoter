@@ -37,6 +37,7 @@ additional arguments, currently ignored.}
 data frame containing the results
 }
 \description{
-internal function which initial prediction function of method aggregated 
-source type.
+internal function which initializes a prediction function of method
+\code{'aggr_source_type'}. This functions selects one source type and aggregates
+the different sources daily per party.
 }
