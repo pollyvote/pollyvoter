@@ -25,8 +25,14 @@ object of class pollyvote, containing an id, an initially empty data frame
   and potentially permissible values for the entries of the data frame.
 }
 \description{
-A pollyvote container is a data frame containing all the information that is 
-needed to predict an election.
+A pollyvote container is a list containing all the information that is 
+needed to predict an election. This is the central construct of this package 
+around which all other functions are centered. 
+A pollyvote container stores all relevant data and aggregation functions.
+A pollyvote container can be 
+predicted (\code{\link{predict.pollyvote}}) and its prediction error can be 
+calculated (\code{\link{error_calc.pollyvote}}). The predictions and error 
+calculations can also be plotted using \code{\link{plot.pollyvote}}.
 }
 \section{initial functions}{
 

@@ -1,6 +1,8 @@
 #' plot a pollyvote object
 #' 
-#' plots a prediction of a pollyvote object.
+#' plots a prediction or error calculation of a pollyvote object. Internally,
+#' either \code{\link{predict.pollyvote}} or \code{\link{error_calc.pollyvote}}
+#' are called and plotted using \code{ggplot2}.
 #'
 #' @param x [\code{pollyvote(1)}] \cr
 #'   pollyvote object to predict from.
@@ -9,7 +11,9 @@
 #' @param .error_calc_method [\code{character(1)}] \cr
 #'   method of the error calculation to be plotted. Note that only one of prediction_method 
 #'   and error_calc_method can be specified.
-#' @param ... additional arguments to the predict or error_calc_method function
+#' @param ... additional arguments to the predict or error_calc_method function.
+#' Most commonly used might be \code{ci = TRUE} if \code{.error_calc_method} is
+#' specified.
 #' 
 #' @examples
 #' pv = create_pollyvote(perm_countries = "D")

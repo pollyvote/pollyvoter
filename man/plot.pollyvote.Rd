@@ -18,13 +18,17 @@ method of the prediction to be plotted.}
 method of the error calculation to be plotted. Note that only one of prediction_method 
 and error_calc_method can be specified.}
 
-\item{...}{additional arguments to the predict or error_calc_method function}
+\item{...}{additional arguments to the predict or error_calc_method function.
+Most commonly used might be \code{ci = TRUE} if \code{.error_calc_method} is
+specified.}
 }
 \value{
 a ggplot object that can be further modified.
 }
 \description{
-plots a prediction of a pollyvote object.
+plots a prediction or error calculation of a pollyvote object. Internally,
+either \code{\link{predict.pollyvote}} or \code{\link{error_calc.pollyvote}}
+are called and plotted using \code{ggplot2}.
 }
 \examples{
 pv = create_pollyvote(perm_countries = "D")
