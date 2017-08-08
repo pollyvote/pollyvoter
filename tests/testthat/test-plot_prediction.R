@@ -56,7 +56,6 @@ test_that("the prediction of a pollyvote object can be plotted", {
   assert_class(plot(pv, .error_calc_method = "poll_only_ci"), "ggplot")
   # draw a CI
   p = plot(pv, .error_calc_method = "poll_only_ci", ci = TRUE)
-  p + geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), 
-                  linetype = "dashed",
-                  fill = "grey70", alpha = 0.1)
+  p = plot(pv, .error_calc_method = "poll_only_ci", ci = FALSE)
+  p = plot(pv, .error_calc_method = "poll_only_ci")
 })

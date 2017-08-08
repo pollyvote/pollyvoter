@@ -25,7 +25,7 @@
 #' @export
 plot.pollyvote = function(x, .prediction_method = NULL, .error_calc_method = NULL, ...) {
   assert_class(x, "pollyvote")
-  # TODO change x$predictions/error_calc with getter function
+  
   if(!is.null(.prediction_method)) assert_choice(.prediction_method, names(x$predictions))
   if(!is.null(.error_calc_method)) assert_choice(.error_calc_method, names(x$error_calc))
   if(!is.null(.prediction_method) & !is.null(.error_calc_method)) 
@@ -38,9 +38,16 @@ plot.pollyvote = function(x, .prediction_method = NULL, .error_calc_method = NUL
     p = ggplot(pred_data, aes(x = date, y = percent, color = party, group = party)) +
       geom_line()
   } else {
+    # error calculation
     pred_data = error_calc(x, method = .error_calc_method, ...)
     p = ggplot(pred_data, aes(x = date, y = percent, color = party, group = party)) +
       geom_line()
+    # check if CI has to be created
+    ci = ifelse(is.null(list(...)$ci), FALSE, list(...)$ci)
+    if (ci) {
+      p = p + 
+        geom_ribbon(aes(ymin=ci_lower, ymax=ci_upper), alpha=.2, color=NA)
+    }
   }
   return(p)
 }
