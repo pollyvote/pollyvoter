@@ -140,3 +140,102 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
   }
   
 }
+
+#' Coalitions percentage prediction.
+#'  
+#' Provides prediction of percentages from different source types for specified coalitions. 
+#' Coalitions percentages are predicted for each day in range [election_day - limit_days, election_day). 
+#'  
+#' @param pv [\code{pollyvote}]\cr the pollyvote object of which to get the prediction from.
+#' @param coalitions list of vectors representing coallitions.
+#'   Complete and exact party names must be written inside the coallition vectors.
+#' @param threshold If positive, this parameter indicates the minimum voice component (greater or equal) 
+#'   that a party has to reach in order to participate in a coalition.
+#' @param threshold_handle Specifies how to handle coalitions with parties that have less percentage than threshold.
+#'   Options:
+#'    o omit: default value. In this case, this coalition forfeits for the given date, instead, NA is entered.
+#'    o ignore: In this case, the coalition will be made up of the remaining parties.                                                                          one).
+#' @param component component for which the votes are to be returned. 
+#'   The Component definition deviates here somewhat from the other declarations to the Normally to come closer.
+#'   Default value is the string specification of the root prediction, ie"Pollyvote", at a transversal (i.e. non-regional) level. Here can be handed over
+#'    o string - that is, a single component name (e.g., "poll"); in this case will one column for the specified component
+#'      and one column each (direct) Subcomponent returned
+#'    o Vector with component name - gives exactly for the specified components (without automatic subcomponent addition) the values back
+#'    o NULL - Wildcard that returns all components
+#' @param election The election year for which the coalitions are predicted.
+#'   If not specified, the most recent election year is used.
+#' @param permitted_parties Allows the selection of specific parties.
+#'   Options:
+#'    o string - For specifying one party - DOES SPECIFYING ONE PARTY MAKES SENSE ?
+#'    o Vector - For specifying multiple parties
+#'    o NULL - For all parties
+#' @param region If specified (and if the region is specified), data for this Region inserted. 
+#'   If specified, but the region is unspecified, will be an error generated.
+#'   Default is always the overall level.
+#' @param limitdays Limit in days before the election up to which the coalitions percentages are calculated.
+#'   Unlimited if negative / null (default).
+#'   For example, specifying limitdays = 100 return coalitions percentages up to 100 days before the election.
+#' @param for.ggplot2 Return format of coalitions predictions.
+#'   Options:
+#'    o FALSE(default) - Returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
+#'    o TRUE - Data frame with rows containing visualisation points
+#' 
+#' @return dataframe of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
+#'   or visualisation points of the coalitions prediction.
+#' @export
+coalitions_pred = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', predictions ='pollyvote',
+                           election = NULL, permitted_parties = NULL, region = NULL, limitdays = -1, for.ggplot2 = FALSE ) {
+  
+  #' Checks whether coalitions are made of permitted parties.
+  #' Permitted parties can be defined either in pv$permparties or in allowed_parties parameter.
+  #' Therefore, the idea is first to collect all specified permitted parties in one vector.
+  #' This vector will serve as a source for checking whether parties inside the coalitions have valid names.
+  #' If there are no parties specified, then the check for valid party names is not performed.
+  #' 
+  #' @param input coalitions to the function.
+  #' @param pv the pollyvote object.
+  #' @param allowed_parties the input allowed_parties object.
+  #' 
+  #' 
+  #' @return list of coalitions consisted only of permitted parties.
+  get_valid_coalitions = function(coalitions, pv, permitted_parties) {
+    assert_class(coalitions, "list")
+    
+    all_permitted_parties = character(0)
+    if (!is.null(pv$perm_parties)){
+      all_permitted_parties = c(all_permitted_parties, pv$perm_parties)
+    }
+    if (!is.null(permitted_parties)){
+      all_permitted_parties = c(all_permitted_parties, permitted_parties)
+    }
+    
+    if (length(all_permitted_parties) == 0) {
+      return(coalitions)
+    }
+    
+    all_permitted_parties = unique(all_permitted_parties)
+    
+    are_with_permitted_parties = sapply(coalitions, function(coalition){
+      valid_party_names = sapply(coalition, function(party){
+        is_allowed_party = is.element(party, all_permitted_parties)
+        if (!is_allowed_party) {
+          warning(sprintf("%s is not permitted party name. Therefore, the prediction would not be calculated for coalition %s\n",
+                          party,
+                          paste(coalition, collapse = "-")))
+        }
+        return(is_allowed_party)
+      })
+      all(valid_party_names)
+    })
+    
+    return(coalitions[are_with_permitted_parties])
+  }
+  
+  if (is.null(pv)) {
+    stop("Pollyvote (pv) object is NULL")
+  }
+  assert_class(pv, c("pollyvote", "list"))
+  
+  coalitions <- get_valid_coalitions(coalitions, pv, permitted_parties)
+}
+
