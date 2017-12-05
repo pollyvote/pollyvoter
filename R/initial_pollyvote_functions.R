@@ -155,26 +155,28 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 #'   Options:
 #'    o omit: default value. In this case, this coalition forfeits for the given date, instead, NA is entered.
 #'    o ignore: In this case, the coalition will be made up of the remaining parties.                                                                          one).
-#' @param component component for which the votes are to be returned. 
+#' @param prediction the name of the prediction function.
 #'   The Component definition deviates here somewhat from the other declarations to the Normally to come closer.
 #'   Default value is the string specification of the root prediction, ie"Pollyvote", at a transversal (i.e. non-regional) level. Here can be handed over
-#'    o string - that is, a single component name (e.g., "poll"); in this case will one column for the specified component
+#'    o character - that is, a single component name (e.g., "poll"); in this case will one column for the specified component
 #'      and one column each (direct) Subcomponent returned
 #'    o Vector with component name - gives exactly for the specified components (without automatic subcomponent addition) the values back
 #'    o NULL - Wildcard that returns all components
-#' @param election The election year for which the coalitions are predicted.
+#' @param election_year The election year for which the coalitions are predicted.
 #'   If not specified, the most recent election year is used.
 #' @param permitted_parties Allows the selection of specific parties.
 #'   Options:
-#'    o string - For specifying one party - DOES SPECIFYING ONE PARTY MAKES SENSE ?
+#'    o character - For specifying one party - DOES SPECIFYING ONE PARTY MAKES SENSE ?
 #'    o Vector - For specifying multiple parties
 #'    o NULL - For all parties
-#' @param region If specified (and if the region is specified), data for this Region inserted. 
-#'   If specified, but the region is unspecified, will be an error generated.
-#'   Default is always the overall level.
+#' @param region If specified (and if the region is defined), data for this Region inserted.
+#'   If the specified region is not defined, error is thrown.
+#'   Options:
+#'    o character - the Specified region.
+#'    o NULL - If the region is not specified, then the result over all regions is returned.
 #' @param limitdays Limit in days before the election up to which the coalitions percentages are calculated.
-#'   Unlimited if negative / null (default).
 #'   For example, specifying limitdays = 100 return coalitions percentages up to 100 days before the election.
+#'   If negative number is supplied (default value), then data from all days is taken into account when calculating coalition percentages.
 #' @param for.ggplot2 Return format of coalitions predictions.
 #'   Options:
 #'    o FALSE(default) - Returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
@@ -183,8 +185,8 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 #' @return dataframe of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
 #'   or visualisation points of the coalitions prediction.
 #' @export
-coalitions_pred = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', predictions ='pollyvote',
-                           election = NULL, permitted_parties = NULL, region = NULL, limitdays = -1, for.ggplot2 = FALSE ) {
+coalitions_pred = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote',
+                           election_year = NULL, permitted_parties = NULL, region = NULL, limitdays = -1, for.ggplot2 = FALSE ) {
   
   #' Checks whether coalitions are made of permitted parties.
   #' Permitted parties can be defined either in pv$permparties or in allowed_parties parameter.
@@ -231,10 +233,26 @@ coalitions_pred = function(pv, coalitions, threshold = 0, threshold_handle = 'om
     return(coalitions[are_with_permitted_parties])
   }
   
-  if (is.null(pv)) {
-    stop("Pollyvote (pv) object is NULL")
-  }
   assert_class(pv, c("pollyvote", "list"))
+  assert_numeric(threshold, lower = 0)
+  if (threshold >= 10) {
+    warning(sprintf("Threshold is bigger than 10. It is equal to %d", threshold))
+  }
+  assert_choice(threshold_handle, c("omit", "ignore"))
+  assert(
+    check_class(election_year, "numeric"),
+    check_class(election_year, "NULL")
+  )
+  assert(
+    check_class(permitted_parties, "character"),
+    check_class(permitted_parties, "NULL")
+  )
+  assert(
+    check_class(region, "character"),
+    check_class(region, "NULL")
+  )
+  assert_class(limitdays, "numeric")
+  assert_class(for.ggplot2, "logical")
   
   coalitions <- get_valid_coalitions(coalitions, pv, permitted_parties)
 }
