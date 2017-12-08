@@ -125,6 +125,9 @@ create_pollyvote = function(id = "pollyvote",
   
   pv = add_prediction(pv, "aggr_source_type", initial_prediction_aggr_source_type)
   
+  #Add coalitions prediction function
+  pv = add_prediction(pv, "coalitions", initial_coalitions_pred)
+  
   # error calculation based on name of prediction and election
   pv = add_error_calc(pv, "prediction_election", 
                       initial_error_calc_prediction_election)

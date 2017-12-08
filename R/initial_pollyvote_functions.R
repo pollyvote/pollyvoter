@@ -194,7 +194,7 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 #' @return dataframe of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
 #'   or visualisation points of the coalitions prediction.
 #' @export
-coalitions_pred = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote',
+initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote',
                            election_year = NULL, permitted_parties = NULL, region = NULL, limitdays = -1, for.ggplot2 = FALSE ) {
   
   #' Checks whether coalitions are made of permitted parties.
