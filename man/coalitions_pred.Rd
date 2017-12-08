@@ -8,52 +8,76 @@ Provides prediction of percentages from different source types for specified coa
 Coalitions percentages are predicted for each day in range [election_day - limit_days, election_day).}
 \usage{
 coalitions_pred(pv, coalitions, threshold = 0, threshold_handle = "omit",
-  predictions = "pollyvote", election = NULL, allowed_parties = NULL,
-  region = NULL, limitdays = -1, for.ggplot2 = FALSE)
+  prediction = "pollyvote", election_year = NULL,
+  permitted_parties = NULL, region = NULL, limitdays = -1,
+  for.ggplot2 = FALSE)
 }
 \arguments{
-\item{pv}{[\code{pollyvote}]\cr the pollyvote object of which to get the prediction from.}
+\item{pv}{[\code{pollyvote}]\cr 
+The pollyvote object of which to get the prediction from.}
 
-\item{coalitions}{list of vectors representing coallitions.
-Complete and exact party names must be written inside the coallition vectors.}
+\item{coalitions}{[\code{list}]\cr
+List of vectors representing coallitions. Coallitions must be specified with full and exact party names.}
 
-\item{threshold}{If positive, this parameter indicates the minimum voice component (greater or equal) 
+\item{threshold}{[\code{numeric(1)}]\cr
+If positive, this parameter indicates the minimum voice component (greater or equal) 
 that a party has to reach in order to participate in a coalition.}
 
-\item{threshold_handle}{Specifies how to handle coalitions with parties that have less percentage than threshold.
+\item{threshold_handle}{[\code{character(1)}]\cr
+Specifies how to handle coalitions with parties that have less percentage than threshold.
 Options:
  o omit: default value. In this case, this coalition forfeits for the given date, instead, NA is entered.
  o ignore: In this case, the coalition will be made up of the remaining parties.                                                                          one).}
 
-\item{election}{The election year for which the coalitions are predicted.
-If not specified, the most recent election year is used.}
-
-\item{region}{If specified (and if the region is specified), data for this Region inserted. 
-If specified, but the region is unspecified, will be an error generated.
-Default is always the overall level.}
-
-\item{limitdays}{Limit in days before the election up to which the coalitions percentages are calculated.
-Unlimited if negative / null (default).
-For example, specifying limitdays = 100 return coalitions percentages up to 100 days before the election.}
-
-\item{for.ggplot2}{Return format of coalitions predictions.
-Options:
- o FALSE(default) - Returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
- o TRUE - Data frame with rows containing visualisation points}
-
-\item{component}{component for which the votes are to be returned. 
+\item{prediction}{[\code{numeric(1)}]\cr
+Name of the prediction function.
 The Component definition deviates here somewhat from the other declarations to the Normally to come closer.
 Default value is the string specification of the root prediction, ie"Pollyvote", at a transversal (i.e. non-regional) level. Here can be handed over
- o string - that is, a single component name (e.g., "poll"); in this case will one column for the specified component
+ o character - that is, a single component name (e.g., "poll"); in this case will one column for the specified component
    and one column each (direct) Subcomponent returned
  o Vector with component name - gives exactly for the specified components (without automatic subcomponent addition) the values back
  o NULL - Wildcard that returns all components}
 
-\item{party}{Allows the selection of specific parties.
+\item{election_year}{[\code{numeric(1)}]\cr
+The election year for which the coalitions are predicted.
+If not specified, the most recent election year is used.}
+
+\item{permitted_parties}{[\code{character(1)}]\cr
+Allows the selection of specific parties.
 Options:
- o string - For specifying one party
+ o character - For specifying one party - DOES SPECIFYING ONE PARTY MAKES SENSE ?
  o Vector - For specifying multiple parties
  o NULL - For all parties}
+
+\item{region}{[\code{character(1)}]\cr
+The region for which to calculate coalitions predictions.
+If the specified region is not defined, error is thrown.
+Options:
+ o character - the Specified region.
+ o NULL - If the region is not specified, then the result over all regions is returned.}
+
+\item{limitdays}{[\code{numeric(1)}]\cr
+Limit in days before the election up to which the coalitions percentages are calculated.
+For example, specifying limitdays = 100 return coalitions percentages up to 100 days before the election.
+If negative number is supplied (default value), then data from all days is taken into account when calculating coalition percentages.}
+
+\item{for.ggplot2}{[\code{logical(1)}]\cr
+Return format of coalitions predictions.
+Options:
+ o FALSE(default) - Returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
+ o TRUE - Data frame with rows containing visualisation points}
+
+\item{input}{coalitions to the function.}
+
+\item{pv}{the pollyvote object.}
+
+\item{allowed_parties}{the input allowed_parties object.}
+}
+\value{
+dataframe of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
+  or visualisation points of the coalitions prediction.
+
+list of coalitions consisted only of permitted parties.
 }
 \description{
 Coalitions percentage prediction.

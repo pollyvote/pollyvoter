@@ -146,38 +146,47 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 #' Provides prediction of percentages from different source types for specified coalitions. 
 #' Coalitions percentages are predicted for each day in range [election_day - limit_days, election_day). 
 #'  
-#' @param pv [\code{pollyvote}]\cr the pollyvote object of which to get the prediction from.
-#' @param coalitions list of vectors representing coallitions.
-#'   Complete and exact party names must be written inside the coallition vectors.
-#' @param threshold If positive, this parameter indicates the minimum voice component (greater or equal) 
+#' @param pv [\code{pollyvote}]\cr 
+#'   The pollyvote object of which to get the prediction from.
+#' @param coalitions [\code{list}]\cr
+#'   List of vectors representing coallitions. Coallitions must be specified with full and exact party names.
+#' @param threshold [\code{numeric(1)}]\cr
+#'   If positive, this parameter indicates the minimum voice component (greater or equal) 
 #'   that a party has to reach in order to participate in a coalition.
-#' @param threshold_handle Specifies how to handle coalitions with parties that have less percentage than threshold.
+#' @param threshold_handle [\code{character(1)}]\cr
+#'   Specifies how to handle coalitions with parties that have less percentage than threshold.
 #'   Options:
 #'    o omit: default value. In this case, this coalition forfeits for the given date, instead, NA is entered.
 #'    o ignore: In this case, the coalition will be made up of the remaining parties.                                                                          one).
-#' @param prediction the name of the prediction function.
+#' @param prediction [\code{numeric(1)}]\cr
+#'   Name of the prediction function.
 #'   The Component definition deviates here somewhat from the other declarations to the Normally to come closer.
 #'   Default value is the string specification of the root prediction, ie"Pollyvote", at a transversal (i.e. non-regional) level. Here can be handed over
 #'    o character - that is, a single component name (e.g., "poll"); in this case will one column for the specified component
 #'      and one column each (direct) Subcomponent returned
 #'    o Vector with component name - gives exactly for the specified components (without automatic subcomponent addition) the values back
 #'    o NULL - Wildcard that returns all components
-#' @param election_year The election year for which the coalitions are predicted.
+#' @param election_year [\code{numeric(1)}]\cr
+#'   The election year for which the coalitions are predicted.
 #'   If not specified, the most recent election year is used.
-#' @param permitted_parties Allows the selection of specific parties.
+#' @param permitted_parties [\code{character(1)}]\cr
+#'   Allows the selection of specific parties.
 #'   Options:
 #'    o character - For specifying one party - DOES SPECIFYING ONE PARTY MAKES SENSE ?
 #'    o Vector - For specifying multiple parties
 #'    o NULL - For all parties
-#' @param region If specified (and if the region is defined), data for this Region inserted.
+#' @param region [\code{character(1)}]\cr
+#'   The region for which to calculate coalitions predictions.
 #'   If the specified region is not defined, error is thrown.
 #'   Options:
 #'    o character - the Specified region.
 #'    o NULL - If the region is not specified, then the result over all regions is returned.
-#' @param limitdays Limit in days before the election up to which the coalitions percentages are calculated.
+#' @param limitdays [\code{numeric(1)}]\cr
+#'   Limit in days before the election up to which the coalitions percentages are calculated.
 #'   For example, specifying limitdays = 100 return coalitions percentages up to 100 days before the election.
 #'   If negative number is supplied (default value), then data from all days is taken into account when calculating coalition percentages.
-#' @param for.ggplot2 Return format of coalitions predictions.
+#' @param for.ggplot2 [\code{logical(1)}]\cr
+#'   Return format of coalitions predictions.
 #'   Options:
 #'    o FALSE(default) - Returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
 #'    o TRUE - Data frame with rows containing visualisation points
