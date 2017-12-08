@@ -210,7 +210,7 @@ initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_hand
   #' 
   #' @return list of coalitions consisted only of permitted parties.
   get_valid_coalitions = function(coalitions, pv, permitted_parties) {
-    assert_class(coalitions, "list")
+    assert_list(coalitions)
     
     all_permitted_parties = character(0)
     if (!is.null(pv$perm_parties)){
@@ -249,20 +249,21 @@ initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_hand
   }
   assert_choice(threshold_handle, c("omit", "ignore"))
   assert(
-    check_class(election_year, "numeric"),
-    check_class(election_year, "NULL")
+    check_numeric(election_year),
+    check_null(election_year)
   )
   assert(
-    check_class(permitted_parties, "character"),
-    check_class(permitted_parties, "NULL")
+    check_character(permitted_parties),
+    check_null(permitted_parties)
   )
   assert(
-    check_class(region, "character"),
-    check_class(region, "NULL")
+    check_character(region),
+    check_null(region)
   )
-  assert_class(limitdays, "numeric")
-  assert_class(for.ggplot2, "logical")
+  assert_numeric(limitdays)
+  assert_logical(for.ggplot2)
   
   coalitions <- get_valid_coalitions(coalitions, pv, permitted_parties)
+  
 }
 
