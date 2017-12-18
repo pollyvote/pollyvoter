@@ -181,10 +181,10 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 #'   Options:
 #'    o character - the Specified region.
 #'    o NULL - If the region is not specified, then the result over all regions is returned.
-#' @param limitdays [\code{numeric(1)}]\cr
+#' @param limit_days [\code{numeric(1)}]\cr
 #'   Limit in days before the election up to which the coalitions percentages are calculated.
 #'   For example, specifying limitdays = 100 return coalitions percentages up to 100 days before the election.
-#'   If negative number is supplied (default value), then data from all days is taken into account when calculating coalition percentages.
+#'   If negative number is supplied (default value of -1), then data from all days is taken into account when calculating coalition percentages.
 #' @param for.ggplot2 [\code{logical(1)}]\cr
 #'   Return format of coalitions predictions.
 #'   Options:
@@ -195,7 +195,7 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 #'   or visualisation points of the coalitions prediction.
 #' @export
 initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote',
-                           election_year = NULL, permitted_parties = NULL, region = NULL, limitdays = -1, for.ggplot2 = FALSE ) {
+                           election_year = NULL, permitted_parties = NULL, region = NULL, limit_days = -1, for.ggplot2 = FALSE ) {
   
   #' Checks whether coalitions are made of permitted parties.
   #' Permitted parties can be defined either in pv$permparties or in allowed_parties parameter.
@@ -242,6 +242,45 @@ initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_hand
     return(coalitions[are_with_permitted_parties])
   }
   
+  get_coalition_predictions_data = function(pv, election_year, limit_days) {
+    
+    election_results = pv$election_result
+    
+    assert_list(election_results)
+    if (length(election_results) == 0) {
+      stop("At least one election result must be present in the pollyvote object")
+    }
+    
+    #create data frame consisting of columns election_name|election_year
+    elections_data = bind_rows(lapply(election_results, function(election_result) {
+      election_name = election_result$election[[1]]
+      election_date = election_result$date[[1]]
+      if (is.null(election_date) || is.na(election_date)){
+        warning(sprintf("There is no year specified for election %s.", election_name))
+        election_date = NA
+      }
+      election_year = as.numeric(format(as.POSIXct(election_date, format = "%Y-%m-%d"), "%Y"))
+      
+      data.frame(name = election_name, year = election_year, stringsAsFactors = FALSE)
+    }))
+    
+    target_election_data = elections_data[elections_data$year == election_year, ]
+    
+    #if there is no year matching the election year, select the most recent one.
+    if (nrow(target_election_data) == 0 ) {
+      target_election_data = elections_data[elections_data$year == max(elections_data$year, na.rm = TRUE), ]
+    }
+    if (nrow(target_election_data) == 0 ) {
+      stop("The election can't be obtained from pollyvote object")
+    }
+    
+    target_election_name = target_election_data$name[[1]]
+    print(target_election_name)
+    #get predictions data from this 
+    data_all_years = get_data(pv)
+    data_all_years
+  }
+  
   assert_class(pv, c("pollyvote", "list"))
   assert_numeric(threshold, lower = 0)
   if (threshold >= 10) {
@@ -250,20 +289,29 @@ initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_hand
   assert_choice(threshold_handle, c("omit", "ignore"))
   assert(
     check_numeric(election_year),
-    check_null(election_year)
-  )
+    check_null(election_year))
   assert(
     check_character(permitted_parties),
-    check_null(permitted_parties)
-  )
+    check_null(permitted_parties))
   assert(
     check_character(region),
-    check_null(region)
-  )
-  assert_numeric(limitdays)
+    check_null(region))
+  assert_numeric(limit_days)
   assert_logical(for.ggplot2)
   
   coalitions <- get_valid_coalitions(coalitions, pv, permitted_parties)
   
+  data <- get_coalition_predictions_data(pv, election_year, limitdays)
+  
+  # data <- get_data(pv)
+  # 
+  # party_percent_per_day <- aggregate(percent ~ date + party, data, FUN=sum, na.action = na.pass)
+  # print(party_percent_per_day)
+  # 
+  # results = lapply(coalitions, FUN = function(coalition) {
+  #   coalition_data = subset(party_percent_per_day, party %in% coalition)
+  #   #check whether all parties from the coalition are present for each day
+  #   coalition_prediction_per_day <- aggregate(percent ~ data, coalition_data, FUN=sum)
+  # })
 }
 
