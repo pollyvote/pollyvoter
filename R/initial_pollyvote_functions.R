@@ -195,7 +195,7 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 #'   or visualisation points of the coalitions prediction.
 #' @export
 initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote',
-                           election_year = NULL, permitted_parties = NULL, region = NULL, limit_days = -1, for.ggplot2 = FALSE ) {
+                           election_year = NULL, permitted_parties = NULL, region = NULL, limitdays = -1, for.ggplot2 = FALSE ) {
   
   #' Checks whether coalitions are made of permitted parties.
   #' Permitted parties can be defined either in pv$permparties or in allowed_parties parameter.
@@ -242,43 +242,58 @@ initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_hand
     return(coalitions[are_with_permitted_parties])
   }
   
-  get_coalition_predictions_data = function(pv, election_year, limit_days) {
+  get_coalition_predictions_data = function(pv, election_year, limitdays) {
     
-    election_results = pv$election_result
+    election_results = assert_list(pv$election_result)
     
-    assert_list(election_results)
     if (length(election_results) == 0) {
-      stop("At least one election result must be present in the pollyvote object")
+      stop("At least one election result must be present in the pollyvote object in order coalitions prediction to be computed")
     }
     
-    #create data frame consisting of columns election_name|election_year
-    elections_data = bind_rows(lapply(election_results, function(election_result) {
+    #create data frame with columns: election_name|election_date|election_year
+    elections_results_data = bind_rows(lapply(election_results, function(election_result) {
       election_name = election_result$election[[1]]
       election_date = election_result$date[[1]]
       if (is.null(election_date) || is.na(election_date)){
+        # remove this if when date is mandatory to enter election date when entering results
         warning(sprintf("There is no year specified for election %s.", election_name))
         election_date = NA
       }
       election_year = as.numeric(format(as.POSIXct(election_date, format = "%Y-%m-%d"), "%Y"))
       
-      data.frame(name = election_name, year = election_year, stringsAsFactors = FALSE)
+      data.frame(name = election_name, date = election_date, year = election_year, stringsAsFactors = FALSE)
     }))
     
-    target_election_data = elections_data[elections_data$year == election_year, ]
+    target_election_results_data = subset(elections_results_data, year == election_year)
     
     #if there is no year matching the election year, select the most recent one.
-    if (nrow(target_election_data) == 0 ) {
-      target_election_data = elections_data[elections_data$year == max(elections_data$year, na.rm = TRUE), ]
+    if (nrow(target_election_results_data) == 0 ) {
+      target_election_results_data = subset(elections_results_data, year == max(elections_results_data$year, na.rm = TRUE))
     }
-    if (nrow(target_election_data) == 0 ) {
-      stop("The election can't be obtained from pollyvote object")
+    if (nrow(target_election_results_data) == 0 ) {
+      stop("The election data can't be obtained from pollyvote object")
     }
     
-    target_election_name = target_election_data$name[[1]]
-    print(target_election_name)
-    #get predictions data from this 
-    data_all_years = get_data(pv)
-    data_all_years
+    target_election_name = target_election_results_data$name[[1]]
+    target_election_date = target_election_results_data$date[[1]]
+    
+    #get predictions data from the pollyvote object 
+    elections_data = get_data(pv)
+    
+    # If there is no election name defined for the polls data, don't subset the data.
+    # This might cause a problems if there is data for more than one election in the pv$data object.
+    if (is.element(target_election_name, elections_data$election)) {
+      elections_data = subset(elections_data, election == target_election_name)
+    }
+    
+    if (limitdays > 0) {
+      elections_data = limit_days(elections_data, limitdays, election_date = target_election_date)
+    }
+    
+    if (nrow(elections_data) == 0) {
+      stop("No data found for elections. Coalitions predictions can't be made without data for elections")
+    }
+    return(elections_data)
   }
   
   assert_class(pv, c("pollyvote", "list"))
@@ -296,13 +311,13 @@ initial_coalitions_pred = function(pv, coalitions, threshold = 0, threshold_hand
   assert(
     check_character(region),
     check_null(region))
-  assert_numeric(limit_days)
+  assert_numeric(limitdays)
   assert_logical(for.ggplot2)
   
   coalitions <- get_valid_coalitions(coalitions, pv, permitted_parties)
   
   data <- get_coalition_predictions_data(pv, election_year, limitdays)
-  
+  return(data)
   # data <- get_data(pv)
   # 
   # party_percent_per_day <- aggregate(percent ~ date + party, data, FUN=sum, na.action = na.pass)

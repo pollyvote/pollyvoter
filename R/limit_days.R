@@ -50,11 +50,12 @@ limit_days = function(data, no_days, election_data, pv, election,
   if (missing(election_date) & !missing(election_data)) {
     if ("date" %in% colnames(election_data)) {
       election_date = unique(election_data$date)
-    } 
-  } else {
-    warning("limit_days could not find out the date of the election. Please specify the argument election_date.")
-    return(data)
-  }
+    }
+    else {
+      warning("limit_days could not find out the date of the election. Please specify the argument election_date.")
+      return(data)
+    }
+  } 
   
   # subset the data accordingly
   earliest_date = election_date - as.difftime(no_days, units = "days")
