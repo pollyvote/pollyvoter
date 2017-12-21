@@ -57,9 +57,6 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   # use only permitted parties
   coalitions = valid_coalitions(coalitions, pv, permitted_parties)
   
-  # ???
-  elections_data = coalition_predictions_data(pv, election_year, limitdays)
-  
   assert_class(pv, c("pollyvote", "list"))
   assert_numeric(threshold, lower = 0)
   if (threshold >= 10) {
@@ -78,9 +75,7 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   assert_numeric(limitdays)
   assert_logical(for.ggplot2)
   
-  coalitions <- get_valid_coalitions(coalitions, pv, permitted_parties)
-  
-  data <- get_coalition_predictions_data(pv, election_year, limitdays)
+  data <- coalition_predictions_data(pv, election_year, limitdays)
   return(data)
   # data <- get_data(pv)
   # 
@@ -143,18 +138,19 @@ valid_coalitions = function(coalitions, pv, permitted_parties){
 
 
 
-#' Checks whether coalitions are made of permitted parties.
-#' Permitted parties can be defined either in pv$permparties or in allowed_parties parameter.
-#' Therefore, the idea is first to collect all specified permitted parties in one vector.
-#' This vector will serve as a source for checking whether parties inside the coalitions have valid names.
-#' If there are no parties specified, then the check for valid party names is not performed.
+#' Filters coalition predictions data.
 #' 
-#' @param input coalitions to the function.
-#' @param pv the pollyvote object.
-#' @param allowed_parties the input allowed_parties object.
+#' Coalition predictions data from the pollyvote object is filtered based on 
+#' the election_year and limit_days parameters.
 #' 
+#' @param pv [\code{pollyvote}]\cr 
+#'   the pollyvote object.
+#' @param election_year [\code{numeric(1)}]\cr
+#'   the election_year for which to get coalition predictions data.
+#' @param limit_days [\code{numeric(1)}]\cr
+#'   limit in days before the election up to which the coalitions percentages are calculated.
 #' 
-#' @return list of coalitions consisted only of permitted parties.
+#' @return coalitions predictions data filtered based on the election_year and limit_days parameters.
 #' @export 
 coalition_predictions_data = function(pv, election_year, limitdays){
   

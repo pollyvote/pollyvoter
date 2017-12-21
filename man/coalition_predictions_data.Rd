@@ -2,28 +2,24 @@
 % Please edit documentation in R/coalitions.R
 \name{coalition_predictions_data}
 \alias{coalition_predictions_data}
-\title{Checks whether coalitions are made of permitted parties.
-Permitted parties can be defined either in pv$permparties or in allowed_parties parameter.
-Therefore, the idea is first to collect all specified permitted parties in one vector.
-This vector will serve as a source for checking whether parties inside the coalitions have valid names.
-If there are no parties specified, then the check for valid party names is not performed.}
+\title{Filters coalition predictions data.}
 \usage{
 coalition_predictions_data(pv, election_year, limitdays)
 }
 \arguments{
-\item{pv}{the pollyvote object.}
+\item{pv}{[\code{pollyvote}]\cr 
+the pollyvote object.}
 
-\item{input}{coalitions to the function.}
+\item{election_year}{[\code{numeric(1)}]\cr
+the election_year for which to get coalition predictions data.}
 
-\item{allowed_parties}{the input allowed_parties object.}
+\item{limit_days}{[\code{numeric(1)}]\cr
+limit in days before the election up to which the coalitions percentages are calculated.}
 }
 \value{
-list of coalitions consisted only of permitted parties.
+coalitions predictions data filtered based on the election_year and limit_days parameters.
 }
 \description{
-Checks whether coalitions are made of permitted parties.
-Permitted parties can be defined either in pv$permparties or in allowed_parties parameter.
-Therefore, the idea is first to collect all specified permitted parties in one vector.
-This vector will serve as a source for checking whether parties inside the coalitions have valid names.
-If there are no parties specified, then the check for valid party names is not performed.
+Coalition predictions data from the pollyvote object is filtered based on 
+the election_year and limit_days parameters.
 }
