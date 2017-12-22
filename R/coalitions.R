@@ -8,7 +8,7 @@
 #' @param coalitions [\code{list}]\cr
 #'   List of vectors representing coallitions. Coallitions must be specified with full and exact party names.
 #' @param threshold [\code{numeric(1)}]\cr
-#'   If positive, this parameter indicates the minimum voice component (greater or equal) 
+#'   If positive, indicates the minimum voice component
 #'   that a party has to reach in order to participate in a coalition.
 #' @param threshold_handle [\code{character(1)}]\cr
 #'   Specifies how to handle coalitions with parties that have less percentage than threshold.
@@ -76,17 +76,15 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   assert_logical(for.ggplot2)
   
   data <- coalition_predictions_data(pv, election_year, limitdays)
-  return(data)
-  # data <- get_data(pv)
-  # 
-  # party_percent_per_day <- aggregate(percent ~ date + party, data, FUN=sum, na.action = na.pass)
-  # print(party_percent_per_day)
-  # 
-  # results = lapply(coalitions, FUN = function(coalition) {
-  #   coalition_data = subset(party_percent_per_day, party %in% coalition)
-  #   #check whether all parties from the coalition are present for each day
-  #   coalition_prediction_per_day <- aggregate(percent ~ data, coalition_data, FUN=sum)
-  # })
+  election_data = data[["election_data"]]
+  election_date = data[["election_date"]]
+  
+  raw_predictions = predict(pv, method = prediction) %>%
+    filter(date %in% election_data$date & party %in% election_data$party & percent  %in% election_data$percent) %>%
+    threshold_and_replace_party_with_coalition(threshold, threshold_handle, coalitions) %>%
+    group_by(date) %>%
+    summarise(percent = sum(percent)) %>%
+    mutate(days_to_election = election_date - as.difftime(date, units = "days"))
 }
 
 
@@ -99,7 +97,6 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
 #' @param input coalitions to the function.
 #' @param pv the pollyvote object.
 #' @param allowed_parties the input allowed_parties object.
-#' 
 #' 
 #' @return list of coalitions consisted only of permitted parties.
 #' @export   
@@ -138,7 +135,7 @@ valid_coalitions = function(coalitions, pv, permitted_parties){
 
 
 
-#' Filters coalition predictions data.
+#' Filters coalition predictions data and election_results in order to extract the election_date.
 #' 
 #' Coalition predictions data from the pollyvote object is filtered based on 
 #' the election_year and limit_days parameters.
@@ -150,7 +147,7 @@ valid_coalitions = function(coalitions, pv, permitted_parties){
 #' @param limit_days [\code{numeric(1)}]\cr
 #'   limit in days before the election up to which the coalitions percentages are calculated.
 #' 
-#' @return coalitions predictions data filtered based on the election_year and limit_days parameters.
+#' @return list of election_date and coalitions predictions data filtered based on the election_year and limit_days parameters.
 #' @export 
 coalition_predictions_data = function(pv, election_year, limitdays){
   
@@ -188,20 +185,68 @@ coalition_predictions_data = function(pv, election_year, limitdays){
   target_election_date = target_election_results_data$date[[1]]
   
   #get predictions data from the pollyvote object 
-  elections_data = get_data(pv)
+  election_data = get_data(pv)
   
   # If there is no election name defined for the polls data, don't subset the data.
   # This might cause a problems if there is data for more than one election in the pv$data object.
-  if (is.element(target_election_name, elections_data$election)) {
-    elections_data = subset(elections_data, election == target_election_name)
+  if (is.element(target_election_name, election_data$election)) {
+    election_data = subset(election_data, election == target_election_name)
   }
   
   if (limitdays > 0) {
-    elections_data = limit_days(elections_data, limitdays, election_date = target_election_date)
+    election_data = limit_days(election_data, limitdays, election_date = target_election_date)
   }
   
-  if (nrow(elections_data) == 0) {
+  if (nrow(election_data) == 0) {
     stop("No data found for elections. Coalitions predictions can't be made without data for elections")
   }
-  return(elections_data)
+  
+  list(election_date=target_election_date, election_data = election_data)
+}
+
+#' Applies the threshold rule and replaces the parties in the election_data with coalitions names.
+#' 
+#' For each day, it is checked whether data is available for all parties in the coalition.
+#' If not, if threshold is greater than zero, NA or zero is inserted depending on the threshold_handle value.
+#' 
+#' @param data [\code{data.frame}]\cr 
+#'   the elections data frame.
+#' @param threshold [\code{numeric(1)}]\cr
+#'   If positive, indicates the minimum voice component
+#'   that a party has to reach in order to participate in a coalition.
+#' @param threshold_handle [\code{character(1)}]\cr
+#'   Specifies how to handle coalitions with parties that have less percentage than threshold.
+#' @param coalitions [\code{list}]\cr
+#'   The coalitions for which prediction is calculated.
+#'   
+#' @return data with applied threshold rule and replaced party names with coalition names.
+#' @export 
+threshold_and_replace_party_with_coalition = function(data, threshold, threshold_handle, coalitions) {
+  
+  thresholded_data = data
+  
+  if (threshold > 0) {
+    data$percent[data$percent < threshold] = ifelse(threshold_handle == 'omit', NA, 0)
+    
+    if (threshold_handle == 'omit'){
+      data_by_days = lapply(split(data, data$date), function(data_by_date) {
+        # If some party of coalition is missing for a given day, all values for the parties in coalition for the day are set to NA.
+        coalitions_data = list()
+        for (i in 1:length(coalitions)) {
+          parties_in_coalition = coalitions[[i]]
+          are_all_parties_present = all(parties_in_coalition %in% data_by_date$party)
+          coalitions_data[[i]] = data_by_date %>%
+            filter(party %in% coalitions[[i]]) %>%
+            mutate(percent = ifelse(are_all_parties_present, percent, NA))
+        }
+        bind_rows(coalitions_data)
+      })
+      
+      thresholded_data = bind_rows(data_by_days)
+    } else {
+      data$percent[is.na(data$percent)] = 0
+    }
+  }
+  
+  data
 }

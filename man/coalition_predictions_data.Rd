@@ -2,7 +2,7 @@
 % Please edit documentation in R/coalitions.R
 \name{coalition_predictions_data}
 \alias{coalition_predictions_data}
-\title{Filters coalition predictions data.}
+\title{Filters coalition predictions data and election_results in order to extract the election_date.}
 \usage{
 coalition_predictions_data(pv, election_year, limitdays)
 }
@@ -17,7 +17,7 @@ the election_year for which to get coalition predictions data.}
 limit in days before the election up to which the coalitions percentages are calculated.}
 }
 \value{
-coalitions predictions data filtered based on the election_year and limit_days parameters.
+list of election_date and coalitions predictions data filtered based on the election_year and limit_days parameters.
 }
 \description{
 Coalition predictions data from the pollyvote object is filtered based on 

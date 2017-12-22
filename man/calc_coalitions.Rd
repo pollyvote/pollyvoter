@@ -20,7 +20,7 @@ The pollyvote object of which to get the prediction from.}
 List of vectors representing coallitions. Coallitions must be specified with full and exact party names.}
 
 \item{threshold}{[\code{numeric(1)}]\cr
-If positive, this parameter indicates the minimum voice component (greater or equal) 
+If positive, indicates the minimum voice component
 that a party has to reach in order to participate in a coalition.}
 
 \item{threshold_handle}{[\code{character(1)}]\cr
