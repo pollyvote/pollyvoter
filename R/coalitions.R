@@ -79,12 +79,11 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   election_data = data[["election_data"]]
   election_date = data[["election_date"]]
   
-  raw_predictions = predict(pv, method = prediction) %>%
+  predict(pv, method = prediction) %>%
     filter(date %in% election_data$date & party %in% election_data$party & percent  %in% election_data$percent) %>%
     threshold_and_replace_party_with_coalition(threshold, threshold_handle, coalitions) %>%
-    group_by(date) %>%
-    summarise(percent = sum(percent)) %>%
-    mutate(days_to_election = election_date - as.difftime(date, units = "days"))
+    group_by(date, party) %>%
+    summarise(percent = sum(percent))
 }
 
 
@@ -223,30 +222,28 @@ coalition_predictions_data = function(pv, election_year, limitdays){
 #' @export 
 threshold_and_replace_party_with_coalition = function(data, threshold, threshold_handle, coalitions) {
   
-  thresholded_data = data
-  
-  if (threshold > 0) {
-    data$percent[data$percent < threshold] = ifelse(threshold_handle == 'omit', NA, 0)
+  coalitions_data = list()
+  for (i in 1:length(coalitions)) {
+    parties_in_coalition = coalitions[[i]]
     
-    if (threshold_handle == 'omit'){
-      data_by_days = lapply(split(data, data$date), function(data_by_date) {
-        # If some party of coalition is missing for a given day, all values for the parties in coalition for the day are set to NA.
-        coalitions_data = list()
-        for (i in 1:length(coalitions)) {
-          parties_in_coalition = coalitions[[i]]
-          are_all_parties_present = all(parties_in_coalition %in% data_by_date$party)
-          coalitions_data[[i]] = data_by_date %>%
-            filter(party %in% coalitions[[i]]) %>%
-            mutate(percent = ifelse(are_all_parties_present, percent, NA))
-        }
-        bind_rows(coalitions_data)
-      })
-      
-      thresholded_data = bind_rows(data_by_days)
-    } else {
-      data$percent[is.na(data$percent)] = 0
-    }
+    coalition_data_by_days = lapply(split(data, data$date), function(data_by_date) {
+    # If some party of coalition is missing for a given day and threshold_handle = "omit" then
+    # all values for the parties in coalition for the day are set to NA.
+    are_all_parties_present = all(parties_in_coalition %in% data_by_date$party)
+    should_change_percent = !are_all_parties_present & threshold_handle == 'omit'
+    data_by_date %>%
+     filter(party %in% coalitions[[i]]) %>%
+     mutate(percent = ifelse(should_change_percent, NA, percent), party = paste(coalitions[[i]], collapse = "-"))
+    })
+    
+    coalitions_data[[i]] = bind_rows(coalition_data_by_days)
   }
   
-  data
+  filtered_coalitions_data = bind_rows(coalitions_data)
+  
+  filtered_coalitions_data$percent[filtered_coalitions_data$percent < threshold] = ifelse(threshold_handle == 'omit', NA, 0)
+  
+  filtered_coalitions_data %>%
+    mutate(percent = ifelse(is.na(percent) & threshold_handle == "ignore", 0, percent))
+  
 }
