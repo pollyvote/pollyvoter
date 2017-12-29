@@ -79,11 +79,23 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   election_data = data[["election_data"]]
   election_date = data[["election_date"]]
   
-  predict(pv, method = prediction) %>%
+  predictions = predict(pv, method = prediction) %>%
     filter(date %in% election_data$date & party %in% election_data$party) %>%
     threshold_and_replace_party_with_coalition(threshold, threshold_handle, coalitions) %>%
     group_by(date, party) %>%
-    summarise(percent = sum(percent))
+    summarise(percent = sum(percent)) %>%
+    mutate(days_to_election = as.numeric(difftime(election_date, date, units="days"))) %>%
+    arrange(desc(date))
+  
+  #transform data in appropriate response format
+  result = data.frame(date = unique(predictions$date), days_to_election = unique(predictions$days_to_election))
+  
+  for (coalition in unique(predictions$party)) {
+    percent_per_coalition = subset(predictions, party == coalition)
+    result[[coalition]] = percent_per_coalition$percent
+  }
+  
+  return(result)
 }
 
 
