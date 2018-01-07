@@ -77,5 +77,33 @@ test_that("the initial coalition function of a pollyvote object work", {
                prediction = "pollyvote", election = "BTW")
   )
   
+})
+
+
+test_that("valid coalitons 1", {
+  
+  pv = create_pollyvote(perm_countries = "D")
+  coalitions = list(c("spd", "fdp"), c("grune", "fdp"))
+  permitted_parties = c("spd", "fdp", "grune")
+  
+  val_coalitions = valid_coalitions(coalitions, pv, permitted_parties)
+  
+  expect_that(coalitions, equals(val_coalitions))
+  
+})
+
+
+test_that("valid coalitons 2", {
+  
+  pv = create_pollyvote(perm_countries = "D")
+  coalitions = list(c("spd", "fdp"), c("grune", "fdp"), c("def", "abc"),
+                    c("wer", "fdp"))
+  permitted_parties = c("spd", "fdp", "grune")
+  perm_coalitions = list(c("spd", "fdp"), c("grune", "fdp"))
+  
+  val_coalitions = suppressWarnings(valid_coalitions(coalitions, pv, 
+                                                   permitted_parties))
+  
+  expect_that(perm_coalitions, equals(val_coalitions))
   
 })
