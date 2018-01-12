@@ -134,7 +134,7 @@ valid_coalitions = function(coalitions, pv, permitted_parties){
       if (!is_allowed_party) {
         warning(sprintf("%s is not permitted party name. Therefore, the prediction would not be calculated for coalition %s\n",
                         party,
-                        paste(coalition, collapse = "-")))
+                        paste(coalition, collapse = "_")))
       }
       return(is_allowed_party)
     })
@@ -255,7 +255,7 @@ threshold_and_replace_party_with_coalition = function(data, threshold, threshold
     
     data_by_date %>%
      filter(party %in% coalitions[[i]]) %>%
-     mutate(percent = threshold_percent(percent, data_by_date), party = paste(coalitions[[i]], collapse = "-"))
+     mutate(percent = threshold_percent(percent, data_by_date), party = paste(coalitions[[i]], collapse = "_"))
     })
     
     coalitions_data[[i]] = bind_rows(coalition_data_by_days)
