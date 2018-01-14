@@ -109,51 +109,52 @@ test_that("valid coalitons 2", {
 })
 
 
-# test_that("coalition prediction omit", {
-#   
-#   data("polls_individual")
-#   data("election_result")
-#   one_day = as.POSIXct("2013-4-24", tz = "UTC")
-#   data_elect = polls_individual[polls_individual$date == one_day, ]
-#   parties = c("grune", "spd")
-#   data_elect = data_elect[data_elect$party %in% parties, ]
-#   
-#   pv = create_pollyvote(perm_countries = "D")
-#   pv = add_data(pv, newdata = data_elect, country = "D", region = "national", 
-#                 source_type = "poll", election = "BTW")
-#   pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
-#   coalitions = list(c("spd", "grune"), c("grune", "fdp"))
-#   
-#   pred_coalitions = calc_coalitions(pv, coalitions = coalitions,
-#                                     threshold_handle = "omit")
-#   
-#   expec_results = data.frame(date = one_day, grune_fdp = NA, 
-#                              spd_grune = 37)
-#   expect_that(expec_results, equals(pred_coalitions))
-#   
-# })
+test_that("coalition prediction omit", {
+
+  data("polls_individual")
+  data("election_result")
+  one_day = as.POSIXct("2013-4-24", tz = "UTC")
+  data_elect = polls_individual[polls_individual$date == one_day, ]
+  parties = c("grune", "spd")
+  data_elect = data_elect[data_elect$party %in% parties, ]
+
+  pv = create_pollyvote(perm_countries = "D")
+  pv = add_data(pv, newdata = data_elect, country = "D", region = "national",
+                source_type = "poll", election = "BTW")
+  pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+  coalitions = list(c("spd", "grune"), c("grune", "fdp"))
+
+  pred_coalitions = calc_coalitions(pv, coalitions = coalitions,
+                                    threshold_handle = "omit")
+
+  expec_results = data.frame(grune_fdp = as.numeric(NA), spd_grune = 37)
+  
+  expect_that(expec_results, equals(pred_coalitions[, c("grune_fdp", 
+                                                        "spd_grune")]))
+
+})
 
 
-# test_that("coalition prediction ignore", {
-#   
-#   data("polls_individual")
-#   data("election_result")
-#   one_day = as.POSIXct("2013-4-24", tz = "UTC")
-#   data_elect = polls_individual[polls_individual$date == one_day, ]
-#   parties = c("grune", "spd")
-#   data_elect = data_elect[data_elect$party %in% parties, ]
-#   
-#   pv = create_pollyvote(perm_countries = "D")
-#   pv = add_data(pv, newdata = data_elect, country = "D", region = "national", 
-#                 source_type = "poll", election = "BTW")
-#   pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
-#   coalitions = list(c("spd", "grune"), c("grune", "fdp"))
-#   
-#   pred_coalitions = calc_coalitions(pv, coalitions = coalitions,
-#                                     threshold_handle = "ignore")
-#   
-#   expec_results = data.frame(date = one_day, grune_fdp = 14, 
-#                              spd_grune = 37)
-#   expect_that(expec_results, equals(pred_coalitions))
-#   
-# })
+test_that("coalition prediction ignore", {
+
+  data("polls_individual")
+  data("election_result")
+  one_day = as.POSIXct("2013-4-24", tz = "UTC")
+  data_elect = polls_individual[polls_individual$date == one_day, ]
+  parties = c("grune", "spd")
+  data_elect = data_elect[data_elect$party %in% parties, ]
+
+  pv = create_pollyvote(perm_countries = "D")
+  pv = add_data(pv, newdata = data_elect, country = "D", region = "national",
+                source_type = "poll", election = "BTW")
+  pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+  coalitions = list(c("spd", "grune"), c("grune", "fdp"))
+
+  pred_coalitions = calc_coalitions(pv, coalitions = coalitions,
+                                    threshold_handle = "ignore")
+
+  expec_results = data.frame(grune_fdp = 14, spd_grune = 37)
+  expect_that(expec_results, equals(pred_coalitions[, c("grune_fdp", 
+                                                        "spd_grune")]))
+
+})
