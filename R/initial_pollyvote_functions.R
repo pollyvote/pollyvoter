@@ -108,7 +108,8 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 #' @inheritParams fill_na
 #' @export
 initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", election, 
-                                                  ci = FALSE, alpha = 0.05, no_days = Inf, ... ) {
+                                                  ci = FALSE, alpha = 0.05, no_days = Inf, 
+                                                  moving_average = TRUE, ... ) {
   # extract election result
   if (length(pv$election_result) == 0)
     stop("pv does not contain any election results. Use add_election_result() to add the results of an election.")
@@ -136,7 +137,53 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     ec_ci = left_join(error_dat, ec_mean_error, by = "party") %>%
       mutate(ci_lower = percent - qnorm(1 - alpha / 2) * mean_error,
              ci_upper = percent + qnorm(1 - alpha / 2) * mean_error)
+    
+    if(moving_average){
+      ec_ci = moving_average_ci(ec_ci)
+    }
     return(ec_ci)
   }
   
+}
+
+#' moving average
+#' 
+#' Calculate moving average vor confidence intervals. 
+#' 
+#' @param data [\code{data.frame}]\cr
+#'   data frame from ...
+#'
+#' @return data frame containing the results
+#' 
+#' @export
+moving_average_ci = function(data){
+  
+  parties = unique(data$party)
+  
+  # lower ci
+  data_lower = data[, c("date", "party", "ci_lower")]
+  data_lower <- spread(data_lower, party, ci_lower)
+  len = nrow(data_lower)
+  date_vec = data_lower$date
+  
+  data_lower = as.data.frame(rollapply(data_lower[,-1], 7, mean, na.rm = TRUE,
+                                        by.column = TRUE))
+  data_lower$date = date_vec[4:(len - 3)]
+  data_lower = gather(data_lower, party, ci_lower, parties)
+  
+  
+  # upper ci
+  data_upper = data[, c("date", "party", "ci_upper")]
+  data_upper <- spread(data_upper, party, ci_upper)
+  
+  data_upper = as.data.frame(rollapply(data_upper[,-1], 7, mean, na.rm = TRUE,
+                                        by.column = TRUE))
+  data_upper$date = date_vec[4:(len - 3)]
+  data_upper = gather(data_upper, party, ci_upper, parties)
+  
+  data = subset(data, select = -c(ci_lower, ci_upper))
+  data = merge(data, data_lower, by = c("date", "party"))
+  data = merge(data, data_upper, by = c("date", "party"))
+  
+  return(data)
 }
