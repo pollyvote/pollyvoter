@@ -124,7 +124,6 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     mutate(days_to_election = as.numeric(difftime(election_date, date, units="days")))
   # bring the prediction and the result together
   joined = left_join(x = pred_data, y = result, by = "party") %>%
-    #rename(percent = percent.x, percent.true = percent.y)
     ungroup %>%
     rename(percent = percent.x, percent.true = percent.y,
            date = date.x, election_date = date.y)
@@ -133,9 +132,9 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     return(error_dat)
   } else {
     ec_mean_error = error_dat %>% 
-      group_by(days_to_election) %>%
+      group_by(days_to_election, party) %>%
       summarize(mean_error = mean(error))
-    ec_ci = left_join(error_dat, ec_mean_error, by = "days_to_election") %>%
+    ec_ci = left_join(error_dat, ec_mean_error, by = c("days_to_election", "party")) %>%
       mutate(ci_lower = percent - qnorm(1 - alpha) * mean_error * 1.25,
              ci_upper = percent + qnorm(1 - alpha) * mean_error * 1.25)
     
