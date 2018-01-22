@@ -116,11 +116,12 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
   if (missing(election)) 
     election = names(pv$election_result)[1]
   result = get_election_result(pv, election)
+  election_date = result[["date"]][[1]]
   
   # extract predicted data
   pred_data = predict(pv, method = prediction, ...) %>%
-    limit_days(no_days = no_days,
-               election_data = result, ...)
+    limit_days(no_days = no_days,election_data = result, ...) %>%
+    mutate(days_to_election = as.numeric(difftime(election_date, date, units="days")))
   # bring the prediction and the result together
   joined = left_join(x = pred_data, y = result, by = "party") %>%
     #rename(percent = percent.x, percent.true = percent.y)

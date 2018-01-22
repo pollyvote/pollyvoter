@@ -5,7 +5,7 @@
 \title{initial pollyvote error calculation}
 \usage{
 initial_error_calc_prediction_election(pv, prediction = "pollyvote", election,
-  ci = FALSE, alpha = 0.05, no_days = Inf, ...)
+  ci = FALSE, alpha = 0.05, no_days = Inf, moving_average = TRUE, ...)
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr
