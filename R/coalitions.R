@@ -54,7 +54,11 @@
 calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote',
                            election_year = NULL, permitted_parties = NULL, region = NULL, limitdays = -1, for.ggplot2 = FALSE ) {
   
-  # use only permitted parties
+  
+  coalitions = lapply(coalitions, function(coalition) {
+    convert_names(coalition)
+  })
+  # use only permitted parties 
   coalitions = valid_coalitions(coalitions, pv, permitted_parties)
   
   assert_class(pv, c("pollyvote", "list"))
@@ -140,7 +144,7 @@ valid_coalitions = function(coalitions, pv, permitted_parties){
     all(valid_party_names)
   })
   
-  return(coalitions[are_with_permitted_parties])
+  coalitions[are_with_permitted_parties]
 }
 
 
@@ -182,7 +186,6 @@ coalition_predictions_data = function(pv, election_year, limitdays){
   }))
   
   target_election_results_data = subset(elections_results_data, year == election_year)
-  
   #if there is no year matching the election year, select the most recent one.
   if (nrow(target_election_results_data) == 0 ) {
     target_election_results_data = subset(elections_results_data, year == max(elections_results_data$year, na.rm = TRUE))
