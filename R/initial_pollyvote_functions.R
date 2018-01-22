@@ -133,11 +133,11 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     return(error_dat)
   } else {
     ec_mean_error = error_dat %>% 
-      group_by(party) %>%
+      group_by(days_to_election) %>%
       summarize(mean_error = mean(error))
-    ec_ci = left_join(error_dat, ec_mean_error, by = "party") %>%
-      mutate(ci_lower = percent - qnorm(1 - alpha / 2) * mean_error,
-             ci_upper = percent + qnorm(1 - alpha / 2) * mean_error)
+    ec_ci = left_join(error_dat, ec_mean_error, by = "days_to_election") %>%
+      mutate(ci_lower = percent - qnorm(1 - alpha) * mean_error * 1.25,
+             ci_upper = percent + qnorm(1 - alpha) * mean_error * 1.25)
     
     if(moving_average){
       ec_ci = moving_average_ci(ec_ci)
@@ -149,7 +149,7 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 
 #' moving average
 #' 
-#' Calculate moving average vor confidence intervals. 
+#' Calculate moving average for confidence intervals. 
 #' 
 #' @param data [\code{data.frame}]\cr
 #'   data frame from ...

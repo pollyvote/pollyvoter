@@ -19,7 +19,8 @@ Imports:
     dplyr,
     ggplot2,
     plyr,
-    tidyr
+    tidyr,
+    zoo
 RoxygenNote: 6.0.1
 Suggests:
     testthat,

@@ -14,5 +14,5 @@ data frame from ...}
 data frame containing the results
 }
 \description{
-Calculate moving average vor confidence intervals.
+Calculate moving average for confidence intervals.
 }
