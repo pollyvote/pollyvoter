@@ -157,7 +157,33 @@ error_pred_conf_int[1:10, c("party", "percent", "percent.true","error",
 
 ```
 
+### Calculation of coalitions predictions
 
+This feature allows calculation of predictions for coalitions where a coalition is made up of 1 or multiple parties.
+Important optional arguments for this function are: threshold and threshold_handle. 
+Threshold is minimum value that a party needs to have for a given day in order to be considered for a coalition.
+threshold.handle is a parameter which specifies how coalitions constituted from parties which have prediction less than threshold
+should be handled: 
+  - If threshold.handle = "omit" -> Prediction for coalitions which have (at least one) party with shares less than threshold won't be calculated. NA would be returned.
+  - If threshold.handle = "ignore" -> Predictions will be made for all coalitions. Parties which have shares less than threshold won't be considered in overall score calculation of the coalition. 
+
+
+```{r}
+
+coalitions = list(c("CDU/CSU", "SPD"), c("spd", "linke", "afd"))
+
+coalitions_percentages = calc_coalitions(pv, coalitions)
+
+#Coalition percentages in format appropriate for visualisation
+coalitions_percentages = calc_coalitions(pv, coalitions, for.ggplot2 = TRUE)
+
+#Coalition percentages with specifying threshold value. By default, threshold_handle = "omit"
+coalitions_percentages = calc_coalitions(pv, coalitions, threshold = 5, for.ggplot2 = TRUE)
+
+#Limit the days in prediction of coalition percentages
+coalitions_percentages = calc_coalitions(pv, coalitions, limitdays = 10, for.ggplot2 = TRUE)
+
+```
 ### save as .csv file
 
 To save the result of predictions or error calculations use the function `write.pollyvote()`. It is important to specify either the prediction method (argument `prediction`) or the error calculation method (argument `error_calculation`). 
