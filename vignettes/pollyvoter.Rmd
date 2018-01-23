@@ -161,7 +161,7 @@ error_pred_conf_int[1:10, c("party", "percent", "percent.true","error",
 
 This feature allows calculation of predictions for coalitions where a coalition is made up of 1 or multiple parties.
 Important optional arguments for this function are: threshold and threshold_handle. 
-Threshold is minimum value that a party needs to have for a given day in order to be considered for a coalition.
+Threshold is minimum value that a party needs to have for a given day in order to be considered for coalition calculations.
 threshold.handle is a parameter which specifies how coalitions constituted from parties which have prediction less than threshold
 should be handled: 
   - If threshold.handle = "omit" -> Prediction for coalitions which have (at least one) party with shares less than threshold won't be calculated. NA would be returned.
