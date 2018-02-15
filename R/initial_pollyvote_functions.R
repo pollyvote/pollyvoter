@@ -101,7 +101,8 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 #' @param alpha [\code{numeric(1)}]\cr
 #'   significance level
 #' @param no_days [\code{character(1)}]\cr
-#'  
+#' @param days_average
+#' length of moving average 
 #'      
 #' @return data frame containing the results
 #' 
@@ -109,7 +110,8 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 #' @export
 initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", election, 
                                                   ci = FALSE, alpha = 0.05, no_days = Inf, 
-                                                  moving_average = TRUE, ... ) {
+                                                  moving_average = TRUE, 
+                                                  days_average = 7, ... ) {
   # extract election result
   if (length(pv$election_result) == 0)
     stop("pv does not contain any election results. Use add_election_result() to add the results of an election.")
@@ -139,7 +141,7 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
              ci_upper = percent + qnorm(1 - alpha) * mean_error * 1.25)
     
     if(moving_average){
-      ec_ci = moving_average_ci(ec_ci)
+      ec_ci = moving_average_ci(ec_ci, days_average = days_average)
     }
     return(ec_ci)
   }
@@ -156,19 +158,26 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
 #' @return data frame containing the results
 #' 
 #' @export
-moving_average_ci = function(data){
+moving_average_ci = function(data, days_average = 7){
+  
+  # check if even number
+  if (days_average %% 2 == 0){
+    days_average = 7
+    warning("days_average set to 7!")
+  }
   
   parties = unique(data$party)
   
   # lower ci
   data_lower = data[, c("date", "party", "ci_lower")]
-  data_lower <- spread(data_lower, party, ci_lower)
+  data_lower = spread(data_lower, party, ci_lower)
   len = nrow(data_lower)
   date_vec = data_lower$date
   
-  data_lower = as.data.frame(rollapply(data_lower[,-1], 7, mean, na.rm = TRUE,
+  data_lower = as.data.frame(rollapply(data_lower[,-1], days_average, 
+                                       mean, na.rm = TRUE,
                                         by.column = TRUE))
-  data_lower$date = date_vec[4:(len - 3)]
+  data_lower$date = date_vec[ceiling(days_average/2):(len - floor(days_average/2))]
   data_lower = gather(data_lower, party, ci_lower, parties)
   
   
@@ -176,9 +185,9 @@ moving_average_ci = function(data){
   data_upper = data[, c("date", "party", "ci_upper")]
   data_upper <- spread(data_upper, party, ci_upper)
   
-  data_upper = as.data.frame(rollapply(data_upper[,-1], 7, mean, na.rm = TRUE,
-                                        by.column = TRUE))
-  data_upper$date = date_vec[4:(len - 3)]
+  data_upper = as.data.frame(rollapply(data_upper[,-1], days_average,
+                                       mean, na.rm = TRUE, by.column = TRUE))
+  data_upper$date = date_vec[ceiling(days_average/2):(len - floor(days_average/2))]
   data_upper = gather(data_upper, party, ci_upper, parties)
   
   data = subset(data, select = -c(ci_lower, ci_upper))
