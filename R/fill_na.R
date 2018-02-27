@@ -24,7 +24,7 @@
 #' @return the data set with filled mssing values.
 #'
 #' @export
-fill_na = function(dat, na_handle = c("last", "omit", "mean_within", "mean_across"), pv = NULL, ... ) {
+fill_na = function(dat, na_handle = c("last", "omit", "mean_within", "mean_across"), pv = NULL, time_int = NULL, ... ) {
   na_handle = match.arg(na_handle)
   # na handling
   if (na_handle == "last") {
@@ -52,7 +52,7 @@ fill_na = function(dat, na_handle = c("last", "omit", "mean_within", "mean_acros
     # create a small fake pollyvote prediction by
     # calculating the mean per source type and then over all aggregated source types
     across.dat = pv %>%
-      get_data %>%
+      get_data(time_int) %>%
       group_by(date, source_type, party) %>%
       summarize(percent = mean(percent, na.rm = TRUE)) %>%
       group_by(date, party) %>%

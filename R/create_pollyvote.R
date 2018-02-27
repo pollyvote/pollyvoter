@@ -113,7 +113,7 @@ create_pollyvote = function(id = "pollyvote",
             perm_parties = perm_parties,
             perm_colnames = perm_colnames,
             predictions = list(),
-            election_result = list(),
+            election_result = data.frame(),
             error_calc = list(),
             data = data)
   class(pv) = c("pollyvote", "list")

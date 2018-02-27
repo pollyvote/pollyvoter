@@ -11,6 +11,8 @@
 #' 
 #' @param pv [\code{pollyvote}]\cr
 #'   the pollyvote object of which to get the prediction from.
+#' @param time_int[\code{date}]
+#'   the time interval for which the prediction should be made.
 #' @param agg_fun [\code{character(1)}]\cr
 #'   the name of the aggregation function to use, currently 'mean' and 'median' are supported
 #'
@@ -18,7 +20,7 @@
 #' 
 #' @inheritParams fill_na
 #' @export
-initial_prediction_pollyvote = function(pv, agg_fun = "mean", na_handle = "last", ...) {
+initial_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last", ...) {
   
   # input checking
   assert_class(pv, "pollyvote")
@@ -33,8 +35,8 @@ initial_prediction_pollyvote = function(pv, agg_fun = "mean", na_handle = "last"
     lapply(which_source_type, assert_choice, get_perm_source_types(pv))
   
   pv %>%
-    get_data %>% 
-    fill_na(na_handle = na_handle, pv = pv) %>%
+    get_data(time_int) %>% 
+    fill_na(na_handle = na_handle, pv = pv, time_int = time_int) %>%
     group_by(date, source_type, party) %>%
     summarize(percent = fun(percent, na.rm = TRUE)) %>%
     group_by(date, party) %>%
@@ -72,7 +74,6 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
   assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
   if(length(get_perm_source_types(pv)) != 0)
     lapply(which_source_type, assert_choice, get_perm_source_types(pv))
-  
   pv %>% 
     get_data  %>%
     filter(source_type %in% which_source_type) %>%
@@ -94,8 +95,9 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 #'   the pollyvote object of which to get the prediction from.
 #' @param prediction [\code{character(1)}]\cr
 #'   the name of the prediction function 
-#' @param election [\code{character(1)}]\cr
-#'   the name of the prediction function
+#' @param target_election_year [\code{integer(1)}]\cr
+#'   the election year for which confidence intervals are calculated.
+#'   If \code{target_election_year} is \code{NULL}, CI are calculated for the last known election.
 #' @param ci [\code{logical(1)}]\cr
 #'   whether confidence interval should be calculated
 #' @param alpha [\code{numeric(1)}]\cr
@@ -108,34 +110,60 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 #' 
 #' @inheritParams fill_na
 #' @export
-initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", election, 
-                                                  ci = FALSE, alpha = 0.05, no_days = Inf, 
-                                                  moving_average = TRUE, 
-                                                  days_average = 7, ... ) {
-  # extract election result
-  if (length(pv$election_result) == 0)
+initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", target_election_year = NULL, ci = FALSE, alpha = 0.05,
+                                                  no_days = Inf, moving_average = TRUE, days_average = 7,
+                                                  ... ) {
+  assert_class(pv, "pollyvote")
+  # Once get_election_Result is fixed, get the election result from there, not directly from pv object.
+  if (nrow(pv$election_result) == 0)
     stop("pv does not contain any election results. Use add_election_result() to add the results of an election.")
-  if (missing(election)) 
-    election = names(pv$election_result)[1]
-  result = get_election_result(pv, election)
-  election_date = result[["date"]][[1]]
   
   # extract predicted data
-  pred_data = predict(pv, method = prediction, ...) %>%
-    limit_days(no_days = no_days,election_data = result, ...) %>%
-    mutate(days_to_election = as.numeric(difftime(election_date, date, units="days")))
-  # bring the prediction and the result together
-  joined = left_join(x = pred_data, y = result, by = "party") %>%
-    ungroup %>%
-    rename(percent = percent.x, percent.true = percent.y,
-           date = date.x, election_date = date.y)
-  error_dat = mutate(joined, error = abs(percent - percent.true))
+  all_election_dates = sort(unique(pv$election_result$date))
+  if(min(get_data(pv)$date) < all_election_dates[1]){
+    dummy_date = all_election_dates[1] - as.difftime(365, units = "days")
+    all_election_dates = c(dummy_date, all_election_dates)
+  }
+  
+  #validation of target_election_date param
+  target_election_date = all_election_dates[length(all_election_dates)]
+  if (!is.null(target_election_year)) {
+    idx = as.integer(format(all_election_dates, "%Y")) == target_election_year
+    if (sum(idx) != 1)
+      stop("'target_election_year' must be existing election year.")
+    
+    target_election_date = all_election_dates[idx]
+  }
+  
+  pred_election_dates = all_election_dates[all_election_dates <= target_election_date]
+  predictions_vs_actual = data.frame()
+  for (i_date in 2:length(pred_election_dates)) {
+    
+    election_date <- pred_election_dates[i_date]
+    election_result = subset(pv$election_result, date == election_date)
+    time_int_i = c(pred_election_dates[i_date - 1], election_date)
+    pred_data = predict(pv, time_int = time_int_i, method = prediction, ...) %>%
+      limit_days(no_days = no_days, election_data = election_result, ...) %>%
+      mutate(days_to_election = round(as.numeric(difftime(election_date, date, units="days"))))
+    
+    # bring the prediction and the result together
+    joined = left_join(x = pred_data, y = election_result, by = "party") %>%
+      ungroup %>%
+      rename(percent = percent.x, percent.true = percent.y,
+             date = date.x, election_date = date.y)
+    
+    predictions_vs_actual = rbind(predictions_vs_actual, joined)
+  }
+
+  error_dat = mutate(predictions_vs_actual, error = abs(percent - percent.true))
   if(!ci) {
     return(error_dat)
   } else {
     ec_mean_error = error_dat %>% 
       group_by(days_to_election, party) %>%
       summarize(mean_error = mean(error))
+    
+    error_dat = subset(error_dat, election_date == target_election_date)
     ec_ci = left_join(error_dat, ec_mean_error, by = c("days_to_election", "party")) %>%
       mutate(ci_lower = percent - qnorm(1 - alpha) * mean_error * 1.25,
              ci_upper = percent + qnorm(1 - alpha) * mean_error * 1.25)

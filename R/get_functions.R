@@ -1,9 +1,14 @@
 #' extract data
 #' 
 #' This function extracts the data from a pollyvote container.
+#' If the time interval is specified, then the only the data that belongs to the input time interval is returned.
+#' Otherwise, whole forecast data is returned.
 #'
 #' @param pv [\code{pollyvote(1)}]\cr
 #'   the pollyvote object of which to extract the data from.
+#' @param time_int[\code{time}]
+#'   the time interval in which forecast data should be returned.
+#'   e.g time_int = c("2016-10-31", "2017-11-09")
 #'
 #' @examples
 #' pv = create_pollyvote(perm_countries = "D")
@@ -12,12 +17,24 @@
 #'               source_type = "poll", election = "BTW")
 #' get_data(pv)
 #' 
-#' @return data frame containing all the data stored in \code{pv}.  
+#' @return data frame containing data stored in \code{pv} possibly filtered by \code{election_year} parameter.  
 #'
 #' @export
-get_data <- function(pv){
-  assert_class(pv, "pollyvote")
-  return(pv$data)
+get_data <- function(pv, time_int = NULL){
+  
+  if (is.null(time_int)) {
+    return(pv$data)
+  } else{
+    time_int = strptime(time_int, format = "%Y-%m-%d")
+    time_int = sort(time_int)
+    assert_class(pv, "pollyvote")
+    
+    data = pv$data[pv$data$date > time_int[1] & pv$data$date <= time_int[2], ]
+    if (nrow(data) == 0) {
+      warning(paste("No prediction for time interval = ",  time_int))
+    }
+    data
+  }
 } 
 
 

@@ -51,6 +51,7 @@ add_data.pollyvote = function(pv, newdata = data.frame(),
   
   # run checks on the data
   newdata = check_data(newdata, pv)
+  newdata$party = as.factor(newdata$party)
   
   # add data to pv
   # TODO maybe better with join/merge, in case the same data is added twice

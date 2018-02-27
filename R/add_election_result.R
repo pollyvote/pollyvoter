@@ -57,6 +57,9 @@ add_election_result.pollyvote = function(pv, election, data, ...) {
   # possibly overwrite election name
   data$election = election
   
-  pv$election_result[[election]] = data
+  # party as factor
+  data$party = as.factor(data$party)
+  
+  pv$election_result = plyr::rbind.fill(pv$election_result, data)
   return(pv)
 }
