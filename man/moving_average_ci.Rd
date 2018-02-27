@@ -4,7 +4,7 @@
 \alias{moving_average_ci}
 \title{moving average}
 \usage{
-moving_average_ci(data)
+moving_average_ci(data, days_average = 7)
 }
 \arguments{
 \item{data}{[\code{data.frame}]\cr

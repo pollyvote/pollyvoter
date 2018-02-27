@@ -119,7 +119,7 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     stop("pv does not contain any election results. Use add_election_result() to add the results of an election.")
   
   # extract predicted data
-  all_election_dates = sort(unique(pv$election_result$date))
+  all_election_dates = sort(unique(get_election_result(pv)$date))
   if(min(get_data(pv)$date) < all_election_dates[1]){
     dummy_date = all_election_dates[1] - as.difftime(365, units = "days")
     all_election_dates = c(dummy_date, all_election_dates)

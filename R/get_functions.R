@@ -201,27 +201,55 @@ get_perm_colnames <- function(pv){
 }  
 
 
-#' get an election result from a pollyvote object
+#' Get an election result from a pollyvote object
+#' 
+#' @param pv [\code{pollyvote}]\cr 
+#'   The pollyvote object from which to get the election result.
+#' @param election_date[\code{date(1)}]\cr 
+#'   Election date by which to get the election result.
+#' @param election_name[\code{character(1)}]\cr
+#'   Election name by which to get the election result.
 #' 
 #' gets an election result from a pollyvote object. To add a new election result to a pollyvote object
 #' use \code{\link{add_election_result}}.
+#' 
+#' If \code{election_date} and \code{election_result} are missing, whole data for elections is returned.
 #'
 #' @inheritParams add_election_result
 #' 
 #' @examples
 #' pv = create_pollyvote(perm_countries = "D")
 #' data("election_result")
-#' pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+#' pv = add_election_result(pv, "BTW 2013", election_result)
+#' get_election_result(pv, election_date = "2013-09-22")
 #' get_election_result(pv, election = "BTW 2013")
 #' 
 #' @return A data frame containing the election result.
 #'
 #' @export
-get_election_result = function(pv, election, ...) {
+get_election_result = function(pv, election_date, election_name) {
   # check feasibility
   assert_class(pv, "pollyvote")
-  assert_choice(election, names(pv$election_result))
-  return(pv$election_result[[election]])
+  
+  if (missing(election_date) & missing(election_name))
+    return(pv$election_result)
+
+  if (missing(election_name)) {
+    election_date = strptime(election_date, format = "%Y-%m-%d")
+    if (is.na(election_date)) {
+      stop("Election date must be in valid '%Y-%m-%d' format.")
+    }
+    result = pv$election_result[pv$election_result$date == election_date, ]
+    if (nrow(result) == 0) 
+      warning(paste("There is no election result for election date", election_date, sep = ": "))
+    return (result)
+  }
+  if (missing(election_date)) {
+    result = pv$election_result[pv$election_result$election == election_name, ]
+    if (nrow(result) == 0) 
+      warning(paste("There is no election result for election_name", election_name, sep = ": "))
+    return (result)
+  }
 }
 
 

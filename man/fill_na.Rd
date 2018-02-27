@@ -5,7 +5,7 @@
 \title{fill missing values in the data of a pollyvote object}
 \usage{
 fill_na(dat, na_handle = c("last", "omit", "mean_within", "mean_across"),
-  pv = NULL, ...)
+  pv = NULL, time_int = NULL, ...)
 }
 \arguments{
 \item{dat}{[\code{data.frame()}]\cr

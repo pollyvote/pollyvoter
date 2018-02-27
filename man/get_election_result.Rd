@@ -2,30 +2,34 @@
 % Please edit documentation in R/get_functions.R
 \name{get_election_result}
 \alias{get_election_result}
-\title{get an election result from a pollyvote object}
+\title{Get an election result from a pollyvote object}
 \usage{
-get_election_result(pv, election, ...)
+get_election_result(pv, election_date, election_name)
 }
 \arguments{
-\item{pv}{[\code{pollyvote}]\cr
-the pollyvote object to add the election results to.}
+\item{pv}{[\code{pollyvote}]\cr 
+The pollyvote object from which to get the election result.}
 
-\item{election}{[\code{character(1)}]\cr
-name of the election. One of the permitted elections of \code{pv}.}
+\item{election_date[\code{date(1)}]\cr}{Election date by which to get the election result.}
 
-\item{...}{currently ignored.}
+\item{election_name[\code{character(1)}]\cr}{Election name by which to get the election result.
+
+gets an election result from a pollyvote object. To add a new election result to a pollyvote object
+use \code{\link{add_election_result}}.
+
+If \code{election_date} and \code{election_result} are missing, whole data for elections is returned.}
 }
 \value{
 A data frame containing the election result.
 }
 \description{
-gets an election result from a pollyvote object. To add a new election result to a pollyvote object
-use \code{\link{add_election_result}}.
+Get an election result from a pollyvote object
 }
 \examples{
 pv = create_pollyvote(perm_countries = "D")
 data("election_result")
-pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+pv = add_election_result(pv, "BTW 2013", election_result)
+get_election_result(pv, election_date = "2013-09-22")
 get_election_result(pv, election = "BTW 2013")
 
 }

@@ -27,13 +27,14 @@ add_election_result = function(pv, election, data, ...) {
 #' add an election result to a pollyvote object
 #' 
 #' Adds election result to a pollyvote opbject.
+#' The election date must be in format "%Y-%m-%d" and of type POSIXlt', 'POSIXct' or 'character'.
 #'
 #' @inheritParams add_election_result
 #' 
 #' @examples
 #' pv = create_pollyvote(perm_countries = "D") 
 #' data("election_result")
-#' pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+#' pv = add_election_result(pv, "BTW 2013", election_result)
 #' 
 #' @return The pollyvote object with added prediction
 #'
@@ -42,6 +43,9 @@ add_election_result.pollyvote = function(pv, election, data, ...) {
   # input checking
   assert_class(pv, "pollyvote")
   assert_data_frame(data)
+  election_date = data$date
+  if (!(is(election_date, "POSIXlt") | is(election_date, "POSIXct") | is.character(election_date)))
+    stop("Date of election must be either 'POSIXlt', 'POSIXct' or 'character'")
   
   # run check on additional arguments
   check_additional_args(data, pv, ...)
@@ -56,9 +60,6 @@ add_election_result.pollyvote = function(pv, election, data, ...) {
   
   # possibly overwrite election name
   data$election = election
-  
-  # party as factor
-  data$party = as.factor(data$party)
   
   pv$election_result = plyr::rbind.fill(pv$election_result, data)
   return(pv)

@@ -4,17 +4,22 @@
 \alias{get_data}
 \title{extract data}
 \usage{
-get_data(pv)
+get_data(pv, time_int = NULL)
 }
 \arguments{
 \item{pv}{[\code{pollyvote(1)}]\cr
 the pollyvote object of which to extract the data from.}
+
+\item{time_int[\code{time}]}{the time interval in which forecast data should be returned.
+e.g time_int = c("2016-10-31", "2017-11-09")}
 }
 \value{
-data frame containing all the data stored in \code{pv}.
+data frame containing data stored in \code{pv} possibly filtered by \code{election_year} parameter.
 }
 \description{
 This function extracts the data from a pollyvote container.
+If the time interval is specified, then the only the data that belongs to the input time interval is returned.
+Otherwise, whole forecast data is returned.
 }
 \examples{
 pv = create_pollyvote(perm_countries = "D")

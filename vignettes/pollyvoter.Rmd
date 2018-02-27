@@ -77,14 +77,14 @@ information about data e.g. country, region, source type.
 
 ### add election results
 
-Use `add_election_result` to add election results to the pollyvote container. Election results are necessary for error calculation.
+Use `add_election_result` to add election results to the pollyvote container. Election results are necessary for error calculation. Dataframe of election result must contain 'date' column which can be `POSIXct`, `POSIXlt` or character in format `%Y-%m-%d`.
 
 ```{r}
 # load the election results of Bundestagswahl 2013
 data("election_result")
-
+election_result$date = rep(strptime("2013-09-22", format = "%Y-%m-%d"), nrow(election_result))
 # add the election result to the pollyvote container
-pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+pv = add_election_result(pv, "BTW 2013", election_result)
 head(get_election_result(pv, election = "BTW 2013"))
 
 ```

@@ -41,6 +41,7 @@ check_data = function(newdata, pv) {
     sapply(newdata$region, assert_choice, pv$perm_region_types)
   if("party" %in% colnames(newdata) & length(pv$perm_parties) > 0) 
     sapply(newdata$party, assert_choice, pv$perm_parties)
+    newdata$party = as.factor(newdata$party)
   if("percent" %in% colnames(newdata)) 
     assert_numeric(newdata$percent, lower = 0, upper = 100)
   

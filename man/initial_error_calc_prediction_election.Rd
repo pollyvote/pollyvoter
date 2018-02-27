@@ -4,8 +4,9 @@
 \alias{initial_error_calc_prediction_election}
 \title{initial pollyvote error calculation}
 \usage{
-initial_error_calc_prediction_election(pv, prediction = "pollyvote", election,
-  ci = FALSE, alpha = 0.05, no_days = Inf, moving_average = TRUE, ...)
+initial_error_calc_prediction_election(pv, prediction = "pollyvote",
+  target_election_year = NULL, ci = FALSE, alpha = 0.05, no_days = Inf,
+  moving_average = TRUE, days_average = 7, ...)
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr
@@ -14,8 +15,9 @@ the pollyvote object of which to get the prediction from.}
 \item{prediction}{[\code{character(1)}]\cr
 the name of the prediction function}
 
-\item{election}{[\code{character(1)}]\cr
-the name of the prediction function}
+\item{target_election_year}{[\code{integer(1)}]\cr
+the election year for which confidence intervals are calculated.
+If \code{target_election_year} is \code{NULL}, CI are calculated for the last known election.}
 
 \item{ci}{[\code{logical(1)}]\cr
 whether confidence interval should be calculated}
@@ -24,6 +26,8 @@ whether confidence interval should be calculated}
 significance level}
 
 \item{no_days}{[\code{character(1)}]\cr}
+
+\item{days_average}{length of moving average}
 
 \item{...}{[\code{list()}]\cr
 additional arguments, currently ignored.}

@@ -4,7 +4,8 @@
 \alias{initial_prediction_pollyvote}
 \title{initial pollyvote prediction}
 \usage{
-initial_prediction_pollyvote(pv, agg_fun = "mean", na_handle = "last", ...)
+initial_prediction_pollyvote(pv, time_int = NULL, agg_fun = "mean",
+  na_handle = "last", ...)
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr
@@ -28,6 +29,8 @@ to predict missing values in the lowest aggregation level.
 
 \item{...}{[\code{list()}]\cr
 additional arguments, currently ignored.}
+
+\item{time_int[\code{date}]}{the time interval for which the prediction should be made.}
 }
 \value{
 data frame containing the results

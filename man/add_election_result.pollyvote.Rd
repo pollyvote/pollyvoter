@@ -23,10 +23,11 @@ The pollyvote object with added prediction
 }
 \description{
 Adds election result to a pollyvote opbject.
+The election date must be in format "%Y-%m-%d" and of type POSIXlt', 'POSIXct' or 'character'.
 }
 \examples{
 pv = create_pollyvote(perm_countries = "D") 
 data("election_result")
-pv = add_election_result(pv, "BTW 2013", election_result, date = "2013-09-22")
+pv = add_election_result(pv, "BTW 2013", election_result)
 
 }
