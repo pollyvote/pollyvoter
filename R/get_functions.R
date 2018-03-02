@@ -241,13 +241,13 @@ get_election_result = function(pv, election_date, election_name) {
     }
     result = pv$election_result[pv$election_result$date == election_date, ]
     if (nrow(result) == 0) 
-      warning(paste("There is no election result for election date", election_date, sep = ": "))
+      warning(paste("No election result exists for election date", election_date, sep = ": "))
     return (result)
   }
   if (missing(election_date)) {
     result = pv$election_result[pv$election_result$election == election_name, ]
     if (nrow(result) == 0) 
-      warning(paste("There is no election result for election_name", election_name, sep = ": "))
+      warning(paste("No election result exists for election_name", election_name, sep = ": "))
     return (result)
   }
 }

@@ -142,6 +142,7 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     election_date <- pred_election_dates[i_date]
     election_result = subset(pv$election_result, date == election_date)
     time_int_i = c(pred_election_dates[i_date - 1], election_date)
+    browser()
     pred_data = predict(pv, time_int = time_int_i, method = prediction, ...) %>%
       limit_days(no_days = no_days, election_data = election_result, ...) %>%
       mutate(days_to_election = round(as.numeric(difftime(election_date, date, units="days"))))

@@ -82,11 +82,11 @@ Use `add_election_result` to add election results to the pollyvote container. El
 ```{r}
 # load the election results of Bundestagswahl 2013
 data("election_result")
-election_result$date = rep(strptime("2013-09-22", format = "%Y-%m-%d"), nrow(election_result))
+election_result$date = strptime("2013-09-22", format = "%Y-%m-%d")
 
 # add the election result to the pollyvote container
 pv = add_election_result(pv, "BTW 2013", election_result)
-head(get_election_result(pv, election = "BTW 2013"))
+head(get_election_result(pv, election_name = "BTW 2013"))
 
 ```
 
