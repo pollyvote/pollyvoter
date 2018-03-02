@@ -126,7 +126,6 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
   }
   
   #validation of target_election_year param
-  browser()
   target_election_date = get_election_date_from_election_year(pv, target_election_year)
   
   pred_election_dates = all_election_dates[all_election_dates <= target_election_date]
