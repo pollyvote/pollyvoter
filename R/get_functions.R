@@ -252,6 +252,36 @@ get_election_result = function(pv, election_date, election_name) {
   }
 }
 
+#' Get an election date that corresponds to a given \code{election_year}.
+#' 
+#' @param pv [\code{pollyvote}] the pollyvote object.\cr
+#' @param election_year [\code{numeric(1)}] the election year.
+#' If it is [\code{NULL}] (default value), latest election_date is returned.
+#' 
+#' @return An election date corresponding to the election_year.
+#'
+#' @export
+get_election_date_from_election_year = function(pv, election_year = NULL) {
+  
+  assert_class(pv, "pollyvote")
+  assert(
+    check_numeric(election_year),
+    check_null(election_year))
+  
+  election_results = get_election_result(pv)
+  all_election_dates = unique(election_results$date)
+  if (length(all_election_dates) == 0)
+    stop("No election_results are present in the pollyvote object.")
+  
+  if (is.null(election_year))
+    return(all_election_dates[length(all_election_dates)])
+  
+  idx = as.integer(format(all_election_dates, "%Y")) == election_year
+  if (sum(idx) != 1)
+    stop(paste("'election_year'", election_year, "does not exists in the pollyvote election results", sep = " "))
+  
+  all_election_dates[idx]
+}
 
 #' extract source types
 #' 

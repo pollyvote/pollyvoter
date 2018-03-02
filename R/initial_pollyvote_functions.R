@@ -125,15 +125,9 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     all_election_dates = c(dummy_date, all_election_dates)
   }
   
-  #validation of target_election_date param
-  target_election_date = all_election_dates[length(all_election_dates)]
-  if (!is.null(target_election_year)) {
-    idx = as.integer(format(all_election_dates, "%Y")) == target_election_year
-    if (sum(idx) != 1)
-      stop("'target_election_year' must be existing election year.")
-    
-    target_election_date = all_election_dates[idx]
-  }
+  #validation of target_election_year param
+  browser()
+  target_election_date = get_election_date_from_election_year(pv, target_election_year)
   
   pred_election_dates = all_election_dates[all_election_dates <= target_election_date]
   predictions_vs_actual = data.frame()
@@ -142,7 +136,6 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     election_date <- pred_election_dates[i_date]
     election_result = subset(pv$election_result, date == election_date)
     time_int_i = c(pred_election_dates[i_date - 1], election_date)
-    browser()
     pred_data = predict(pv, time_int = time_int_i, method = prediction, ...) %>%
       limit_days(no_days = no_days, election_data = election_result, ...) %>%
       mutate(days_to_election = round(as.numeric(difftime(election_date, date, units="days"))))
