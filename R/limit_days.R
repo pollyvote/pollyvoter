@@ -66,7 +66,7 @@ limit_days = function(data, no_days, election_data, pv, election,
     if ("date" %in% colnames(election_data)) {
       election_date = unique(election_data$date)
       if (length(election_date) != 1) {
-        stop("Only one distinct date should be present in the election data")
+        stop("Only one distinct date should be present in the election data.")
       }
     }
     else {

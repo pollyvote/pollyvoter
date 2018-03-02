@@ -13,31 +13,39 @@
 #' @param threshold_handle [\code{character(1)}]\cr
 #'   Specifies how to handle coalitions with parties that have less percentage than threshold.
 #'   Options:
-#'    o omit: default value. In this case, this coalition forfeits for the given date, instead, NA is entered.
-#'    o ignore: In this case, the coalition will be made up of the remaining parties.                                                                          one).
-#' @param prediction [\code{numeric(1)}]\cr
+#'   \itemize{
+#'    \item \code{'omit'}: default value. In this case, this coalition percentage is not calculated for the given date. Instead, NA is entered.
+#'    \item \code{'ignore'}: In this case, the coalition will be made up of the remaining parties. 
+#'    }
+#' @param prediction [\code{character(1)}]\cr
 #'   Name of the prediction function.
 #'   The Component definition deviates here somewhat from the other declarations to the Normally to come closer.
-#'   Default value is the string specification of the root prediction, ie"Pollyvote", at a transversal (i.e. non-regional) level. Here can be handed over
-#'    o character - that is, a single component name (e.g., "poll"); in this case will one column for the specified component
-#'      and one column each (direct) Subcomponent returned
-#'    o Vector with component name - gives exactly for the specified components (without automatic subcomponent addition) the values back
-#'    o NULL - Wildcard that returns all components
+#'   Default value is the string specification of the root prediction, ie"Pollyvote", at a transversal (i.e. non-regional) level.
+#'   Options:
+#'   \itemize{
+#'    \item [\code{character(1)}]: Single component name (e.g., "poll"); in this case will one column for the specified component
+#'      and one column each (direct) Subcomponent returned.
+#'    \item [\code{character(n)}]: Vector with component names - gives exactly for the specified components (without automatic subcomponent addition) the values back.
+#'    \item [\code{NULL}]: Wildcard that returns all components.
+#'    }
 #' @param election_year [\code{numeric(1)}]\cr
 #'   The election year for which the coalitions are predicted.
 #'   If not specified, the most recent election year is used.
 #' @param permitted_parties [\code{character(1)}]\cr
-#'   Allows the selection of specific parties.
+#'   Selection of only specific parties for which coalitions are calculated.
 #'   Options:
-#'    o character - For specifying one party - DOES SPECIFYING ONE PARTY MAKES SENSE ?
-#'    o Vector - For specifying multiple parties
-#'    o NULL - For all parties
+#'   \itemize{
+#'    \item [\code{NULL}]: Default value for not excluding any party in coalitions calculations.
+#'    \item [\code{character(1)}]: For specifying one party.
+#'    \item [\code{character(n)}]: Vector for specifying multiple parties.
+#'    }
 #' @param region [\code{character(1)}]\cr
 #'   The region for which to calculate coalitions predictions.
 #'   If the specified region is not defined, error is thrown.
 #'   Options:
-#'    o character - the Specified region.
-#'    o NULL - If the region is not specified, then the result over all regions is returned.
+#'   \itemize{
+#'    \item [\code{NULL}] - Default value. If the region is not specified, then the result over all regions is returned.
+#'    \item [\code{character(1)}]: The Specified region for which coalitions are calculated.
 #' @param limit_days [\code{numeric(1)}]\cr
 #'   Limit in days before the election up to which the coalitions percentages are calculated.
 #'   For example, specifying limitdays = 100 return coalitions percentages up to 100 days before the election.
@@ -45,9 +53,10 @@
 #' @param for.ggplot2 [\code{logical(1)}]\cr
 #'   Return format of coalitions predictions.
 #'   Options:
-#'    o FALSE(default) - Returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
-#'    o TRUE - Data frame with rows containing visualisation points
-#' 
+#'   \itemize{
+#'    \item [\code{logical(1)}] FALSE: Default value - Function returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
+#'    \item [\code{logical(1)}] TRUE:  Data frame with rows containing visualisation points
+#'    }
 #' @return dataframe of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
 #'   or visualisation points of the coalitions prediction.
 #' @export
