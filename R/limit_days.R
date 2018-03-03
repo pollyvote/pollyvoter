@@ -4,9 +4,11 @@
 #' object. Different error handling arguments can be handed over.
 #' If \code{election_data}, \code{election} and \code{election_date} are supplied to the function, than 
 #' the election date which is supplied will be used
-#' and resolving of the election date from \code{get_election_result(pv, election_name = election)} will be ignored.
+#' and resolving of the election date from
+#' \code{get_election_result(pv, election_name = election)} will be ignored.
 #' 
-#' If limit_days is called like: limit_days(pv$data, no_days = 10, election_date = "Y-M-DD") and if pv object is not supplied,
+#' If limit_days is called like: limit_days(pv$data, no_days = 10, election_date = "Y-M-DD")
+#' and if pv object is not supplied,
 #' then election_date will not be validated whether it is existing election date in the pollyvote object.
 #' Therefore, it is more safe for if pollyvote object is also supplied as an argument 
 #' (e.g. limit_days(pv$data, no_days = 10, pv = pv, election_date = "Y-M-DD")).  

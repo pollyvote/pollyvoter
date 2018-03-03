@@ -31,7 +31,7 @@ get_data <- function(pv, time_int = NULL){
     
     data = pv$data[pv$data$date > time_int[1] & pv$data$date <= time_int[2], ]
     if (nrow(data) == 0) {
-      warning(paste("No prediction for time interval = ",  time_int))
+      warning(paste("No prediction for time interval = ",  time_int[1], "-", time_int[2], "."))
     }
     data
   }

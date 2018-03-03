@@ -11,11 +11,14 @@ If there are no parties specified, then the check for valid party names is not p
 valid_coalitions(coalitions, pv, permitted_parties)
 }
 \arguments{
-\item{pv}{the pollyvote object.}
+\item{coalitions}{[\code{list}]\cr
+List of vectors representing coallitions.}
 
-\item{input}{coalitions to the function.}
+\item{pv}{[\code{pollyvote}]\cr 
+The pollyvote object}
 
-\item{allowed_parties}{the input allowed_parties object.}
+\item{permitted_parties}{[\code{character(n)}]\cr
+Selection of only specific parties for which coalitions are calculated.}
 }
 \value{
 list of coalitions consisted only of permitted parties.

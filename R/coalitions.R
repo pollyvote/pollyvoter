@@ -31,7 +31,7 @@
 #' @param election_year [\code{numeric(1)}]\cr
 #'   The election year for which the coalitions are predicted.
 #'   If not specified, the most recent election year is used.
-#' @param permitted_parties [\code{character(1)}]\cr
+#' @param permitted_parties [\code{character(n)}]\cr
 #'   Selection of only specific parties for which coalitions are calculated.
 #'   Options:
 #'   \itemize{
@@ -88,12 +88,12 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   assert_numeric(limitdays)
   assert_logical(for.ggplot2)
   
-  data = coalition_predictions_data(pv, election_year, limitdays)
-  election_data = data[["election_data"]]
-  election_date = data[["election_date"]]
+  prediction_time_int <- prediction_time_int(pv, election_year)
+  limitdays = ifelse(limitdays < 0, Inf, limitdays)
+  election_date = get_election_date_from_election_year(pv, election_year)
   
-  predictions = predict(pv, method = prediction) %>%
-    filter(date %in% election_data$date & party %in% election_data$party) %>%
+  predictions = predict(pv, time_int = prediction_time_int, method = prediction) %>%
+    limit_days(no_days = limitdays, pv = pv, election_date = election_date)%>%
     threshold_and_replace_party_with_coalition(threshold, threshold_handle, coalitions) %>%
     group_by(date, party) %>%
     summarise(percent = sum(percent)) %>%
@@ -110,16 +110,18 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   predictions %>% arrange(days_to_election)
 }
 
-
 #' Checks whether coalitions are made of permitted parties.
 #' Permitted parties can be defined either in pv$permparties or in allowed_parties parameter.
 #' Therefore, the idea is first to collect all specified permitted parties in one vector.
 #' This vector will serve as a source for checking whether parties inside the coalitions have valid names.
 #' If there are no parties specified, then the check for valid party names is not performed.
 #' 
-#' @param input coalitions to the function.
-#' @param pv the pollyvote object.
-#' @param allowed_parties the input allowed_parties object.
+#' @param coalitions [\code{list}]\cr
+#'   List of vectors representing coallitions.
+#' @param pv [\code{pollyvote}]\cr 
+#'   The pollyvote object
+#' @param permitted_parties [\code{character(n)}]\cr
+#'   Selection of only specific parties for which coalitions are calculated.
 #' 
 #' @return list of coalitions consisted only of permitted parties.
 #' @export   
@@ -156,74 +158,33 @@ valid_coalitions = function(coalitions, pv, permitted_parties){
   coalitions[are_with_permitted_parties]
 }
 
-
-
-#' Filters coalition predictions data and election_results in order to extract the election_date.
-#' 
-#' Coalition predictions data from the pollyvote object is filtered based on 
-#' the election_year and limit_days parameters.
+#' Gets the prediction time interval based on the chosen election year.
+#' The time interval should include the predictions data
+#' after the previous election and target election.
 #' 
 #' @param pv [\code{pollyvote}]\cr 
-#'   the pollyvote object.
+#'   The pollyvote object
 #' @param election_year [\code{numeric(1)}]\cr
-#'   the election_year for which to get coalition predictions data.
-#' @param limit_days [\code{numeric(1)}]\cr
-#'   limit in days before the election up to which the coalitions percentages are calculated.
-#' 
-#' @return list of election_date and coalitions predictions data filtered based on the election_year and limit_days parameters.
-#' @export 
-coalition_predictions_data = function(pv, election_year, limitdays){
+#'   The election year for which the coalitions are predicted.
+#'   If not specified, the most recent election year is used.
+#'   
+#' @return prediction data time interval
+#' @export
+prediction_time_int = function(pv, election_year) {
   
-  election_results = assert_list(pv$election_result)
+  assert_class(pv, "pollyvote")
+  assert(
+    check_numeric(election_year),
+    check_null(election_year))
   
-  if (length(election_results) == 0) {
-    stop("At least one election result must be present in the pollyvote object in order coalitions prediction to be computed")
+  target_election_date = get_election_date_from_election_year(pv, election_year)
+  all_election_dates = sort(unique(get_election_result(pv)$date))
+  if (target_election_date == all_election_dates[1]) {
+    dummy_date = target_election_date - as.difftime(365, units = "days")
+    return(c(dummy_date, target_election_date))
   }
   
-  #create data frame with columns: election_name|election_date|election_year
-  elections_results_data = bind_rows(lapply(election_results, function(election_result) {
-    election_name = election_result$election[[1]]
-    election_date = election_result$date[[1]]
-    if (is.null(election_date) || is.na(election_date)){
-      # remove this if when date is mandatory to enter election date when entering results
-      warning(sprintf("There is no year specified for election %s.", election_name))
-      election_date = NA
-    }
-    election_year = as.numeric(format(as.POSIXct(election_date, format = "%Y-%m-%d"), "%Y"))
-    
-    data.frame(name = election_name, date = election_date, year = election_year, stringsAsFactors = FALSE)
-  }))
-  
-  target_election_results_data = subset(elections_results_data, year == election_year)
-  #if there is no year matching the election year, select the most recent one.
-  if (nrow(target_election_results_data) == 0 ) {
-    target_election_results_data = subset(elections_results_data, year == max(elections_results_data$year, na.rm = TRUE))
-  }
-  if (nrow(target_election_results_data) == 0 ) {
-    stop("The election data can't be obtained from pollyvote object")
-  }
-  
-  target_election_name = target_election_results_data$name[[1]]
-  target_election_date = target_election_results_data$date[[1]]
-  
-  #get predictions data from the pollyvote object 
-  election_data = get_data(pv)
-  
-  # If there is no election name defined for the polls data, don't subset the data.
-  # This might cause a problems if there is data for more than one election in the pv$data object.
-  if (is.element(target_election_name, election_data$election)) {
-    election_data = subset(election_data, election == target_election_name)
-  }
-  
-  if (limitdays > 0) {
-    election_data = limit_days(election_data, limitdays, election_date = target_election_date)
-  }
-  
-  if (nrow(election_data) == 0) {
-    stop("No data found for elections. Coalitions predictions can't be made without data for elections")
-  }
-  
-  list(election_date=target_election_date, election_data = election_data)
+  c(all_election_dates[all_election_dates == target_election_date - 1], target_election_date)
 }
 
 #' Applies the threshold rule and replaces the parties in the election_data with coalitions names.

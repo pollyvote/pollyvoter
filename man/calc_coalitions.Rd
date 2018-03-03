@@ -47,7 +47,7 @@ Options:
 The election year for which the coalitions are predicted.
 If not specified, the most recent election year is used.}
 
-\item{permitted_parties}{[\code{character(1)}]\cr
+\item{permitted_parties}{[\code{character(n)}]\cr
 Selection of only specific parties for which coalitions are calculated.
 Options:
 \itemize{
