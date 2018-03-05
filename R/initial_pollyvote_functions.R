@@ -187,7 +187,7 @@ moving_average_ci = function(data, days_average = 7){
     warning("days_average set to 7!")
   }
   
-  parties = unique(data$party)
+  parties = as.character(unique(data$party))
   
   # lower ci
   data_lower = data[, c("date", "party", "ci_lower")]
