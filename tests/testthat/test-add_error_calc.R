@@ -13,7 +13,8 @@ test_that("the initial error_calc functions of pollyvote object work", {
   
   # add an election result
   data("election_result")
-  pv = add_election_result(pv, "BTW", election_result, date = "2013-09-22")
+  election_result$date = "2013-09-22"
+  pv = add_election_result(pv, "BTW", election_result)
   
   # check that predefined error calculation works
   assert_data_frame(error_calc(pv, "prediction_election", 
@@ -42,7 +43,8 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
   
   # add an election result
   data("election_result")
-  pv = add_election_result(pv, "BTW", election_result, date = "2013-09-22")
+  election_result$date = "2013-09-22"
+  pv = add_election_result(pv, "BTW", election_result)
   
   # check that predefined error calculation works
   assert_data_frame(error_calc(pv, "prediction_election", 
@@ -71,7 +73,7 @@ test_that("the error of pollyvote object can be calculated (with CI)", {
     # extract predicted data
     pred_data = predict(pv, "poll")
     # extract election result
-    result = get_election_result(pv, "BTW")
+    result = get_election_result(pv, election_name = "BTW")
     joined = left_join(x = pred_data, y = result, by = "party") %>%
       rename(percent = percent.x, percent.true = percent.y)
     return(mutate(joined, error = abs(percent - percent.true)))

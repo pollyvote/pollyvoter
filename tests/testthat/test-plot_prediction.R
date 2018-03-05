@@ -23,6 +23,7 @@ test_that("the prediction of a pollyvote object can be plotted", {
   
   # add an election result
   data("election_result")
+  election_result$date = "2013-09-22"
   pv = add_election_result(pv, "BTW", election_result)
   
   # add an error calculation function
@@ -30,7 +31,7 @@ test_that("the prediction of a pollyvote object can be plotted", {
     # extract predicted data
     pred_data = predict(pv, "poll")
     # extract election result
-    result = get_election_result(pv, "BTW")
+    result = get_election_result(pv, election_name = "BTW")
     joined = left_join(x = pred_data, y = result, by = "party") %>%
       rename(percent = percent.x, percent.true = percent.y)
     return(mutate(joined, error = abs(percent - percent.true)))

@@ -147,7 +147,7 @@ initial_error_calc_prediction_election = function(pv, prediction = "pollyvote", 
     
     predictions_vs_actual = rbind(predictions_vs_actual, joined)
   }
-
+  
   error_dat = mutate(predictions_vs_actual, error = abs(percent - percent.true))
   if(!ci) {
     return(error_dat)
