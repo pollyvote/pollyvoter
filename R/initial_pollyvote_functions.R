@@ -63,7 +63,7 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
   
   pv %>%
     get_data(time_int) %>% 
-    #fill_na(na_handle = na_handle, pv = pv, time_int = time_int) %>%    # Problem !
+    fill_na(na_handle = na_handle, pv = pv, time_int = time_int) %>%
     group_by(region, date, source_type, party) %>%
     summarize(percent = fun(percent, na.rm = TRUE)) %>%
     group_by(region, date, party) %>%

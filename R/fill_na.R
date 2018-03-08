@@ -24,14 +24,16 @@
 #' @return the data set with filled mssing values.
 #'
 #' @export
-fill_na = function(dat, na_handle = c("last", "omit", "mean_within", "mean_across"), pv = NULL, time_int = NULL, ... ) {
+fill_na = function(dat, na_handle = c("last", "omit", "mean_within", "mean_across"), 
+                   pv = NULL, time_int = NULL, ... ) {
   na_handle = match.arg(na_handle)
+
   # na handling
   if (na_handle == "last") {
-    preprocessed_dat = dat %>%
+      preprocessed_dat = dat %>%
       complete(date,
-               nesting(source, source_type, party)) %>%
-      group_by(source, party) %>%
+               nesting(source, source_type, party, region)) %>%
+      group_by(source, party, region) %>%
       fill(percent, .direction = "down")
 
   } else if (na_handle == "omit") {
@@ -40,25 +42,26 @@ fill_na = function(dat, na_handle = c("last", "omit", "mean_within", "mean_acros
   } else if (na_handle == "mean_within") {
     preprocessed_dat = dat %>%
       complete(date,
-               nesting(source, source_type, party)) %>%
-      group_by(date, party) %>%
+               nesting(source, source_type, party, region)) %>%
+      group_by(date, party, region) %>%
       mutate(percent = ifelse(is.na(percent), mean(percent, na.rm = T), percent))
 
   } else if (na_handle == "mean_across") {
     raw_dat = dat %>%
       complete(date,
-               nesting(source, source_type, party))
+               nesting(source, source_type, party, region))
 
     # create a small fake pollyvote prediction by
     # calculating the mean per source type and then over all aggregated source types
     across.dat = pv %>%
       get_data(time_int) %>%
-      group_by(date, source_type, party) %>%
+      group_by(date, source_type, party, region) %>%
       summarize(percent = mean(percent, na.rm = TRUE)) %>%
-      group_by(date, party) %>%
+      group_by(date, party, region) %>%
       summarize(percent = mean(percent, na.rm = TRUE))
 
-    preprocessed_dat = left_join(raw_dat, across.dat, by = c("date", "party"))
+    preprocessed_dat = left_join(raw_dat, across.dat, by = c("date", "party", 
+                                                             "region"))
     preprocessed_dat = preprocessed_dat %>%
       mutate(percent = ifelse(is.na(percent.x), percent.y, percent.x))
   }
