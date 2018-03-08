@@ -45,7 +45,7 @@ initial_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", n
 
 
 initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last", 
-                                                region_method = c("wta", "vs")) {
+                                                region_method = "wta") {
   
   # input checking
   assert_class(pv, "pollyvote")
@@ -67,6 +67,8 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
     group_by(region, date, source_type, party) %>%
     summarize(percent = fun(percent, na.rm = TRUE)) %>%
     group_by(region, date, party) %>%
+    summarize(percent = fun(percent, na.rm = TRUE)) %>%
+    group_by(region, date) %>%
     handle_region_method(region_method) %>%
     left_join(region_weights, by = "region") %>%
     mutate(electoral_result = electoral_result * weight) %>%
@@ -74,6 +76,7 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
     summarize(electoral_result = sum(electoral_result, na.rm = TRUE))  %>%
     mutate(percent = electoral_result / sum(region_weights$weight))
 }
+
 
 handle_region_method = function(data, region_method) {
   
