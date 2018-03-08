@@ -74,7 +74,7 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
     mutate(electoral_result = electoral_result * weight) %>%
     group_by(date, party) %>%
     summarize(electoral_result = sum(electoral_result, na.rm = TRUE))  %>%
-    mutate(percent = electoral_result / sum(region_weights$weight))
+    mutate(percent = 100 * electoral_result / sum(region_weights$weight))
 }
 
 
