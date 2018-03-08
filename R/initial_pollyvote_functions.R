@@ -37,10 +37,51 @@ initial_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", n
   pv %>%
     get_data(time_int) %>% 
     fill_na(na_handle = na_handle, pv = pv, time_int = time_int) %>%
-    group_by(date, source_type, party) %>%
+    group_by(date, source_type, party) %>% 
     summarize(percent = fun(percent, na.rm = TRUE)) %>%
     group_by(date, party) %>%
     summarize(percent = fun(percent, na.rm = TRUE)) 
+}
+
+
+initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last", 
+                                                region_method = c("wta", "vs")) {
+  
+  # input checking
+  assert_class(pv, "pollyvote")
+  # evaluate string input
+  assert_choice(agg_fun, c("mean", "median"))
+  # evaluate string input
+  fun = switch(agg_fun,
+               mean = mean,
+               median = median)
+  assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
+  if(length(get_perm_source_types(pv)) != 0)
+    lapply(which_source_type, assert_choice, get_perm_source_types(pv))
+  
+  region_weights = get_region_weights(pv) # Needs to be implemented!
+  
+  pv %>%
+    get_data(time_int) %>% 
+    #fill_na(na_handle = na_handle, pv = pv, time_int = time_int) %>%    # Problem !
+    group_by(region, date, source_type, party) %>%
+    summarize(percent = fun(percent, na.rm = TRUE)) %>%
+    group_by(region, date, party) %>%
+    handle_region_method(region_method) %>%
+    left_join(region_weights, by = "region") %>%
+    mutate(electoral_result = electoral_result * weight) %>%
+    group_by(date, party) %>%
+    summarize(electoral_result = sum(electoral_result, na.rm = TRUE))  %>%
+    mutate(percent = electoral_result / sum(region_weights$weight))
+}
+
+handle_region_method = function(data, region_method) {
+  
+  if (region_method == 'wta') {
+    return(data %>% mutate(electoral_result = ifelse(percent == max(percent, na.rm = TRUE), 1, 0)))
+  } else {
+    data %>% mutate(electoral_result = percent)
+  }
 }
 
 
@@ -74,6 +115,7 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
   assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
   if(length(get_perm_source_types(pv)) != 0)
     lapply(which_source_type, assert_choice, get_perm_source_types(pv))
+  
   pv %>% 
     get_data  %>%
     filter(source_type %in% which_source_type) %>%
