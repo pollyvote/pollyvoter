@@ -45,12 +45,13 @@ initial_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", n
 
 
 initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last", 
-                                                region_method = "wta") {
+                                                region_method = c("wta", "vs")) {
   
   # input checking
   assert_class(pv, "pollyvote")
   # evaluate string input
   assert_choice(agg_fun, c("mean", "median"))
+  assert_choice(region_method, c("wta", "vs"))
   # evaluate string input
   fun = switch(agg_fun,
                mean = mean,
