@@ -15,7 +15,7 @@
 #' data("polls_individual")
 #' pv = add_data(pv, newdata = polls_individual, country = "D", region = "national", 
 #'               source_type = "poll", election = "BTW")
-#' get_data(pv)
+#' 
 #' 
 #' @return data frame containing data stored in \code{pv} possibly filtered by \code{election_year} parameter.  
 #'
@@ -36,6 +36,29 @@ get_data <- function(pv, time_int = NULL){
     data
   }
 } 
+
+#' Get's the region weights from the pollyvote container.
+#' 
+#' @param pv [\code{pollyvote(1)}]\cr
+#'   the pollyvote object of which to extract the region weights from.
+#' 
+#' @examples 
+#' region_weights = get_region_weights(pv)
+#' 
+#'  
+#' @return the region region weights from the pollyvote container.
+#' 
+#' @export
+get_region_weights = function(pv) {
+  
+  assert_class(pv, "pollyvote")
+  region_weights = pv$region_weights
+  assert_data_frame(region_weights)
+  if (nrow(region_weights) == 0)
+    stop("The 'region_weights' has no data.")
+  
+  return(region_weights)
+}
 
 
 #' extract party names

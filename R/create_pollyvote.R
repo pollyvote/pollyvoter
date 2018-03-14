@@ -115,7 +115,8 @@ create_pollyvote = function(id = "pollyvote",
             predictions = list(),
             election_result = data.frame(),
             error_calc = list(),
-            data = data)
+            data = data,
+            region_weights = data.frame())
   class(pv) = c("pollyvote", "list")
   
   # initialize some useful prediction, aggregation and error calculation functions
