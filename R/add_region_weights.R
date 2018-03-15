@@ -26,6 +26,6 @@ add_region_weights = function(pv, region_weights) {
   if (length(pv$perm_regions) > 0)
     sapply(region_weights$region, assert_choice, pv$perm_regions)
   
-  pv$region_weigths = region_weights
+  pv$region_weights = region_weights
   return(pv)
 }

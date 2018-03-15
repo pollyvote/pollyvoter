@@ -60,7 +60,7 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
   if(length(get_perm_source_types(pv)) != 0)
     lapply(which_source_type, assert_choice, get_perm_source_types(pv))
   
-  region_weights = get_region_weights(pv) # Needs to be implemented!
+  region_weights = get_region_weights(pv)
   
   pv %>%
     get_data(time_int) %>% 

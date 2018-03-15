@@ -55,7 +55,7 @@ get_region_weights = function(pv) {
   region_weights = pv$region_weights
   assert_data_frame(region_weights)
   if (nrow(region_weights) == 0)
-    stop("The 'region_weights' has no data.")
+    stop("Region weights are not present in the pollyvote container.")
   
   return(region_weights)
 }
