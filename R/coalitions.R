@@ -19,8 +19,9 @@
 #'    }
 #' @param prediction [\code{character(1)}]\cr
 #'   Name of the prediction function.
-#'   The Component definition deviates here somewhat from the other declarations to the Normally to come closer.
-#'   Default value is the string specification of the root prediction, ie"Pollyvote", at a transversal (i.e. non-regional) level.
+#'   For calculation of coalitions aggregated over (date, source_type, party) [\code{pollyvote}] should be supplied.
+#'   For calculation of coalitions aggregated over (region, date, source_type, party) [\code{aggr_pollyvote_region}] should be supplied.
+#'   For calculation of coalitions only in one region [\code{pollyvote_region}] should be supplied.
 #'   Options:
 #'   \itemize{
 #'    \item [\code{character(1)}]: Single component name (e.g., "poll"); in this case will one column for the specified component
@@ -57,11 +58,15 @@
 #'    \item [\code{logical(1)}] FALSE: Default value - Function returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
 #'    \item [\code{logical(1)}] TRUE:  Data frame with rows containing visualisation points
 #'    }
+#' @param ... Optional parameters passed into [\code{prediction}] function.
+#'   This function needs to be called with region = 'region' in the optional params if the results need to be calculated for one region only.
+#'  
+#'  
 #' @return dataframe of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
 #'   or visualisation points of the coalitions prediction.
 #' @export
-calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote',
-                           election_year = NULL, permitted_parties = NULL, region = NULL, limitdays = -1, for.ggplot2 = FALSE ) {
+calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote', ..., 
+                           election_year = NULL, permitted_parties = NULL, limitdays = -1, for.ggplot2 = FALSE) {
   
   
   coalitions = lapply(coalitions, function(coalition) {
@@ -82,9 +87,6 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   assert(
     check_character(permitted_parties),
     check_null(permitted_parties))
-  assert(
-    check_character(region),
-    check_null(region))
   assert_numeric(limitdays)
   assert_logical(for.ggplot2)
   
@@ -92,7 +94,7 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
   limitdays = ifelse(limitdays < 0, Inf, limitdays)
   election_date = get_election_date_from_election_year(pv, election_year)
   
-  predictions = predict(pv, time_int = prediction_time_int, method = prediction) %>%
+  predictions = predict(pv, method = prediction, time_int = prediction_time_int, ...) %>%
     limit_days(no_days = limitdays, pv = pv, election_date = election_date)%>%
     threshold_and_replace_party_with_coalition(threshold, threshold_handle, coalitions) %>%
     group_by(date, party) %>%

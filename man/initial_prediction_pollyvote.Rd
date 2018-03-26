@@ -9,36 +9,26 @@ initial_prediction_pollyvote(pv, time_int = NULL, agg_fun = "mean",
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr
-the pollyvote object of which to get the prediction from.}
+the pollyvote object of which to get the prediction data from.}
 
 \item{agg_fun}{[\code{character(1)}]\cr
 the name of the aggregation function to use, currently 'mean' and 'median' are supported}
 
-\item{na_handle}{[\code{character(1)}]\cr
-character describing which method is used to fill missing values.
-Currently supported is 
-\itemize{
-\item \code{'last'}: Use the last available value. Fill all days between the earliest and latest day in the data.
-\item \code{'omit'}: For every day, agregate available data.
-\item \code{'mean_within'} Use the available data of this subcomponent to fill missing values.
-\item \code{'mean_across'} Create a mini-pollyvote prediction by aggregating 
-all \code{source_type}s using \code{na_handle = 'last'} and then
-aggregating the result using \code{na_handle = 'last'}, which will then be used 
-to predict missing values in the lowest aggregation level.
-}}
+\item{na_handle}{[\code{character(1)}]\cr 
+specifies how NA values are handled in the data.}
 
 \item{...}{[\code{list()}]\cr
 additional arguments, currently ignored.}
 
-\item{time_int[\code{date}]}{the time interval for which the prediction should be made.}
+\item{time_int[\code{date}]}{the time interval for which the prediction.}
 }
 \value{
-data frame containing the results
+data frame containing predictions for a parties in the days before the election
 }
 \description{
 internal function which initializes the prediction function of method pollyvote.
 This function aggregates the daat in two steps: 
-In the first step all predictions of the same \code{source_types} are aggregated
+In the first step all predictions from sources of the same \code{source_types} are aggregated
 daily. In the second step the aggregated \code{source_types} are aggregated,
 resulting in one prediction per day and party.
 }

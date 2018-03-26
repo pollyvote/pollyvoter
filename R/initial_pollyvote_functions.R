@@ -5,34 +5,31 @@
 #' 
 #' internal function which initializes the prediction function of method pollyvote.
 #' This function aggregates the daat in two steps: 
-#' In the first step all predictions of the same \code{source_types} are aggregated
+#' In the first step all predictions from sources of the same \code{source_types} are aggregated
 #' daily. In the second step the aggregated \code{source_types} are aggregated,
 #' resulting in one prediction per day and party. 
 #' 
 #' @param pv [\code{pollyvote}]\cr
-#'   the pollyvote object of which to get the prediction from.
+#'   the pollyvote object of which to get the prediction data from.
 #' @param time_int[\code{date}]
-#'   the time interval for which the prediction should be made.
+#'   the time interval for which the prediction.
 #' @param agg_fun [\code{character(1)}]\cr
 #'   the name of the aggregation function to use, currently 'mean' and 'median' are supported
+#' @param na_handle [\code{character(1)}]\cr 
+#'   specifies how NA values are handled in the data.
 #'
-#' @return data frame containing the results
+#' @return data frame containing predictions for a parties in the days before the election
 #' 
 #' @inheritParams fill_na
 #' @export
 initial_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last", ...) {
   
-  # input checking
-  assert_class(pv, "pollyvote")
-  # evaluate string input
-  assert_choice(agg_fun, c("mean", "median"))
+  validate_common_prediction_params(pv = pv, agg_fun = agg_fun, na_handle = na_handle)
+  
   # evaluate string input
   fun = switch(agg_fun,
                mean = mean,
                median = median)
-  assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
-  if(length(get_perm_source_types(pv)) != 0)
-    lapply(which_source_type, assert_choice, get_perm_source_types(pv))
   
   pv %>%
     get_data(time_int) %>% 
@@ -43,44 +40,106 @@ initial_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", n
     summarize(percent = fun(percent, na.rm = TRUE)) 
 }
 
+#' Calculates prediction for each party on each day in each region from the data in the pollyvote container.
+#' 
+#' @param pv [\code{pollyvote}]\cr
+#'   the pollyvote object of which to get the prediction data from.
+#' @param time_int[\code{date}]
+#'   the time interval for the prediction.
+#' @param agg_fun [\code{character(1)}]\cr
+#'   the name of the aggregation function to use, currently 'mean' and 'median' are supported
+#' @param na_handle [\code{character(1)}]\cr 
+#'   specifies how NA values are handled in the data.
+#' @param region [\code{character(1)}] \cr
+#'   The region in which predictions are made. If the region is not existing in the pollyvote container, error is thrown.
+#'   If [\code{NULL}], then the predictions are calculated in each region. 
+#'   
+#' @return dataframe of predictions for a party on each day in each region.
+#' 
+#' @export
+initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last", region = NULL) {
+  
+  validate_common_prediction_params(pv = pv, agg_fun = agg_fun, na_handle = na_handle)
+  
+  data = pv %>%
+    get_data(time_int)
+  
+  if (!is.null(region)) {
+    region_weights = get_region_weights(pv)
+    assert_choice(region, region_weights$region)
+    
+    data = data %>% 
+      filter(region = region)
+  }
+  
+   data %>% 
+    fill_na(na_handle = na_handle, pv = pv, time_int = time_int) %>%
+    group_by(region, date, source_type, party) %>%
+    summarize(percent = fun(percent, na.rm = TRUE)) %>%
+    group_by(region, date, party) %>%
+    summarize(percent = fun(percent, na.rm = TRUE))
+}
 
-initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last", 
+#' First calculates predictions on level of each region by using \code{initial_region_prediction_pollyvote} function
+#' and afterwards aggregates predictions over the regions in order to obtain final single prediction for a party on given day.
+#' 
+#' @param pv [\code{pollyvote}]\cr
+#'   the pollyvote object of which to get the prediction data from.
+#' @param time_int[\code{date}]
+#'   the time interval for the prediction.
+#' @param agg_fun [\code{character(1)}]\cr
+#'   the name of the aggregation function to use, currently 'mean' and 'median' are supported
+#' @param na_handle [\code{character(1)}]\cr 
+#'   specifies how NA values are handled in the data.
+#' @param region_method method of aggregation of party scores over different regions.
+#'   See \code{handle_region_method} function for implementation and meaning of the parameteres.
+#' 
+#' @return dataframe containing aggregated predictions for the parties aggregated over regions.
+#' 
+#' @export
+#'
+#' POSSIBLE ISSUE: In the specification it is stated that by default region_weights are 1.
+#' This is certainly a problem with the existing code when region_method is "vs" and region_weights are set to 1!!!
+initial_region_aggregation_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last",
                                                 region_method = c("wta", "vs")) {
 
-  # input checking
-  assert_class(pv, "pollyvote")
-  # evaluate string input
-  assert_choice(agg_fun, c("mean", "median"))
+  validate_prediction_params(pv = pv, agg_fun = agg_fun, na_handle = na_handle)
+  
   region_method = match.arg(region_method)
   # evaluate string input
   fun = switch(agg_fun,
                mean = mean,
                median = median)
-  assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
-  if(length(get_perm_source_types(pv)) != 0)
-    lapply(which_source_type, assert_choice, get_perm_source_types(pv))
   
   region_weights = get_region_weights(pv)
   
-  pv %>%
-    get_data(time_int) %>% 
-    fill_na(na_handle = na_handle, pv = pv, time_int = time_int) %>%
-    group_by(region, date, source_type, party) %>%
-    summarize(percent = fun(percent, na.rm = TRUE)) %>%
-    group_by(region, date, party) %>%
-    summarize(percent = fun(percent, na.rm = TRUE)) %>%
-    group_by(region, date) %>%
+ initial_region_prediction_pollyvote(pv, time_int, agg_fun, na_handle) %>%
     handle_region_method(region_method) %>%
     left_join(region_weights, by = "region") %>%
-    mutate(electoral_result = electoral_result * weight) %>%
+    mutate(electoral_result = electoral_result * weight) %>% #weights in case of 'wta' should be positive integers and in case of 'vs' numbers between 0 and 1 ? 
     group_by(date, party) %>%
     summarize(electoral_result = sum(electoral_result, na.rm = TRUE))  %>%
-    mutate(percent = 100 * electoral_result / sum(region_weights$weight))
+    group_by(date) %>%
+    mutate(percent = 100 * electoral_result / sum(electoral_result))
 }
 
-
+#' Adds new column named 'electoral_result' in the input [\code{data}] parameter depending on the value of [\code{region_method}] parameter.
+#' 
+#' @param data [\code{dataframe}]\cr
+#'   The predictions dataframe
+#' @param region_method [\code{character(1)}]
+#'  Values:
+#'   \itemize{
+#'    \item [\code{character(1)}] wta: Winner takes it all method - 1 is assigned to the party which has most points in a region for a given day.
+#'    \item [\code{character(1)}] vs:  Voteshares method - percent for the parties remain unchanged.
+#'    }
+#' 
+#' @return dataframe with 'electoral_result' column which a result of applying region aggregation method.
+#' @export
 handle_region_method = function(data, region_method) {
+  assert_choice(region_method, c("wta", "vs"))
   
+  data = data %>% group_by(region, date)
   if (region_method == 'wta') {
     return(data %>% mutate(electoral_result = ifelse(percent == max(percent, na.rm = TRUE), 1, 0)))
   } else {
@@ -109,14 +168,14 @@ handle_region_method = function(data, region_method) {
 initial_prediction_aggr_source_type = function(pv, which_source_type, 
                 agg_fun = "mean", 
                 na_handle = "last", ...) {
-  # input checking
-  assert_class(pv, "pollyvote")
-  assert_choice(agg_fun, c("mean", "median"))
+  
+  validate_common_prediction_params(pv = pv, agg_fun = agg_fun, na_handle = na_handle)
+  
   # evaluate string input
   fun = switch(agg_fun,
                mean = mean,
                median = median)
-  assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
+  
   if(length(get_perm_source_types(pv)) != 0)
     lapply(which_source_type, assert_choice, get_perm_source_types(pv))
   
@@ -128,6 +187,24 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
     summarize(percent = fun(percent, na.rm = TRUE))
 }
 
+#' Validates common input parameters to the prediction functions.
+#' 
+#' @param pv [\code{pollyvote}]\cr
+#'   the pollyvote object of which to get the prediction data from.
+#' @param time_int[\code{date}]
+#'   the time interval for the prediction.
+#' @param agg_fun [\code{character(1)}]\cr
+#'   the name of the aggregation function to use, currently 'mean' and 'median' are supported
+#' @param na_handle [\code{character(1)}]\cr 
+#'   specifies how NA values are handled in the data.
+#'   
+#'   
+validate_common_prediction_params = function(pv, agg_fun, na_handle) {
+  
+  assert_class(pv, "pollyvote")
+  assert_choice(agg_fun, c("mean", "median"))
+  assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
+}
 
 
 #' initial pollyvote error calculation

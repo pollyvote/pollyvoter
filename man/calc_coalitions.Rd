@@ -8,9 +8,8 @@ Provides prediction of percentages from different source types for specified coa
 Coalitions percentages are predicted for each day in range [election_day - limit_days, election_day).}
 \usage{
 calc_coalitions(pv, coalitions, threshold = 0, threshold_handle = "omit",
-  prediction = "pollyvote", election_year = NULL,
-  permitted_parties = NULL, region = NULL, limitdays = -1,
-  for.ggplot2 = FALSE)
+  prediction = "pollyvote", ..., election_year = NULL,
+  permitted_parties = NULL, limitdays = -1, for.ggplot2 = FALSE)
 }
 \arguments{
 \item{pv}{[\code{pollyvote}]\cr 
@@ -33,8 +32,9 @@ Options:
 
 \item{prediction}{[\code{character(1)}]\cr
 Name of the prediction function.
-The Component definition deviates here somewhat from the other declarations to the Normally to come closer.
-Default value is the string specification of the root prediction, ie"Pollyvote", at a transversal (i.e. non-regional) level.
+For calculation of coalitions aggregated over (date, source_type, party) [\code{pollyvote}] should be supplied.
+For calculation of coalitions aggregated over (region, date, source_type, party) [\code{aggr_pollyvote_region}] should be supplied.
+For calculation of coalitions only in one region [\code{pollyvote_region}] should be supplied.
 Options:
 \itemize{
  \item [\code{character(1)}]: Single component name (e.g., "poll"); in this case will one column for the specified component
@@ -42,6 +42,9 @@ Options:
  \item [\code{character(n)}]: Vector with component names - gives exactly for the specified components (without automatic subcomponent addition) the values back.
  \item [\code{NULL}]: Wildcard that returns all components.
  }}
+
+\item{...}{Optional parameters passed into [\code{prediction}] function.
+This function needs to be called with region = 'region' in the optional params if the results need to be calculated for one region only.}
 
 \item{election_year}{[\code{numeric(1)}]\cr
 The election year for which the coalitions are predicted.

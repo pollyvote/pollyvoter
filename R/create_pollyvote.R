@@ -125,6 +125,7 @@ create_pollyvote = function(id = "pollyvote",
   pv = add_prediction(pv, "pollyvote", initial_prediction_pollyvote)
   
   pv = add_prediction(pv, "pollyvote_region", initial_region_prediction_pollyvote)
+  pv = add_prediction(pv, "aggr_pollyvote_region", initial_region_aggregation_pollyvote)
   
   pv = add_prediction(pv, "aggr_source_type", initial_prediction_aggr_source_type)
   
