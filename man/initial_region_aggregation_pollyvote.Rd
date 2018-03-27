@@ -2,7 +2,7 @@
 % Please edit documentation in R/initial_pollyvote_functions.R
 \name{initial_region_aggregation_pollyvote}
 \alias{initial_region_aggregation_pollyvote}
-\title{First calculates predictions on level of each region by using [\code{initial_region_prediction_pollyvote}]
+\title{First calculates predictions on level of each region by using \code{initial_region_prediction_pollyvote} function
 and afterwards aggregates predictions over the regions in order to obtain final single prediction for a party on given day.}
 \usage{
 initial_region_aggregation_pollyvote(pv, time_int = NULL, agg_fun = "mean",
@@ -19,7 +19,7 @@ the name of the aggregation function to use, currently 'mean' and 'median' are s
 specifies how NA values are handled in the data.}
 
 \item{region_method}{method of aggregation of party scores over different regions.
-See [\code{handle_region_method}] function for implementation and meaning of the parameteres.}
+See \code{handle_region_method} function for implementation and meaning of the parameteres.}
 
 \item{time_int[\code{date}]}{the time interval for the prediction.}
 }
@@ -27,6 +27,6 @@ See [\code{handle_region_method}] function for implementation and meaning of the
 dataframe containing aggregated predictions for the parties aggregated over regions.
 }
 \description{
-First calculates predictions on level of each region by using [\code{initial_region_prediction_pollyvote}]
+First calculates predictions on level of each region by using \code{initial_region_prediction_pollyvote} function
 and afterwards aggregates predictions over the regions in order to obtain final single prediction for a party on given day.
 }

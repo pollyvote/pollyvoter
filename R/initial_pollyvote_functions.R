@@ -98,11 +98,11 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
 #' 
 #' @export
 #'
-#' POSSIBLE ISSUE: In the specification it is stated that by default region_weights are 1.
-#' This is certainly a problem with the existing code when region_method is "vs" and region_weights are set to 1!!!
 initial_region_aggregation_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last",
                                                 region_method = c("wta", "vs")) {
-
+  
+  # POSSIBLE ISSUE: In the specification it is stated that by default region_weights are 1.
+  # This is certainly a problem with the existing code when region_method is "vs" and region_weights are set to 1!!!
   validate_prediction_params(pv = pv, agg_fun = agg_fun, na_handle = na_handle)
   
   region_method = match.arg(region_method)
@@ -113,7 +113,7 @@ initial_region_aggregation_pollyvote = function(pv, time_int = NULL, agg_fun = "
   
   region_weights = get_region_weights(pv)
   
- initial_region_prediction_pollyvote(pv, time_int, agg_fun, na_handle) %>%
+  initial_region_prediction_pollyvote(pv, time_int, agg_fun, na_handle) %>%
     handle_region_method(region_method) %>%
     left_join(region_weights, by = "region") %>%
     mutate(electoral_result = electoral_result * weight) %>% #weights in case of 'wta' should be positive integers and in case of 'vs' numbers between 0 and 1 ? 
