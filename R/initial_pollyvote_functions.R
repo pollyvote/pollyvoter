@@ -65,12 +65,19 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
     get_data(time_int)
   
   if (!is.null(region)) {
+    # Should we let the user to use this prediction function without adding regions to the pollyvote container ?
     region_weights = get_region_weights(pv)
     assert_choice(region, region_weights$region)
     
-    data = data %>% 
-      filter(region = region)
+    data = data[data$region == region, ]
+    if (nrow(data) == 0) {
+      stop(paste("No observations in the data with region = ", region, sep = ""))
+    }
   }
+  
+  fun = switch(agg_fun,
+               mean = mean,
+               median = median)
   
    data %>% 
     fill_na(na_handle = na_handle, pv = pv, time_int = time_int) %>%

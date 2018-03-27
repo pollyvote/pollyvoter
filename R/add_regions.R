@@ -39,6 +39,6 @@ add_regions = function(pv, regions, weights = NULL) {
   if (length(pv$perm_regions) > 0)
     sapply(regions, assert_choice, pv$perm_regions)
   
-  pv$region_weights = data.frame(region = regions, weight = weights)
+  pv$region_weights = data.frame(region = regions, weight = weights, stringsAsFactors = FALSE)
   return(pv)
 }
