@@ -29,6 +29,7 @@
 #'    \item [\code{character(n)}]: Vector with component names - gives exactly for the specified components (without automatic subcomponent addition) the values back.
 #'    \item [\code{NULL}]: Wildcard that returns all components.
 #'    }
+#' @param ... Optional parameters passed into [\code{prediction}] function.\cr
 #' @param election_year [\code{numeric(1)}]\cr
 #'   The election year for which the coalitions are predicted.
 #'   If not specified, the most recent election year is used.
@@ -40,13 +41,6 @@
 #'    \item [\code{character(1)}]: For specifying one party.
 #'    \item [\code{character(n)}]: Vector for specifying multiple parties.
 #'    }
-#' @param region [\code{character(1)}]\cr
-#'   The region for which to calculate coalitions predictions.
-#'   If the specified region is not defined, error is thrown.
-#'   Options:
-#'   \itemize{
-#'    \item [\code{NULL}] - Default value. If the region is not specified, then the result over all regions is returned.
-#'    \item [\code{character(1)}]: The Specified region for which coalitions are calculated.
 #' @param limit_days [\code{numeric(1)}]\cr
 #'   Limit in days before the election up to which the coalitions percentages are calculated.
 #'   For example, specifying limitdays = 100 return coalitions percentages up to 100 days before the election.
@@ -58,17 +52,25 @@
 #'    \item [\code{logical(1)}] FALSE: Default value - Function returns data frame of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
 #'    \item [\code{logical(1)}] TRUE:  Data frame with rows containing visualisation points
 #'    }
-#' @param ... Optional parameters passed into [\code{prediction}] function.
-#'   This function needs to be called with region = 'region' in the optional params if the results need to be calculated for one region only.
+#' 
 #'  
-#'  
+#'
 #' @return dataframe of columns (date | Days to election | Coalition_1_percentage | ... | Coaltion_n_percentage)
 #'   or visualisation points of the coalitions prediction.
+#'   
+#' @section Predicting coalitions in one region:
+#'  To predict coalitions percentages only in one region, this functions needs to be called like:
+#'  \code{calc_coalitions(pv, coalitions, prediction = "pollyvote_region", region = "A")} \cr
+#'  To predict coalitions percentages over all regions, this function needs to be called like:
+#'  \code{calc_coalitions(pv, coalitions, prediction = "aggr_pollyvote_region")} \cr
+#'  Region information is ignored while computing coalitions percentages if this function is used like:
+#'  \code{calc_coalitions(pv, coalitions, prediction = "pollyvote")
+#'  
 #' @export
 calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'omit', prediction ='pollyvote', ..., 
                            election_year = NULL, permitted_parties = NULL, limitdays = -1, for.ggplot2 = FALSE) {
   
-  
+  #if calc_coalitions is used with "wta" method, then should percent or electoral result be used ??
   coalitions = lapply(coalitions, function(coalition) {
     convert_names(coalition)
   })
@@ -81,6 +83,13 @@ calc_coalitions = function(pv, coalitions, threshold = 0, threshold_handle = 'om
     warning(sprintf("Threshold is bigger than 10. It is equal to %d", threshold))
   }
   assert_choice(threshold_handle, c("omit", "ignore"))
+  assert_character(prediction)
+  if (prediction == "pollyvote_region") {
+    args = list(...)
+    if (!("region" %in% names(args))) {
+      stop(paste("Specific region must be specified as additional parameter when'", prediction ,"' prediction function is used"))
+    }
+  }
   assert(
     check_numeric(election_year),
     check_null(election_year))

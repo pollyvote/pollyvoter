@@ -43,8 +43,7 @@ Options:
  \item [\code{NULL}]: Wildcard that returns all components.
  }}
 
-\item{...}{Optional parameters passed into [\code{prediction}] function.
-This function needs to be called with region = 'region' in the optional params if the results need to be calculated for one region only.}
+\item{...}{Optional parameters passed into [\code{prediction}] function.\cr}
 
 \item{election_year}{[\code{numeric(1)}]\cr
 The election year for which the coalitions are predicted.

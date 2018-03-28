@@ -71,7 +71,7 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
     
     data = data[data$region == region, ]
     if (nrow(data) == 0) {
-      stop(paste("No observations in the data with region = ", region, sep = ""))
+      stop(paste("No observations in the data with region =", region))
     }
   }
   
@@ -107,13 +107,10 @@ initial_region_prediction_pollyvote = function(pv, time_int = NULL, agg_fun = "m
 #'
 initial_region_aggregation_pollyvote = function(pv, time_int = NULL, agg_fun = "mean", na_handle = "last",
                                                 region_method = c("wta", "vs")) {
-  
-  # POSSIBLE ISSUE: In the specification it is stated that by default region_weights are 1.
-  # This is certainly a problem with the existing code when region_method is "vs" and region_weights are set to 1!!!
-  validate_prediction_params(pv = pv, agg_fun = agg_fun, na_handle = na_handle)
+  validate_common_prediction_params(pv = pv, agg_fun = agg_fun, na_handle = na_handle)
   
   region_method = match.arg(region_method)
-  # evaluate string input
+  
   fun = switch(agg_fun,
                mean = mean,
                median = median)
@@ -207,7 +204,6 @@ initial_prediction_aggr_source_type = function(pv, which_source_type,
 #'   
 #'   
 validate_common_prediction_params = function(pv, agg_fun, na_handle) {
-  
   assert_class(pv, "pollyvote")
   assert_choice(agg_fun, c("mean", "median"))
   assert_choice(na_handle, c("last", "omit", "mean_within", "mean_across"))
